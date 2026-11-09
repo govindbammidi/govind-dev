@@ -4,17 +4,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useLiquidLens } from "@/lib/liquidLens";
 
 // recruiter-first: the resume sections, the journal for anyone who wants the
-// longer read, contact, and the PDF itself. /work is linked from Projects.
+// longer read, and contact. The PDF is the hero's "Download resume" button;
+// /work is linked from Projects.
 const LINKS = [
   { href: "/#experience", label: "experience" },
   { href: "/#projects", label: "projects" },
   { href: "/journal", label: "journal" },
   { href: "/contact", label: "contact" },
 ];
-
-const RESUME = { href: "/Govind_Resume.pdf", file: "Bammidi_Govinda_Rao_Resume.pdf" };
 
 const sectionOf = (href: string) => (href.startsWith("/#") ? href.slice(2) : null);
 
@@ -85,6 +85,12 @@ export default function Nav() {
   // the thumb: a white pill that slides under the current desktop link. it is
   // placed by measuring the link, not by state, so a font swap or a resize
   // just re-measures without a render
+  // the Roots tab bar's bending rim (Chromium; elsewhere the CSS frost)
+  const islandRef = useRef<HTMLDivElement>(null);
+  // a full 10px frost under the bend: the island holds words, and words
+  // behind it must never compete with the links
+  useLiquidLens(islandRef, { bezel: 14, shift: 12 });
+
   const rowRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLSpanElement>(null);
   useEffect(() => {
@@ -112,8 +118,6 @@ export default function Nav() {
   return (
     <nav
       aria-label="Site"
-      // anchored through route transitions: the content moves, the island doesn't
-      style={{ viewTransitionName: "site-nav" }}
       className="pointer-events-none fixed inset-x-0 top-3 z-40 flex justify-center px-4"
     >
       {/* frosted scrim over the page while the menu is open. it's also the
@@ -127,7 +131,16 @@ export default function Nav() {
         onClick={() => setOpen(false)}
         className="island-scrim fixed inset-0 -z-10 cursor-default sm:hidden"
       />
-      <div className="island pointer-events-auto" data-open={open || undefined}>
+      <div
+        ref={islandRef}
+        // anchored through route transitions: the content moves, the island
+        // doesn't. The name sits on the island, not on <nav>: an element with
+        // a view-transition-name is a backdrop root, so on <nav> it cut the
+        // page off from the island's blur and the text behind read through
+        style={{ viewTransitionName: "site-nav" }}
+        className="island pointer-events-auto"
+        data-open={open || undefined}
+      >
         <div className="flex h-[44px] items-center gap-[14px] pl-[18px] pr-[14px]">
           <Link
             href="/"
@@ -157,13 +170,6 @@ export default function Nav() {
                 {l.label}
               </Link>
             ))}
-            <a
-              href={RESUME.href}
-              download={RESUME.file}
-              className="nav-link rounded-full px-[10px] py-[5px] text-accent no-underline transition-opacity hover:opacity-80"
-            >
-              resume ↓
-            </a>
           </div>
 
           {/* ml-auto: when the island widens for the menu, the controls stay
@@ -209,19 +215,6 @@ export default function Nav() {
                   </Link>
                 );
               })}
-              <a
-                href={RESUME.href}
-                download={RESUME.file}
-                onClick={() => setOpen(false)}
-                tabIndex={open ? undefined : -1}
-                className="flex items-center justify-between py-[10px] font-mono text-[13px] text-accent no-underline"
-              >
-                <span className="flex items-center gap-[10px]">
-                  <Dot lit={false} />
-                  resume
-                </span>
-                <ArrowDown />
-              </a>
             </div>
           </div>
         </div>
@@ -246,20 +239,6 @@ function Chevron() {
     <svg aria-hidden="true" width="6" height="10" viewBox="0 0 6 10" fill="none" className="text-muted">
       <path
         d="M1 1l4 4-4 4"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ArrowDown() {
-  return (
-    <svg aria-hidden="true" width="10" height="10" viewBox="0 0 10 10" fill="none">
-      <path
-        d="M5 1v8M1.5 5.5L5 9l3.5-3.5"
         stroke="currentColor"
         strokeWidth="1.3"
         strokeLinecap="round"

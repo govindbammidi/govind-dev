@@ -17,7 +17,7 @@
   --color-lede: #3a352c;
 
   --font-display: var(--font-fraunces), Georgia, serif;
-  --font-serif: var(--font-newsreader), Georgia, serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 
   /* the one easing for all motion — a quick start that settles gently */
@@ -55,7 +55,7 @@ html {
      fill the page shows through, a 1px rim that catches light at opposite
      corners, a sheen pooling at the top-left, "shine" on the inset edges, a
      soft drop shadow, and the white pill that marks the current link */
-  --lg-fill: rgb(255 255 255 / 0.5);
+  --lg-fill: rgb(255 255 255 / 0.26);
   --lg-rim: linear-gradient(
     135deg,
     rgb(255 255 255 / 1),
@@ -102,7 +102,7 @@ html[data-theme="dark"] {
   --glow-2: rgb(230 170 150 / 0.07);
   --glow-3: rgb(150 210 190 / 0.07);
   --glass-gloss: rgb(255 255 255 / 0.07);
-  --lg-fill: rgb(40 40 44 / 0.6);
+  --lg-fill: rgb(40 40 44 / 0.38);
   --lg-rim: linear-gradient(
     135deg,
     rgb(255 255 255 / 0.42),
@@ -126,9 +126,9 @@ html[data-theme="dark"] {
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
-  font-family: var(--font-serif);
-  font-size: 19px;
-  line-height: 1.65;
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   background-image: radial-gradient(var(--color-line) 0.5px, transparent 0.5px);
   background-size: 22px 22px;
@@ -196,9 +196,11 @@ h3 {
   }
 
   /* article body — Govind's raw voice, post page measure */
+  /* long reads: a little larger than the page text, with roomier lines */
   .post-body {
-    font-size: 20px;
-    line-height: 1.7;
+    font-size: 18px;
+    line-height: 1.8;
+    letter-spacing: -0.005em;
   }
   .post-body p {
     margin-bottom: 20px;
@@ -206,7 +208,7 @@ h3 {
     text-wrap: pretty;
   }
   .post-body strong {
-    font-weight: 500;
+    font-weight: 600;
   }
   .post-body a {
     color: var(--color-accent);
@@ -610,8 +612,10 @@ body::before {
     width: fit-content;
     max-width: 100%;
     background-color: var(--lg-fill);
-    -webkit-backdrop-filter: blur(14px) saturate(185%) brightness(1.04);
-    backdrop-filter: blur(14px) saturate(185%) brightness(1.04);
+    /* the Roots tab bar's numbers: a 26% fill over a 10px frost (on Chromium,
+       useLiquidLens swaps in the bending rim plus a lighter frost) */
+    -webkit-backdrop-filter: blur(10px) saturate(185%) brightness(1.04);
+    backdrop-filter: blur(10px) saturate(185%) brightness(1.04);
     border-radius: 23px;
     box-shadow: var(--lg-shine), var(--lg-shadow);
     /* lets width animate from fit-content to a length where supported */

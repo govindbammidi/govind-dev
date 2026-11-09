@@ -115,7 +115,7 @@ export default async function PostPage({ params }: Props) {
           </h1>
 
           {post.arc && (
-            <div className="rise rise-2 mb-[34px] border-b border-line pb-7 font-mono text-[11.5px] tracking-[0.5px] text-accent-soft">
+            <div className="rise rise-2 mb-[34px] border-b border-line pb-7 text-[15px] leading-relaxed text-accent-soft">
               arc: {post.arc}
             </div>
           )}

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { ViewTransition } from "react";
-import { Fraunces, JetBrains_Mono, Newsreader } from "next/font/google";
+import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Nav from "@/components/Nav";
 import { site } from "@/lib/site";
@@ -13,11 +13,14 @@ const fraunces = Fraunces({
   style: ["normal", "italic"],
 });
 
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
+// body text: Inter, a screen face with open letters and even strokes, so a
+// long journal entry reads without strain (the old high-contrast newspaper
+// serif went faint at reading sizes). opsz keeps it crisp at body sizes.
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500"],
   style: ["normal", "italic"],
+  axes: ["opsz"],
 });
 
 const jetbrains = JetBrains_Mono({
@@ -83,7 +86,7 @@ export default function RootLayout({
       lang="en"
       data-theme="light"
       suppressHydrationWarning
-      className={`${fraunces.variable} ${newsreader.variable} ${jetbrains.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${inter.variable} ${jetbrains.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
