@@ -88,17 +88,17 @@ export default function Nav() {
       style={{ viewTransitionName: "site-nav" }}
       className="pointer-events-none fixed inset-x-0 top-3 z-40 flex justify-center px-4"
     >
-      {/* the island re-centres as it grows, so `close` moves from under the
-          thumb: a tap anywhere outside puts it away instead */}
-      {open && (
-        <button
-          type="button"
-          aria-label="Close menu"
-          tabIndex={-1}
-          onClick={() => setOpen(false)}
-          className="pointer-events-auto fixed inset-0 -z-10 cursor-default sm:hidden"
-        />
-      )}
+      {/* frosted scrim over the page while the menu is open. it's also the
+          tap-outside target, since `close` moves as the island re-centres */}
+      <button
+        type="button"
+        aria-hidden={!open}
+        aria-label="Close menu"
+        tabIndex={-1}
+        data-open={open || undefined}
+        onClick={() => setOpen(false)}
+        className="island-scrim fixed inset-0 -z-10 cursor-default sm:hidden"
+      />
       <div className="island pointer-events-auto" data-open={open || undefined}>
         <div className="flex h-[44px] items-center gap-[18px] pl-[18px] pr-[14px]">
           <Link
