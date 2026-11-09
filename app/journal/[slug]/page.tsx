@@ -58,6 +58,11 @@ export default async function PostPage({ params }: Props) {
   if (!post) notFound();
 
   const { prev, next } = getAdjacentPosts(slug);
+  const seriesParts = post.series
+    ? getAllPosts()
+        .filter((p) => p.series === post.series)
+        .sort((a, b) => (a.part ?? 0) - (b.part ?? 0))
+    : [];
   const url = `${site.url}/journal/${post.slug}`;
   const mediumUrl = await mediumUrlFor(post.title);
 
@@ -112,14 +117,6 @@ export default async function PostPage({ params }: Props) {
         <article className="pb-[10px] pt-[30px]">
           <div className="rise mb-4 flex flex-wrap items-center gap-x-[12px] gap-y-1 text-[12.5px] uppercase tracking-[0.8px] text-muted">
             <span className="text-accent">{post.tag}</span>
-            {post.part != null && post.seriesTotal != null && (
-              <>
-                <span aria-hidden="true">·</span>
-                <span className="normal-case tracking-normal">
-                  part {post.part} of {post.seriesTotal} - {post.series}
-                </span>
-              </>
-            )}
           </div>
 
           <h1 className="rise rise-1 mb-4 font-display text-title leading-[1.08]">
@@ -154,6 +151,41 @@ export default async function PostPage({ params }: Props) {
               Follow on Medium
             </a>
           </div>
+
+          {/* the other parts of this story, in reading order */}
+          {seriesParts.length > 1 && (
+            <nav aria-label={`${post.series}, all parts`} className="glass mb-8 rounded-[20px] p-5 sm:p-6">
+              <p className="text-[12.5px] text-muted">
+                <span className="font-semibold text-ink">
+                  {post.series!.charAt(0).toUpperCase() + post.series!.slice(1)}
+                </span>
+                <span aria-hidden="true"> · </span>
+                part {post.part} of {seriesParts.length}
+              </p>
+              <ol className="mt-3 space-y-1">
+                {seriesParts.map((p) => {
+                  const here = p.slug === post.slug;
+                  return (
+                    <li key={p.slug} className="flex items-baseline gap-3 text-[15px] leading-[1.45]">
+                      <span className="tnum w-4 shrink-0 text-[13px] text-muted">{p.part}</span>
+                      {here ? (
+                        <span aria-current="page" className="font-semibold text-ink">
+                          {p.title} <span className="text-[12.5px] font-normal text-muted">- you&apos;re here</span>
+                        </span>
+                      ) : (
+                        <Link
+                          href={`/journal/${p.slug}`}
+                          className="text-muted no-underline hover:text-ink hover:underline hover:underline-offset-[4px]"
+                        >
+                          {p.title}
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
+              </ol>
+            </nav>
+          )}
 
           {post.arc && (
             <div className="mb-[34px] text-[15px] leading-relaxed text-accent-soft">

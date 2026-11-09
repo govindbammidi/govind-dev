@@ -235,10 +235,6 @@ export default function AboutPage() {
                 ))}
               </ul>
             </details>
-
-            <p className="mt-6 text-[13px] text-muted">
-              From a 28-minute conversation with Yoshi on Proof CV, 14 September.
-            </p>
           </div>
         </Reveal>
       </section>
