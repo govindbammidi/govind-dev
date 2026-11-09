@@ -22,8 +22,7 @@ const sectionOf = (href: string) => (href.startsWith("/#") ? href.slice(2) : nul
  * The nav as a floating island of liquid glass: a capsule over the page, after
  * the Dynamic Island. On a phone it grows into a card to hold the menu and
  * folds back when a row is tapped, the page is tapped, or the page scrolls.
- * The material lives in globals.css (`.island`, `.nav-thumb`); the lens behind
- * it is drawn by LiquidLens.
+ * The material lives in globals.css (`.island`, `.nav-thumb`).
  */
 export default function Nav() {
   const pathname = usePathname();

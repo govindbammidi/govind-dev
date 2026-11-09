@@ -55,7 +55,7 @@ html {
      fill the page shows through, a 1px rim that catches light at opposite
      corners, a sheen pooling at the top-left, "shine" on the inset edges, a
      soft drop shadow, and the white pill that marks the current link */
-  --lg-fill: rgb(255 255 255 / 0.34);
+  --lg-fill: rgb(255 255 255 / 0.5);
   --lg-rim: linear-gradient(
     135deg,
     rgb(255 255 255 / 1),
@@ -102,7 +102,7 @@ html[data-theme="dark"] {
   --glow-2: rgb(230 170 150 / 0.07);
   --glow-3: rgb(150 210 190 / 0.07);
   --glass-gloss: rgb(255 255 255 / 0.07);
-  --lg-fill: rgb(40 40 44 / 0.42);
+  --lg-fill: rgb(40 40 44 / 0.6);
   --lg-rim: linear-gradient(
     135deg,
     rgb(255 255 255 / 0.42),
@@ -610,8 +610,8 @@ body::before {
     width: fit-content;
     max-width: 100%;
     background-color: var(--lg-fill);
-    -webkit-backdrop-filter: blur(10px) saturate(185%) brightness(1.04);
-    backdrop-filter: blur(10px) saturate(185%) brightness(1.04);
+    -webkit-backdrop-filter: blur(14px) saturate(185%) brightness(1.04);
+    backdrop-filter: blur(14px) saturate(185%) brightness(1.04);
     border-radius: 23px;
     box-shadow: var(--lg-shine), var(--lg-shadow);
     /* lets width animate from fit-content to a length where supported */
@@ -648,14 +648,6 @@ body::before {
     border-radius: inherit;
     background: var(--lg-sheen);
     pointer-events: none;
-  }
-  /* the lens: once LiquidLens has drawn its displacement map, the backdrop
-     bends inward at the rim as well as blurring. Chromium reads url()
-     filters in backdrop-filter; other engines keep the plain blur above */
-  @media (prefers-reduced-transparency: no-preference) {
-    html[data-lens] .island {
-      backdrop-filter: url("#liquid-lens") blur(10px) saturate(185%) brightness(1.04);
-    }
   }
   /* the current link sits in a white pill that slides between links, like a
      tab bar's thumb. Nav positions it; this is only the material */
