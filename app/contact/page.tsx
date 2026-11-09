@@ -4,13 +4,14 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Talk shop, hire, or compare notes on building in public — I'm easy to reach.",
+    "Talk shop, hire, or compare notes on building in public - I'm easy to reach.",
 };
 
 const CHANNELS = [
   { label: "LinkedIn", value: "/in/bammidi-govinda-rao", href: site.linkedin },
   { label: "GitHub", value: "@govindbammidi", href: site.github },
   { label: "GitHub · Maahita", value: "@govindaraob-maahita", href: site.githubWork },
+  { label: "Medium", value: "@bammidigovindarao1729", href: site.medium },
   { label: "Email", value: site.email, href: `mailto:${site.email}` },
 ];
 
@@ -25,13 +26,13 @@ export default function ContactPage() {
           </h1>
           <p className="rise rise-2 mb-10 max-w-[520px] text-[20px] text-lede">
             The journal is the real answer. But if you want to talk shop,
-            hire, or just compare notes on building in public — I&apos;m easy
+            hire, or just compare notes on building in public - I&apos;m easy
             to reach.
           </p>
 
           <div className="glass rise rise-3 grid max-w-[520px] overflow-hidden rounded-[18px]">
             {CHANNELS.map((ch) => {
-              // mailto opens the mail client, not a page — a new tab would be blank
+              // mailto opens the mail client, not a page - a new tab would be blank
               const external = !ch.href.startsWith("mailto:");
               return (
               <a

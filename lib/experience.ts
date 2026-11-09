@@ -2,13 +2,13 @@
  * Experience length, derived from the start date instead of hardcoded, so the
  * numbers on the site never go stale.
  *
- * Call these inside a component, never at module scope — a module-level value is
+ * Call these inside a component, never at module scope - a module-level value is
  * computed once when the server loads the file and would survive an ISR
  * re-render. Pages using them set `revalidate` so the value refreshes without a
  * deploy.
  */
 
-/** Joined Maahita Technologies — September 2024. */
+/** Joined Maahita Technologies - September 2024. */
 const START = { year: 2024, month: 9 } as const;
 
 /** Whole months elapsed since the start date. */
@@ -28,7 +28,7 @@ function years(now: Date): number {
   return Math.round((monthsSince(now) / 12) * 10) / 10;
 }
 
-/** "1.6", "2" — a whole number drops the pointless ".0". */
+/** "1.6", "2" - a whole number drops the pointless ".0". */
 function trim(value: number): string {
   return value % 1 === 0 ? String(value) : value.toFixed(1);
 }

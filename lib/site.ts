@@ -18,5 +18,6 @@ export const site = {
   linkedin: "https://www.linkedin.com/in/bammidi-govinda-rao-b8286a229/",
   github: "https://github.com/govindbammidi",
   githubWork: "https://github.com/govindaraob-maahita",
-  fine: "Govind — building the Maahita school ERP, and writing down what it teaches me.",
+  medium: "https://medium.com/@bammidigovindarao1729",
+  fine: "Govind - building the Maahita school ERP, and writing down what it teaches me.",
 } as const;

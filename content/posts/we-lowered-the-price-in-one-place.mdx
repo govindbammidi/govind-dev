@@ -1,6 +1,6 @@
 ---
 title: "We lowered the price in one place. We charged the old one."
-summary: "We cut plan prices for rural schools and shipped the change to the landing page, deliberately deferring the rest as a tracked follow-up. That was a reasonable call. It became a bug anyway — because 'the price' was never one thing to defer. It was three things wearing the same name, in two repositories."
+summary: "We cut plan prices for rural schools and shipped the change to the landing page, deliberately deferring the rest as a tracked follow-up. That was a reasonable call. It became a bug anyway - because 'the price' was never one thing to defer. It was three things wearing the same name, in two repositories."
 date: "2026-06-11"
 tag: "Engineering"
 arc: "cut the price for rural schools → ship it to the landing page, defer the rest on purpose → the amount actually charged came from the copy nobody updated → a deferral is only safe if the thing you deferred is one thing"
@@ -10,7 +10,7 @@ featured: false
 
 we were pushing to reach government and low-fee schools across AP and TS, and the pricing was wrong for that market. so we cut it. starter went from ₹4,499 a month to ₹1,999. professional from ₹19,999 to ₹4,999.
 
-the ticket shipped the new numbers to the landing page and **explicitly deferred everything else** — the registration flow, the backend — as a known, tracked inconsistency to be picked up next.
+the ticket shipped the new numbers to the landing page and **explicitly deferred everything else** - the registration flow, the backend - as a known, tracked inconsistency to be picked up next.
 
 i want to be fair to that decision, because it wasn't laziness. marketing needed the new number live. the rest was scoped, written down, and linked. that is how you're supposed to defer work.
 
@@ -22,17 +22,17 @@ when i went to do the follow-up, the amount wasn't in one place waiting to be ed
 
 <PriceInThreePlacesDiagram />
 
-so here is what a school actually experienced. they read ₹1,999 on the landing page. they started registering and the plan step quoted them ₹4,499. and whichever number they'd made peace with by then, the amount that reached the payment screen came from the third one — the backend — because that's the value the razorpay order is built from.
+so here is what a school actually experienced. they read ₹1,999 on the landing page. they started registering and the plan step quoted them ₹4,499. and whichever number they'd made peace with by then, the amount that reached the payment screen came from the third one - the backend - because that's the value the razorpay order is built from.
 
 | Surface | showed | should have shown |
 |---|---|---|
-| Starter — monthly | ₹4,499 | ₹1,999 |
-| Starter — annual (per month) | ₹3,824 | ₹1,799 |
-| Professional — monthly | ₹19,999 | ₹4,999 |
-| Professional — annual (per month) | ₹16,999 | ₹4,499 |
+| Starter - monthly | ₹4,499 | ₹1,999 |
+| Starter - annual (per month) | ₹3,824 | ₹1,799 |
+| Professional - monthly | ₹19,999 | ₹4,999 |
+| Professional - annual (per month) | ₹16,999 | ₹4,499 |
 | Annual discount label | Save 15% | Save 10% |
 
-and it didn't stop at the screen. the backend number is what flows into the quotation PDF, the invoice, and the receipt — so the stale price wasn't just being *displayed*, it was being **charged and then written down permanently** on documents a school keeps.
+and it didn't stop at the screen. the backend number is what flows into the quotation PDF, the invoice, and the receipt - so the stale price wasn't just being *displayed*, it was being **charged and then written down permanently** on documents a school keeps.
 
 we advertised one price and billed another. that's not a UI inconsistency, that's the kind of thing that costs you a customer's trust in one step.
 
@@ -42,13 +42,13 @@ we advertised one price and billed another. that's not a UI inconsistency, that'
 
 they agreed for months. that's the trap.
 
-three identical values are indistinguishable from one value — every test passes, every screen matches, nothing is wrong. the duplication isn't a bug while nobody changes anything. it only becomes a bug the first time someone updates one, and at that exact moment it becomes several bugs at once, on the most sensitive screen in the product.
+three identical values are indistinguishable from one value - every test passes, every screen matches, nothing is wrong. the duplication isn't a bug while nobody changes anything. it only becomes a bug the first time someone updates one, and at that exact moment it becomes several bugs at once, on the most sensitive screen in the product.
 
 i had already been taught this and hadn't generalised it. [my lead once made me extract every hardcoded string into constants](/journal/i-fought-my-team-lead-over-extracting-strings-into-constants) and i thought it was busywork until we needed a second language. i'd filed that away as a lesson about *strings*. it was never about strings. it was about a fact being allowed to exist in more than one place.
 
 a label rendering in the wrong language is embarrassing. a price rendering in the wrong number is a refund and an apology.
 
-<Ex>Ex: duplication doesn't announce itself when you create it. it announces itself the first time the copies need to disagree — which is always later, and always under pressure.</Ex>
+<Ex>Ex: duplication doesn't announce itself when you create it. it announces itself the first time the copies need to disagree - which is always later, and always under pressure.</Ex>
 
 ## the fix
 
@@ -60,9 +60,9 @@ one invariant got pinned down while we were in there: `annualTotal` must equal `
 
 worth writing these down rather than claiming it's fully closed:
 
-- the GST semantics still differ on purpose. the landing page quotes GST-exclusive with tax applied at checkout; in-app is GST-inclusive. the headline numbers match, the framing doesn't. we decided that's acceptable and left it — but it's a decision, not a fix.
+- the GST semantics still differ on purpose. the landing page quotes GST-exclusive with tax applied at checkout; in-app is GST-inclusive. the headline numbers match, the framing doesn't. we decided that's acceptable and left it - but it's a decision, not a fix.
 - historical invoices and receipts keep the old amounts, correctly. those are records of what actually happened, and the whole point of freezing them is that a price change must not reach backwards. [the receipts already learned that lesson the hard way.](/journal/the-receipt-that-kept-rewriting-itself)
-- the change only took effect on the backend deploy, so there was a window where the repos disagreed by design. two repos, two PRs — a price change can't be atomic across them, and i don't have a good answer for that beyond deploying the backend first.
+- the change only took effect on the backend deploy, so there was a window where the repos disagreed by design. two repos, two PRs - a price change can't be atomic across them, and i don't have a good answer for that beyond deploying the backend first.
 
 <Pull>a price isn't a number you display. it's a fact you charge against, and a fact can only be true in one place.</Pull>
 

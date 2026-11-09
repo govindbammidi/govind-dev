@@ -1,6 +1,6 @@
 ---
 title: "The first prompt gets you 60%. The last 15% is the whole job."
-summary: "I started counting my prompts. One prompt gets a working prototype. A few more get you to 85%. Then the curve flattens and the remaining stretch can take hundreds — and almost none of them are feature requests. They're me correcting things the model assumed."
+summary: "I started counting my prompts. One prompt gets a working prototype. A few more get you to 85%. Then the curve flattens and the remaining stretch can take hundreds - and almost none of them are feature requests. They're me correcting things the model assumed."
 date: "2026-08-22"
 tag: "Engineering"
 arc: "one prompt gets a working prototype → a few more reach 85% → the last stretch takes hundreds → and they're not features, they're corrections"
@@ -22,7 +22,7 @@ from what i've watched on our own product, roughly:
 
 that last line is the whole point of this post.
 
-the intuition everybody has — the one i had — is that once you're at 85%, you're basically done. ten more prompts. an afternoon.
+the intuition everybody has - the one i had - is that once you're at 85%, you're basically done. ten more prompts. an afternoon.
 
 it isn't ten. small bugs keep arriving. small mistakes keep arriving. things that were fine on the happy path fall over on the second one. and the closer the implementation gets to what you actually pictured, the *smaller* each improvement becomes and the *more* of your intervention each one needs 😮‍💨
 
@@ -34,11 +34,11 @@ here's the part that surprised me when i actually looked at what i was typing.
 
 most of my prompts are not "build me this". most of my prompts are me correcting an assumption the model made and never mentioned.
 
-it decided a text field didn't need a max length. it decided a number should be a string. it decided a column could grow forever. it decided the happy path was the only path. none of those are refusals or errors — they're quiet defaults, and every one of them costs a prompt to undo.
+it decided a text field didn't need a max length. it decided a number should be a string. it decided a column could grow forever. it decided the happy path was the only path. none of those are refusals or errors - they're quiet defaults, and every one of them costs a prompt to undo.
 
 <Ex>Ex: nobody's first prompt says "and put a sensible max length on that input". you only ever write that prompt after you notice it's missing.</Ex>
 
-and noticing is the expensive part. the model can't tell you what it assumed, because from its side it didn't assume anything — it just filled a gap i left open. the gaps i leave open are exactly the gaps i don't know are gaps.
+and noticing is the expensive part. the model can't tell you what it assumed, because from its side it didn't assume anything - it just filled a gap i left open. the gaps i leave open are exactly the gaps i don't know are gaps.
 
 which is why context does so much work here. a fresh session with no idea how our app is built will reinvent decisions we settled months ago, and i'll spend prompts putting them back. the prompts i save by writing a proper spec up front are the cheapest prompts i'll ever save.
 
@@ -50,13 +50,13 @@ none of that is my job. my job is the distance between a prototype and something
 
 <Pull>the useful benchmark isn't how fast a model writes code. it's the prompt cost of turning what it wrote into what you meant.</Pull>
 
-by that measure the interesting question about any model is not "can it build this" — it's "how many times will i have to correct it before this is real?" i'd take a slower model that assumes less.
+by that measure the interesting question about any model is not "can it build this" - it's "how many times will i have to correct it before this is real?" i'd take a slower model that assumes less.
 
 ## why i'm writing this down
 
 because this curve explains almost everything else i've learned this year, and i didn't see the pattern until i started counting.
 
-[the frontend that showed pages while the backend sent all 5000 rows](/journal/pagination-is-a-contract-not-a-frontend-feature) — an assumption i didn't correct. [the dashboard where all eight graphs fetched separately](/journal/eight-graphs-eight-api-calls) — same. [the migration that added a column for data we already stored](/journal/ai-can-write-the-sql-you-still-have-to-read-the-schema) — same. [the service that imported the adapter directly](/journal/the-service-imported-the-adapter-directly) — same. [the dropdown guarded with a length check](/journal/the-ai-length-checked-a-dropdown) — same.
+[the frontend that showed pages while the backend sent all 5000 rows](/journal/pagination-is-a-contract-not-a-frontend-feature) - an assumption i didn't correct. [the dashboard where all eight graphs fetched separately](/journal/eight-graphs-eight-api-calls) - same. [the migration that added a column for data we already stored](/journal/ai-can-write-the-sql-you-still-have-to-read-the-schema) - same. [the service that imported the adapter directly](/journal/the-service-imported-the-adapter-directly) - same. [the dropdown guarded with a length check](/journal/the-ai-length-checked-a-dropdown) - same.
 
 five posts, five different subsystems, one shape. every one of them was the model filling a gap in my instructions with something reasonable-looking, and me not catching it until someone else did.
 

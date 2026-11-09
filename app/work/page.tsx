@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "One product, every layer. The end-to-end surface area: engineering, product & ops, and the Maahita school ERP.",
 };
 
-// the peer comparison in the header is derived from the start date — re-render
+// the peer comparison in the header is derived from the start date - re-render
 // daily so it moves on its own instead of freezing at the last deploy.
 export const revalidate = 86400;
 
@@ -49,18 +49,18 @@ const SIDE_PROJECTS: SideProject[] = [
     kicker: "Built for my father",
     title: "Site Bill Automator",
     story: [
-      "My father is a paint contractor. Every time he finished painting a bank branch, someone had to make the bill for the owner — material lists, work measurements, totals. That someone was me: typing every line into MS Word, colouring fonts, adjusting sizes, running each calculation on a phone calculator, exporting a PDF. I made calculation mistakes more than once, and my father let me know about it.",
-      "So I built the proper fix: an Android app (Kotlin, Jetpack Compose) and a web app (Next.js) sharing one Firestore database in real time — multi-section bills, work measurements, per-day rates, advances, and a one-tap PDF whose maths is never wrong. A bill that used to eat an evening now takes minutes.",
+      "My father is a paint contractor. Every time he finished painting a bank branch, someone had to make the bill for the owner - material lists, work measurements, totals. That someone was me: typing every line into MS Word, colouring fonts, adjusting sizes, running each calculation on a phone calculator, exporting a PDF. I made calculation mistakes more than once, and my father let me know about it.",
+      "So I built the proper fix: an Android app (Kotlin, Jetpack Compose) and a web app (Next.js) sharing one Firestore database in real time - multi-section bills, work measurements, per-day rates, advances, and a one-tap PDF whose maths is never wrong. A bill that used to eat an evening now takes minutes.",
     ],
     stack: ["Kotlin · Jetpack Compose", "Next.js", "Firebase Firestore", "PDF generation", "PWA"],
     links: [{ label: "live app", href: "https://web-sable-rho-20.vercel.app" }],
   },
   {
-    kicker: "Built for myself — now my friends use it",
+    kicker: "Built for myself - now my friends use it",
     title: "Roots",
     story: [
-      "I was spending a lot, lending money to friends and forgetting about it. My system was a notepad app on my phone and redoing the maths by hand — who owes me, what I owe, constant confusion.",
-      "Roots is the fix: a simple expense tracker that also tracks lent and borrowed money per person, with repayments, budgets, recurring expenses, and charts — offline-first, installable on Android. I kept it simple enough that my friends now use it daily too.",
+      "I was spending a lot, lending money to friends and forgetting about it. My system was a notepad app on my phone and redoing the maths by hand - who owes me, what I owe, constant confusion.",
+      "Roots is the fix: a simple expense tracker that also tracks lent and borrowed money per person, with repayments, budgets, recurring expenses, and charts - offline-first, installable on Android. I kept it simple enough that my friends now use it daily too.",
     ],
     stack: ["React", "Capacitor (Android)", "Firebase", "offline-first", "Recharts"],
     links: [
@@ -84,7 +84,7 @@ export default function WorkPage() {
           <p className="rise rise-2 max-w-[600px] text-[20px] text-lede">
             At {served}{" "}
             in, most engineers have touched one slice of one codebase.
-            I&apos;ve shipped a whole product — from the database to the deploy
+            I&apos;ve shipped a whole product - from the database to the deploy
             to the customer call that changed it.
           </p>
         </div>
@@ -193,7 +193,7 @@ export default function WorkPage() {
             Selected projects
           </SectionLabel>
           <p className="mb-7 max-w-[600px] text-[18px] text-lede">
-            Client and product work with a dedicated breakdown — the problem, the
+            Client and product work with a dedicated breakdown - the problem, the
             build, and where it landed.
           </p>
           <div className="flex flex-col gap-6">
@@ -211,7 +211,7 @@ export default function WorkPage() {
           </SectionLabel>
           <p className="mb-4 max-w-[620px] text-body">
             I came in with basic programming and almost no production
-            experience. I learned by shipping — and by getting my PRs rejected
+            experience. I learned by shipping - and by getting my PRs rejected
             by engineers with 10 to 14 years in the industry.
           </p>
           <p className="mb-4 max-w-[620px] text-body">
@@ -230,7 +230,7 @@ export default function WorkPage() {
       <section className="border-b border-line py-[50px]">
         <div className="mx-auto max-w-[760px] px-7">
           <SectionLabel number="05" className="mb-7">
-            Side projects — built because real life demanded it
+            Side projects - built because real life demanded it
           </SectionLabel>
           <div className="flex flex-col gap-6">
             {SIDE_PROJECTS.map((project) => (

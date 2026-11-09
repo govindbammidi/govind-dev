@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { WorkRow as WorkRowData } from "@/lib/projects";
 
 /** One ruled line of the homepage work list: what it is, one sentence, the
- *  stack, and where to see it. Compact on purpose — the page has to read in
+ *  stack, and where to see it. Compact on purpose - the page has to read in
  *  the time a recruiter gives it. */
 export default function WorkRow({
   row,

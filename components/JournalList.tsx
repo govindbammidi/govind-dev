@@ -48,7 +48,7 @@ function months(posts: PostMeta[]) {
   return out;
 }
 
-/** Searches what the row actually shows — title, summary, arc and tag. */
+/** Searches what the row actually shows - title, summary, arc and tag. */
 function matches(post: PostMeta, q: string): boolean {
   if (!q) return true;
   return (
@@ -113,7 +113,7 @@ export default function JournalList({ posts }: { posts: PostMeta[] }) {
 
   return (
     <>
-      {/* front matter — the search line, the tags, then the month index, set
+      {/* front matter - the search line, the tags, then the month index, set
           like the opening pages of a printed volume */}
       <div className="border-b border-line pt-[26px]">
         {/* a ruled line to write on, rather than a boxed widget */}
@@ -122,7 +122,7 @@ export default function JournalList({ posts }: { posts: PostMeta[] }) {
             <label htmlFor="journal-search" className="sr-only">
               Search entries
             </label>
-            {/* drawn rather than typed — the glass glyphs have no reliable
+            {/* drawn rather than typed - the glass glyphs have no reliable
                 mono coverage, and this one inherits the rust exactly */}
             <svg
               aria-hidden="true"
@@ -300,7 +300,7 @@ export default function JournalList({ posts }: { posts: PostMeta[] }) {
               seg.series && seg.posts.length > 1 ? (
                 <section
                   key={`series-${seg.series}`}
-                  aria-label={`${seg.series} — a ${seg.posts.length}-part story`}
+                  aria-label={`${seg.series} - a ${seg.posts.length}-part story`}
                 >
                   <div className="flex items-center gap-[10px] pt-[26px] font-mono text-[11.5px] uppercase tracking-[0.5px] text-accent-soft">
                     <span

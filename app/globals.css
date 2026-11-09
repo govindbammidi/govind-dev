@@ -16,14 +16,21 @@
   --color-body: #2f2b23;
   --color-lede: #3a352c;
 
-  --font-display: var(--font-fraunces), Georgia, serif;
-  --font-body: var(--font-inter), system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  /* one typeface for the whole site, set the way apple.com sets SF Pro.
+     Apple devices get the real SF Pro (the system font, via -apple-system;
+     SF Pro may not be bundled into a website). Everyone else gets Inter,
+     its closest open match. display and mono are kept as names so the
+     existing classes still resolve; all three are the same face. Only real
+     code (journal snippets) gets a monospace, so columns of code line up. */
+  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  --font-code: ui-monospace, "SFMono-Regular", "Cascadia Code", Consolas, monospace;
 
-  /* the one easing for all motion — a quick start that settles gently */
+  /* the one easing for all motion - a quick start that settles gently */
   --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* fluid display scale — headings grow with the page instead of jumping at a
+  /* fluid display scale - headings grow with the page instead of jumping at a
      breakpoint, so the masthead reads big on a desktop and still fits a phone */
   --text-masthead: clamp(2.35rem, 1.1rem + 5vw, 3.7rem);
   --text-display: clamp(2.05rem, 1.35rem + 2.8vw, 2.95rem);
@@ -45,10 +52,15 @@ html {
   --glass-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 10px 30px -14px rgb(0 0 0 / 0.18);
   --glass-shadow-lift: 0 2px 4px rgb(0 0 0 / 0.05), 0 18px 40px -16px rgb(0 0 0 / 0.26);
   /* ambient light behind the panes: three muted pastels, faint enough that
-     the paper stays paper — the glass picks them up, the text doesn't */
-  --glow-1: rgb(205 218 255 / 0.55);
-  --glow-2: rgb(255 222 205 / 0.45);
-  --glow-3: rgb(205 238 224 / 0.5);
+     the paper stays paper - the glass picks them up, the text doesn't */
+  /* the aurora behind everything: periwinkle, peach, mint and lilac light,
+     soft enough that text never sits on a colour, strong enough that the
+     glass always has something to catch */
+  --glow-1: rgb(188 204 255 / 0.7);
+  --glow-2: rgb(255 208 186 / 0.6);
+  --glow-3: rgb(186 234 214 / 0.65);
+  --glow-4: rgb(232 204 252 / 0.5);
+  --grid-dot: rgb(26 24 19 / 0.07);
   /* the gloss: a soft sheen across the top-left of a pane */
   --glass-gloss: rgb(255 255 255 / 0.4);
   /* liquid glass, the island's material (after the Roots bottom bar): a thin
@@ -76,33 +88,37 @@ html {
     0 3px 10px -3px rgb(44 44 60 / 0.22), 0 1px 2px rgb(44 44 60 / 0.08);
 }
 
-/* dark theme: same warm paper-and-ink character on Claude's near-black ground */
+/* dark theme: a true neutral black, no warm tint - near-black ground,
+   near-white ink, cool greys between (the shadcn neutral scale) */
 html[data-theme="dark"] {
   color-scheme: dark;
-  --color-ink: #ece7da;
-  --color-paper: #1f1f1e;
-  --color-paper-2: #262624;
-  --color-line: #3a3a37;
-  --color-muted: #a39a84;
-  /* black would vanish on the dark ground — the accent inverts to white */
-  --color-accent: #f5f5f7;
-  --color-accent-soft: #d2d2d7;
-  --color-tag: #d9d3c2;
-  --color-body: #d6d0bf;
-  --color-lede: #c9c3b1;
+  --color-ink: #fafafa;
+  --color-paper: #0a0a0a;
+  --color-paper-2: #171717;
+  --color-line: #262626;
+  --color-muted: #a1a1a1;
+  /* black would vanish on the dark ground - the accent inverts to white */
+  --color-accent: #fafafa;
+  --color-accent-soft: #d4d4d4;
+  --color-tag: #d4d4d4;
+  --color-body: #d4d4d4;
+  --color-lede: #e5e5e5;
 
   /* dark glass: a smoked pane, lit faintly from above */
   --glass-bg: rgb(255 255 255 / 0.05);
-  --glass-bg-strong: rgb(38 38 36 / 0.62);
+  --glass-bg-strong: rgb(23 23 23 / 0.62);
   --glass-edge: rgb(255 255 255 / 0.09);
   --glass-highlight: rgb(255 255 255 / 0.1);
   --glass-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -14px rgb(0 0 0 / 0.6);
   --glass-shadow-lift: 0 2px 4px rgb(0 0 0 / 0.35), 0 20px 44px -16px rgb(0 0 0 / 0.75);
-  --glow-1: rgb(150 170 230 / 0.1);
-  --glow-2: rgb(230 170 150 / 0.07);
-  --glow-3: rgb(150 210 190 / 0.07);
+  /* dark: the same four lights, deeper (indigo, rose, teal, violet) on ink */
+  --glow-1: rgb(99 110 241 / 0.2);
+  --glow-2: rgb(236 120 130 / 0.11);
+  --glow-3: rgb(40 190 165 / 0.13);
+  --glow-4: rgb(168 110 240 / 0.14);
+  --grid-dot: rgb(255 255 255 / 0.05);
   --glass-gloss: rgb(255 255 255 / 0.07);
-  --lg-fill: rgb(40 40 44 / 0.38);
+  --lg-fill: rgb(38 38 38 / 0.4);
   --lg-rim: linear-gradient(
     135deg,
     rgb(255 255 255 / 0.42),
@@ -130,8 +146,22 @@ body {
   font-size: 17px;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
-  background-image: radial-gradient(var(--color-line) 0.5px, transparent 0.5px);
+  /* a faint dot grid, like graph paper, under the aurora */
+  background-image: radial-gradient(var(--grid-dot) 0.75px, transparent 0.75px);
   background-size: 22px 22px;
+}
+
+/* apple.com's type: text tightened a touch, headlines semibold and set
+   tight. Unlayered, so it wins over the per-heading weight and tracking
+   utilities and every heading on the site reads the same way. */
+body {
+  letter-spacing: -0.011em;
+}
+h1,
+h2,
+h3 {
+  font-weight: 600;
+  letter-spacing: -0.025em;
 }
 
 ::selection {
@@ -195,7 +225,7 @@ h3 {
     margin: 32px 0;
   }
 
-  /* article body — Govind's raw voice, post page measure */
+  /* article body - Govind's raw voice, post page measure */
   /* long reads: a little larger than the page text, with roomier lines */
   .post-body {
     font-size: 18px;
@@ -204,7 +234,7 @@ h3 {
   }
   .post-body p {
     margin-bottom: 20px;
-    /* fewer orphaned words and ragged line-ends — quiet reading aid */
+    /* fewer orphaned words and ragged line-ends - quiet reading aid */
     text-wrap: pretty;
   }
   .post-body strong {
@@ -241,7 +271,7 @@ h3 {
     margin-bottom: 0;
   }
   .post-body code {
-    font-family: var(--font-mono);
+    font-family: var(--font-code);
     font-size: 15px;
     background: var(--color-paper-2);
     border: 1px solid var(--color-line);
@@ -249,7 +279,7 @@ h3 {
     padding: 1px 6px;
   }
   .post-body pre {
-    font-family: var(--font-mono);
+    font-family: var(--font-code);
     font-size: 15px;
     background: var(--color-paper-2);
     border: 1px solid var(--color-line);
@@ -386,7 +416,7 @@ h3 {
     justify-content: center;
     gap: 22px;
   }
-  /* panels stack rather than shrink — a squeezed viewBox takes the labels
+  /* panels stack rather than shrink - a squeezed viewBox takes the labels
      down with it, and 6px mono is not a diagram */
   .post-body .diagram-panel {
     flex: 1 1 240px;
@@ -422,7 +452,7 @@ h3 {
   }
 
   /* italic caption line right under an image: *like this*
-     scoped to image containers only — a bare `div + p` also catches any
+     scoped to image containers only - a bare `div + p` also catches any
      paragraph whose lone element child is an <em> (text-node siblings are
      invisible to :only-child), which mis-styled inline *emphasis* after
      .ex / .pull callouts. */
@@ -464,7 +494,7 @@ html[data-theme="dark"] .post-body .diagram {
   background: color-mix(in srgb, var(--color-paper-2) 88%, white 12%);
 }
 
-/* dark mode: logo art is black marks — keep it on light paper chips */
+/* dark mode: logo art is black marks - keep it on light paper chips */
 html[data-theme="dark"] .post-body .product-family-mark {
   background: #f4f1e8;
 }
@@ -496,7 +526,7 @@ html[data-theme="dark"] .post-body .logo-row img {
 }
 
 /* ------------------------------------------------------------------ */
-/* glass — translucent material, after Apple's HIG materials.          */
+/* glass - translucent material, after Apple's HIG materials.          */
 
 /* soft fixed light behind everything, so the panes have something to
    refract. greyscale only; it sits under the dotted ground's content. */
@@ -507,13 +537,27 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(42rem 30rem at 8% 6%, var(--glow-1), transparent 70%),
-    radial-gradient(38rem 32rem at 95% 36%, var(--glow-2), transparent 70%),
-    radial-gradient(34rem 26rem at 28% 98%, var(--glow-3), transparent 70%);
+    radial-gradient(46rem 34rem at 6% 4%, var(--glow-1), transparent 70%),
+    radial-gradient(40rem 34rem at 98% 30%, var(--glow-2), transparent 70%),
+    radial-gradient(40rem 30rem at 18% 96%, var(--glow-3), transparent 70%),
+    radial-gradient(34rem 28rem at 88% 92%, var(--glow-4), transparent 70%);
+}
+/* the lights drift, very slowly, so the page feels alive without anything
+   moving that you'd notice reading. transform only: the layer is drawn once
+   and the GPU slides it, so it costs nothing while scrolling */
+@media (prefers-reduced-motion: no-preference) {
+  body::before {
+    inset: -8%;
+    animation: aurora-drift 48s ease-in-out infinite alternate;
+  }
+}
+@keyframes aurora-drift {
+  from { transform: translate3d(-2%, -1.5%, 0) scale(1); }
+  to { transform: translate3d(2%, 1.5%, 0) scale(1.06); }
 }
 
 @layer components {
-  /* cards: the bigger surface reads thicker — more blur, deeper shadow */
+  /* cards: the bigger surface reads thicker - more blur, deeper shadow */
   .glass {
     /* frosted body, glossy top-left: the sheen fades out before mid-pane */
     background:
@@ -674,7 +718,7 @@ body::before {
   .nav-thumb[data-on] {
     opacity: 1;
   }
-  /* open: the capsule grows a little into a card to hold the menu — only as
+  /* open: the capsule grows a little into a card to hold the menu - only as
      wide as the rows need, so the page stays visible around it. phone widths
      only, so a menu left open while the window widens can't squeeze the
      desktop island (the panel itself is already sm:hidden) */
@@ -767,6 +811,15 @@ body::before {
     320ms var(--ease-settle) 100ms both vt-fade,
     480ms var(--ease-settle) both vt-rise;
 }
+/* theme switch: the new theme grows out of the toggle in a circle
+   (ThemeToggle animates the clip-path). The two root snapshots don't
+   cross-fade - the circle is the only motion. */
+html[data-theme-switch]::view-transition-old(root),
+html[data-theme-switch]::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 ::view-transition-group(site-nav) {
   animation: none;
   z-index: 100;
@@ -846,7 +899,7 @@ html[data-theme="dark"] .glass-btn {
 }
 
 /* ------------------------------------------------------------------ */
-/* motion — ink settling on paper. small distances, one easing curve.  */
+/* motion - ink settling on paper. small distances, one easing curve.  */
 
 @keyframes rise {
   from {
@@ -878,7 +931,7 @@ html[data-theme="dark"] .glass-btn {
 
 @layer components {
   /* page-load entrance: each .rise-N waits one beat longer.
-     0.5s / 10px — long slow tails crawl at sub-pixel speeds and make
+     0.5s / 10px - long slow tails crawl at sub-pixel speeds and make
      text shimmer, especially on Windows display scaling */
   .rise {
     animation: rise 0.5s var(--ease-settle) both;
@@ -921,7 +974,7 @@ html[data-theme="dark"] .glass-btn {
   }
 }
 
-/* scroll reveal — content is only hidden when JS is around to reveal it */
+/* scroll reveal - content is only hidden when JS is around to reveal it */
 @media (scripting: enabled) {
   @layer components {
     .reveal {
@@ -941,7 +994,7 @@ html[data-theme="dark"] .glass-btn {
   }
 }
 
-/* reading progress on posts — the kicker's rule-draw, driven by scroll.
+/* reading progress on posts - the kicker's rule-draw, driven by scroll.
    pure CSS scroll timeline; browsers without it simply never show the line */
 .read-progress {
   display: none;
@@ -977,7 +1030,7 @@ html.theme-fade *::after {
     stroke 0.4s var(--ease-settle) !important;
 }
 
-/* keyboard focus ring — an accent rule around whatever Tab landed on */
+/* keyboard focus ring - an accent rule around whatever Tab landed on */
 a:focus-visible,
 button:focus-visible {
   outline: 2px solid var(--color-accent);
@@ -1026,4 +1079,38 @@ html[data-pointer] button:focus-visible {
   .caret {
     animation: none;
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* GitHub activity - the contribution grid, in GitHub's own greens.     */
+/* ------------------------------------------------------------------ */
+:root {
+  --gh-0: #ebedf0;
+  --gh-1: #9be9a8;
+  --gh-2: #40c463;
+  --gh-3: #30a14e;
+  --gh-4: #216e39;
+}
+html[data-theme="dark"] {
+  --gh-0: #1c1c1c;
+  --gh-1: #0e4429;
+  --gh-2: #006d32;
+  --gh-3: #26a641;
+  --gh-4: #39d353;
+}
+.gh-cell {
+  outline: 1px solid rgb(0 0 0 / 0.04);
+  outline-offset: -1px;
+}
+.gh-l0 { fill: var(--gh-0); }
+.gh-l1 { fill: var(--gh-1); }
+.gh-l2 { fill: var(--gh-2); }
+.gh-l3 { fill: var(--gh-3); }
+.gh-l4 { fill: var(--gh-4); }
+.gh-month {
+  fill: var(--color-muted);
+  font-size: 10px;
+}
+.gh-scroll {
+  scrollbar-width: thin;
 }

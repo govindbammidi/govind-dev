@@ -2,20 +2,55 @@
 
 let fadeTimer: ReturnType<typeof setTimeout> | undefined;
 
+// how long the new theme takes to spread across the screen
+const REVEAL_MS = 500;
+
 export default function ThemeToggle() {
-  const toggle = () => {
+  const toggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     const root = document.documentElement;
     const next = root.dataset.theme === "dark" ? "light" : "dark";
-    // colors settle into the new theme instead of snapping (see globals.css)
-    root.classList.add("theme-fade");
-    clearTimeout(fadeTimer);
-    fadeTimer = setTimeout(() => root.classList.remove("theme-fade"), 450);
-    root.dataset.theme = next;
-    try {
-      localStorage.setItem("theme", next);
-    } catch {
-      /* private mode — theme just won't persist */
+    const apply = () => {
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem("theme", next);
+      } catch {
+        /* private mode - theme just won't persist */
+      }
+    };
+
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!document.startViewTransition || still) {
+      // no view transitions (or asked for less motion): colors settle into
+      // the new theme instead of snapping (see .theme-fade in globals.css)
+      root.classList.add("theme-fade");
+      clearTimeout(fadeTimer);
+      fadeTimer = setTimeout(() => root.classList.remove("theme-fade"), 450);
+      apply();
+      return;
     }
+
+    // The new theme grows out of this button in a circle, wide enough to
+    // reach the farthest corner of the screen
+    const r = e.currentTarget.getBoundingClientRect();
+    const x = r.left + r.width / 2;
+    const y = r.top + r.height / 2;
+    const reach = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+    root.dataset.themeSwitch = "";
+    const transition = document.startViewTransition(apply);
+    transition.ready
+      .then(() => {
+        root.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${reach}px at ${x}px ${y}px)`] },
+          { duration: REVEAL_MS, easing: "ease-in-out", pseudoElement: "::view-transition-new(root)" },
+        );
+      })
+      .catch(() => {
+        /* transition skipped (e.g. tab hidden) - the theme still applied */
+      });
+    transition.finished.finally(() => {
+      delete root.dataset.themeSwitch;
+    });
   };
 
   // Both icons render always, stacked in one grid cell; CSS cross-fades and
@@ -28,7 +63,7 @@ export default function ThemeToggle() {
       onClick={toggle}
       className="grid place-items-center text-muted transition-colors hover:text-accent"
     >
-      {/* moon — shown in light mode */}
+      {/* moon - shown in light mode */}
       <svg
         className="col-start-1 row-start-1 transition-[opacity,transform] duration-300 ease-settle dark:-rotate-90 dark:scale-50 dark:opacity-0"
         width="15"
@@ -43,7 +78,7 @@ export default function ThemeToggle() {
       >
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
       </svg>
-      {/* sun — shown in dark mode */}
+      {/* sun - shown in dark mode */}
       <svg
         className="col-start-1 row-start-1 -rotate-90 scale-50 opacity-0 transition-[opacity,transform] duration-300 ease-settle dark:rotate-0 dark:scale-100 dark:opacity-100"
         width="15"

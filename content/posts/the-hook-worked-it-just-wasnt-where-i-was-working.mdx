@@ -1,6 +1,6 @@
 ---
 title: "The hook worked. It just wasn't where I was working."
-summary: "I automated the schema-sync check with a hook and trusted it completely. Months later the tables had drifted again. The hook lived in the backend folder — but I do most of my work from the frontend, a separate repo with its own Claude session, where it never once fired."
+summary: "I automated the schema-sync check with a hook and trusted it completely. Months later the tables had drifted again. The hook lived in the backend folder - but I do most of my work from the frontend, a separate repo with its own Claude session, where it never once fired."
 date: "2026-06-12"
 tag: "Engineering"
 arc: "built the hook → trusted it for months → drift came back → the hook only lived in the backend → install it in both folders"
@@ -10,7 +10,7 @@ draft: false
 featured: false
 ---
 
-so [i built the hook](/journal/i-kept-forgetting-the-check-so-i-gave-it-to-a-hook) and felt safe. finally — the boring check i kept forgetting was the machine's job now. i stopped thinking about migration sync entirely 🤷‍♂️
+so [i built the hook](/journal/i-kept-forgetting-the-check-so-i-gave-it-to-a-hook) and felt safe. finally - the boring check i kept forgetting was the machine's job now. i stopped thinking about migration sync entirely 🤷‍♂️
 
 a few months later, **Jagan** sir ran one of his analyses.... and found the migration files had drifted. again. tables missing. the exact class of bug i thought i'd killed. he ran the audit, brought it all back in line.
 
@@ -18,7 +18,7 @@ then the question i had no answer for: "why didn't your hook catch this?" 🙃
 
 so i went digging. and here's the hole.
 
-our backend and frontend are **separate** — separate folders, separate repos, separate ports. not a next.js app where both live under one roof. two codebases. which means two `.claude/` folders. two different places a hook can live.
+our backend and frontend are **separate** - separate folders, separate repos, separate ports. not a next.js app where both live under one roof. two codebases. which means two `.claude/` folders. two different places a hook can live.
 
 i'd built the hook in the **backend** folder. that's where the migrations are, so that's where it made sense.
 
@@ -26,19 +26,19 @@ but here's how i actually work: most days i open claude in the **frontend** fold
 
 <Pull>i installed the guard on the door i rarely walk through. then i spent every day walking through the other one.</Pull>
 
-and the AI does nothing to save you here — claude opened in the frontend sees only the frontend. it never pauses to ask "wait, should the backend change too?" or "is there a guardrail i'm supposed to be respecting?". it just does the thing in front of it.
+and the AI does nothing to save you here - claude opened in the frontend sees only the frontend. it never pauses to ask "wait, should the backend change too?" or "is there a guardrail i'm supposed to be respecting?". it just does the thing in front of it.
 
 so back then, working from the frontend, i needed some migration changes. i told claude "go ahead and fix the backend too". it asked for access to the backend files, i gave it, it wrote the migrations, everything ran, i was happy.
 
-except those edits happened *from the frontend session*. and the hook doesn't live there. so it never fired. not once. the migrations went in, the base schema didn't follow, and the drift quietly started over — past a guardrail that was sitting one folder away, working perfectly, watching a door nobody used 😮‍💨
+except those edits happened *from the frontend session*. and the hook doesn't live there. so it never fired. not once. the migrations went in, the base schema didn't follow, and the drift quietly started over - past a guardrail that was sitting one folder away, working perfectly, watching a door nobody used 😮‍💨
 
 <Ex>Ex: a guardrail only guards the path it's installed on. mine covered the backend repo. my hands were in the frontend repo. the gap between those two is exactly where the bug crawled back in.</Ex>
 
-the fix was almost insultingly simple — i copied the same skill and hook into the frontend folder's `.claude/` too. now whichever side i'm working from, the check fires.
+the fix was almost insultingly simple - i copied the same skill and hook into the frontend folder's `.claude/` too. now whichever side i'm working from, the check fires.
 
 but the real lesson isn't "copy the hook". it's this: i automated the check so i'd stop relying on my memory. then i trusted the automation so completely that i never checked whether it even covered the way i work.
 
-<Pull>the trust didn't disappear when i built the hook. it just moved — from "i'll remember" to "the hook's got it". both of them are me not looking.</Pull>
+<Pull>the trust didn't disappear when i built the hook. it just moved - from "i'll remember" to "the hook's got it". both of them are me not looking.</Pull>
 
 and once again, the thing that actually caught it wasn't my automation. it was **Jagan** sir, reading the code 🤷‍♂️
 

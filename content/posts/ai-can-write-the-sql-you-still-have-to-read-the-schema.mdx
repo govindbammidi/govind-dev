@@ -18,24 +18,24 @@ then my lead **Jagan** sir looked at one migration file for maybe five seconds a
 
 i didn't have an answer 🙃🥲
 
-then he hit me with the real one — "are you planning to corrupt my pocket or what.... if schools scale on this, this database design will cost us real money" 😅
+then he hit me with the real one - "are you planning to corrupt my pocket or what.... if schools scale on this, this database design will cost us real money" 😅
 
 that one question turned into a full schema audit. duplicate columns. wrong data types. no length limits. missing constraints. all of it sitting there, quietly shipped.
 
-and here's the thing — the AI wasn't wrong. it did exactly what i asked. i asked "make this feature work," and it made the feature work. it optimised for the migration running, because that's the goal i handed it.
+and here's the thing - the AI wasn't wrong. it did exactly what i asked. i asked "make this feature work," and it made the feature work. it optimised for the migration running, because that's the goal i handed it.
 
 schema design, storage cost, data integrity.... that was supposed to be MY job. i'd quietly handed it to a tool that was never asked to care about it 🤷‍♂️
 
 <Ex>Ex: `ALTER TABLE students ADD COLUMN grade_name TEXT` runs perfectly. it also duplicates a value we already store, with no type discipline and no limit. "it ran" told me nothing about whether it should exist.</Ex>
 
-so the rule i actually walked away with — if you're shipping AI-generated SQL, don't stop at "did the migration run". read the schema like you'll be paying the bill for it. because you will.
+so the rule i actually walked away with - if you're shipping AI-generated SQL, don't stop at "did the migration run". read the schema like you'll be paying the bill for it. because you will.
 
 is this data already stored somewhere? is the type right? length limits? constraints? what does this cost when 500 schools are on it?
 
-![Day 7 — AI can write the SQL, you must read the schema: a migration running successfully is not the same as a schema designed correctly. the engineer's checklist — already stored elsewhere, correct data type, length limits, constraints, storage impact, future maintenance](/journal/day-7.webp)
+![Day 7 - AI can write the SQL, you must read the schema: a migration running successfully is not the same as a schema designed correctly. the engineer's checklist - already stored elsewhere, correct data type, length limits, constraints, storage impact, future maintenance](/journal/day-7.webp)
 
-*day 7 — a migration running successfully ≠ a schema designed correctly*
+*day 7 - a migration running successfully ≠ a schema designed correctly*
 
-AI can generate a schema in seconds. reading it — really reading it — is still on you.
+AI can generate a schema in seconds. reading it - really reading it - is still on you.
 
 #buildinpublic #softwareengineering #database #ai #maahitatechnologies

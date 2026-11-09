@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import GitHubActivity from "@/components/GitHubActivity";
 import Reveal from "@/components/Reveal";
 import SectionLabel from "@/components/SectionLabel";
 import SchemaHall from "@/components/figures/schema-hall/SchemaHall";
@@ -220,6 +221,14 @@ export default function HomePage() {
             >
               github →
             </a>
+            <a
+              href={site.medium}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={link}
+            >
+              medium →
+            </a>
           </div>
         </div>
       </header>
@@ -265,9 +274,18 @@ export default function HomePage() {
         </Reveal>
       </section>
 
-      <section className="border-b border-line py-[46px]" id="architect">
+      <section className="border-b border-line py-[46px]" id="activity">
         <Reveal className="mx-auto max-w-[760px] px-7">
           <SectionLabel number="02" className="mb-[22px]">
+            Activity
+          </SectionLabel>
+          <GitHubActivity />
+        </Reveal>
+      </section>
+
+      <section className="border-b border-line py-[46px]" id="architect">
+        <Reveal className="mx-auto max-w-[760px] px-7">
+          <SectionLabel number="03" className="mb-[22px]">
             How I build
           </SectionLabel>
           <div className="mb-[26px] border-l-2 border-accent pl-5">
@@ -287,7 +305,7 @@ export default function HomePage() {
 
       <section className="border-b border-line py-[46px]" id="projects">
         <Reveal className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="03" className="mb-[8px]">
+          <SectionLabel number="04" className="mb-[8px]">
             Projects
           </SectionLabel>
           {PROJECTS.map((p, i) => (
@@ -337,7 +355,7 @@ export default function HomePage() {
 
       <section className="border-b border-line py-[46px]" id="skills">
         <Reveal className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="04" className="mb-[22px]">
+          <SectionLabel number="05" className="mb-[22px]">
             Skills
           </SectionLabel>
           <dl className="grid gap-y-[12px] sm:grid-cols-[170px_1fr] sm:gap-x-5">
@@ -357,7 +375,7 @@ export default function HomePage() {
 
       <section className="border-b border-line py-[46px]" id="education">
         <Reveal className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="05" className="mb-[22px]">
+          <SectionLabel number="06" className="mb-[22px]">
             Education
           </SectionLabel>
           <div className="mb-[4px] flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
@@ -383,7 +401,7 @@ export default function HomePage() {
 
       <section className="border-b border-line py-[46px]" id="writing">
         <Reveal className="mx-auto max-w-[760px] px-7">
-          <SectionLabel number="06" className="mb-[14px]">
+          <SectionLabel number="07" className="mb-[14px]">
             Selected writing
           </SectionLabel>
           {writing.map((w, i) => (

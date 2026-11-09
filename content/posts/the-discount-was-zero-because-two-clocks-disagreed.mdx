@@ -1,6 +1,6 @@
 ---
 title: "The discount was ₹0 because two clocks disagreed by 0.7 seconds"
-summary: "A discount was approved. The certificate froze it as ₹0. Nothing in the code was wrong — new Date() is what every codebase writes. But the database stamps its own time, my machine was 0.76 seconds behind, and for a fraction of a second an approval that already happened looked like it hadn't."
+summary: "A discount was approved. The certificate froze it as ₹0. Nothing in the code was wrong - new Date() is what every codebase writes. But the database stamps its own time, my machine was 0.76 seconds behind, and for a fraction of a second an approval that already happened looked like it hadn't."
 date: "2026-06-04"
 tag: "Engineering"
 arc: "a discount freezes at ₹0 → the logic reads correct → two clocks, 0.76s apart → 'the app clock equals the db clock' was an assumption nobody wrote down"
@@ -16,7 +16,7 @@ i read that code many times. it was fine. that's the part that made me a little 
 
 ## what the code was doing
 
-context first — we freeze fee documents at the moment money moves, [same reason the receipts get frozen](/journal/the-receipt-that-kept-rewriting-itself). a certificate isn't a live query, it's a snapshot of what was true when it was issued.
+context first - we freeze fee documents at the moment money moves, [same reason the receipts get frozen](/journal/the-receipt-that-kept-rewriting-itself). a certificate isn't a live query, it's a snapshot of what was true when it was issued.
 
 so when a certificate gets issued, the snapshot writer walks the discount events and asks a very reasonable question about each one:
 
@@ -60,7 +60,7 @@ and because we freeze snapshots, the wrong answer didn't stay a glitch. it got w
 
 nothing looked wrong. `new Date()` is what virtually every codebase writes, including every codebase i'd read. the logic was correct. the data was correct. the test would pass on any machine whose clock happened to be ahead.
 
-the flaw wasn't in the code. it was an assumption *underneath* the code — "the app clock equals the db clock" — and nobody ever wrote that assumption down, so nobody ever checked it.
+the flaw wasn't in the code. it was an assumption *underneath* the code - "the app clock equals the db clock" - and nobody ever wrote that assumption down, so nobody ever checked it.
 
 the only way to catch it was to run the real flow against the real database on a machine with a real clock difference. not a unit test. the actual thing.
 
@@ -72,9 +72,9 @@ my first instinct was "swap `new Date()` for the db clock, done." that removes t
 
 so it ended up as three separate things:
 
-1. **one clock everywhere.** the snapshot's "now" is `SELECT NOW()` from the same database that stamps `approved_at`. a clock can't disagree with itself — the approval is committed before the snapshot reads the clock, so `approved_at <= now` is guaranteed by postgres's own ordering. my laptop being fast, slow or plain wrong stopped mattering.
+1. **one clock everywhere.** the snapshot's "now" is `SELECT NOW()` from the same database that stamps `approved_at`. a clock can't disagree with itself - the approval is committed before the snapshot reads the clock, so `approved_at <= now` is guaranteed by postgres's own ordering. my laptop being fast, slow or plain wrong stopped mattering.
 
-2. **a zero-freeze became unwritable.** even if some event genuinely does look future, the writer now refuses to freeze it as dropped — the discount stays live and activates on its own date. the poisoned state i hit (`applied_distribution = []` written for an active discount) isn't a state the code can produce anymore.
+2. **a zero-freeze became unwritable.** even if some event genuinely does look future, the writer now refuses to freeze it as dropped - the discount stays live and activates on its own date. the poisoned state i hit (`applied_distribution = []` written for an active discount) isn't a state the code can produce anymore.
 
 3. **silence became illegal.** the original sin wasn't the clock, it was the *silent* drop. a discount dropped as "future" now emits a loud violation in the logs, with a regression test pinning that behaviour. if anything in this family misbehaves again it announces itself instead of quietly rendering ₹0.
 
@@ -85,7 +85,7 @@ lock 1 is the fix. locks 2 and 3 are the ones that matter, because they assume i
 i want to write these down, because "can this happen again?" deserves a scoped answer and not a confident one:
 
 - if the `SELECT NOW()` probe itself fails on a db hiccup, that one request falls back to the app clock and could transiently miss a discount approved less than a second ago. it self-heals on the next request, and lock 2 still prevents anything being frozen.
-- future-dated discounts now behave correctly, but stay live-computed until the next change after they activate — so their immutability starts when a certificate is eventually issued, not on day one.
+- future-dated discounts now behave correctly, but stay live-computed until the next change after they activate - so their immutability starts when a certificate is eventually issued, not on day one.
 - if the database's own clock steps backwards (a bad NTP jump on supabase), that's out of my hands. locks 2 and 3 contain it: no zero-freeze, loud violation.
 
 none of those are the bug i had. all of them are things i'd rather have written down than discover twice.

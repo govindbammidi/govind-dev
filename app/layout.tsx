@@ -1,19 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { ViewTransition } from "react";
-import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Nav from "@/components/Nav";
 import { site } from "@/lib/site";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-});
-
-// body text: Inter, a screen face with open letters and even strokes, so a
+// the one typeface: Inter, a screen face with open letters and even strokes, so a
 // long journal entry reads without strain (the old high-contrast newspaper
 // serif went faint at reading sizes). opsz keeps it crisp at body sizes.
 const inter = Inter({
@@ -23,20 +16,14 @@ const inter = Inter({
   axes: ["opsz"],
 });
 
-const jetbrains = JetBrains_Mono({
-  variable: "--font-jetbrains",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-});
-
-// the homepage tab and link-preview title — every other page fills the template
-const homeTitle = `${site.title} — ${site.role}`;
+// the homepage tab and link-preview title - every other page fills the template
+const homeTitle = `${site.title} - ${site.role}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
     default: homeTitle,
-    template: "%s — Govind",
+    template: "%s - Govind",
   },
   description: site.description,
   authors: [{ name: site.author, url: site.url }],
@@ -60,11 +47,11 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#f4f1e8" },
-    { media: "(prefers-color-scheme: dark)", color: "#1f1f1e" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
   ],
 };
 
-// Runs synchronously during HTML parsing, before first paint — no theme flash.
+// Runs synchronously during HTML parsing, before first paint - no theme flash.
 // Stored preference wins; otherwise follow the OS setting.
 //
 // It also tracks input modality. Focus rings are for keyboard users, but
@@ -86,7 +73,7 @@ export default function RootLayout({
       lang="en"
       data-theme="light"
       suppressHydrationWarning
-      className={`${fraunces.variable} ${inter.variable} ${jetbrains.variable} h-full antialiased`}
+      className={`${inter.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />

@@ -1,6 +1,6 @@
 ---
 title: "They paid. Then they closed the tab."
-summary: "My payment flow confirmed the payment from the browser. Which is fine, until someone pays and closes the tab before the browser gets a chance to tell my backend. Money captured, account never activated — the worst kind of bug, because from the outside it looks like nothing happened at all."
+summary: "My payment flow confirmed the payment from the browser. Which is fine, until someone pays and closes the tab before the browser gets a chance to tell my backend. Money captured, account never activated - the worst kind of bug, because from the outside it looks like nothing happened at all."
 date: "2026-07-20"
 tag: "Engineering"
 arc: "browser confirms the payment → what if the browser never comes back? → the webhook is server-to-server, not through the frontend → two paths, one idempotent door"
@@ -18,7 +18,7 @@ then: *what if they pay and close the tab?*
 
 ## the failure that looks like nothing
 
-trace it. razorpay has the money — that happened on their servers, it's real, it's captured. the success callback never fires, because there's no page left to fire it. my verify endpoint is never called. my database still thinks the payment is `attempted`.
+trace it. razorpay has the money - that happened on their servers, it's real, it's captured. the success callback never fires, because there's no page left to fire it. my verify endpoint is never called. my database still thinks the payment is `attempted`.
 
 so the school has paid us and has no subscription 😐
 
@@ -28,15 +28,15 @@ and the reason this one is nastier than a crash is that **nothing anywhere repor
 
 it also isn't an edge case i had to go looking for. closing a tab after paying is *normal behaviour*. so is a phone dying, a train going into a tunnel, a laptop lid closing. i had built the flow assuming the browser sticks around to file the paperwork, and browsers don't owe me that.
 
-## the webhook — and the bit i had backwards
+## the webhook - and the bit i had backwards
 
 the fix is that razorpay's servers tell my server directly, over a connection the browser has nothing to do with. that's a webhook: instead of me asking "is it done yet?", they call me the moment it is.
 
-i had this drawn wrong in my head, though. i thought the webhook came back **through the frontend** — razorpay to the browser, browser to my backend. which is exactly the model that had just failed:
+i had this drawn wrong in my head, though. i thought the webhook came back **through the frontend** - razorpay to the browser, browser to my backend. which is exactly the model that had just failed:
 
 <WebhookPathDiagram />
 
-if it travelled through the browser it would be worthless. the entire value of the thing is that it survives the browser being gone. that's the whole point — and i'd drawn the one diagram where the point doesn't exist.
+if it travelled through the browser it would be worthless. the entire value of the thing is that it survives the browser being gone. that's the whole point - and i'd drawn the one diagram where the point doesn't exist.
 
 so it's a public endpoint with no session auth, because the caller isn't a logged-in user, it's razorpay. the HMAC signature from part one *is* the authentication. no valid signature, no entry.
 
@@ -46,21 +46,21 @@ what i landed on isn't "use the webhook instead". it's both, deliberately:
 
 <TwoPathsDiagram />
 
-path 1 exists for the user — nobody wants to stare at a spinner while a server-to-server call finds its way over. path 2 exists for the truth. if the browser makes it back, great, it's just faster. if it doesn't, the webhook still lands and the school still gets activated.
+path 1 exists for the user - nobody wants to stare at a spinner while a server-to-server call finds its way over. path 2 exists for the truth. if the browser makes it back, great, it's just faster. if it doesn't, the webhook still lands and the school still gets activated.
 
-which means both paths can fire for the same payment, and often do. so the activation has to be **idempotent** — whichever arrives first does the work, and the second one looks up the order, sees it's already captured, and does nothing. this isn't defensive politeness, it's required: razorpay retries a webhook it didn't get a clean response to, so duplicate deliveries are the designed behaviour, not an anomaly.
+which means both paths can fire for the same payment, and often do. so the activation has to be **idempotent** - whichever arrives first does the work, and the second one looks up the order, sees it's already captured, and does nothing. this isn't defensive politeness, it's required: razorpay retries a webhook it didn't get a clean response to, so duplicate deliveries are the designed behaviour, not an anomaly.
 
-that retry rule has a consequence i wouldn't have guessed. if my database hiccups mid-webhook and i return a 500, razorpay reads that as "didn't land, try again" — and keeps trying. a transient failure on my side turns into a retry storm pointed at the exact endpoint that's already struggling. so a bad signature earns a 400, and everything else acknowledges with a 200 and gets logged and alerted on instead. i take the failure on my own terms rather than asking the payment gateway to hold my place in the queue.
+that retry rule has a consequence i wouldn't have guessed. if my database hiccups mid-webhook and i return a 500, razorpay reads that as "didn't land, try again" - and keeps trying. a transient failure on my side turns into a retry storm pointed at the exact endpoint that's already struggling. so a bad signature earns a 400, and everything else acknowledges with a 200 and gets logged and alerted on instead. i take the failure on my own terms rather than asking the payment gateway to hold my place in the queue.
 
 and for the case where *neither* path lands: a scheduled sweep walks orders still sitting at `attempted`, asks razorpay what actually happened to them, and repairs the ones that were really paid.
 
-<Ex>Ex: three mechanisms — a callback, a webhook, and a reconciliation sweep — and all three exist to answer one question: did the money move? none of them trusts the answer alone.</Ex>
+<Ex>Ex: three mechanisms - a callback, a webhook, and a reconciliation sweep - and all three exist to answer one question: did the money move? none of them trusts the answer alone.</Ex>
 
 ## what i took from it
 
 i'd been treating the browser as a participant in the transaction. it isn't. it's a window onto a transaction happening somewhere else, and windows get closed.
 
-the question that found this bug wasn't technical. it was "what if the user just... leaves?" — and i can't test that by using my own app carefully, because when i test i'm a well-behaved user who waits for the spinner. the real users are on a bus.
+the question that found this bug wasn't technical. it was "what if the user just... leaves?" - and i can't test that by using my own app carefully, because when i test i'm a well-behaved user who waits for the spinner. the real users are on a bus.
 
 <Pull>every step that only happens if the browser cooperates is a step that sometimes doesn't happen. money is a bad place to find that out.</Pull>
 

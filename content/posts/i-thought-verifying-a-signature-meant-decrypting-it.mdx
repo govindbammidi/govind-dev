@@ -1,6 +1,6 @@
 ---
 title: "I thought verifying a signature meant decrypting it"
-summary: "The payment integration worked. Money moved, subscriptions activated. Then someone asked me how the backend knows a payment is genuine, and I heard myself say the word 'decrypt'. There is no decryption anywhere in it — and the code had been working fine without me understanding that."
+summary: "The payment integration worked. Money moved, subscriptions activated. Then someone asked me how the backend knows a payment is genuine, and I heard myself say the word 'decrypt'. There is no decryption anywhere in it - and the code had been working fine without me understanding that."
 date: "2026-07-20"
 tag: "Engineering"
 arc: "the payment flow works → 'so how does the backend verify it?' → i described decryption that doesn't exist → a hash isn't opened, it's recomputed → working code never forced me to be right"
@@ -20,11 +20,11 @@ there is no decryption. not anywhere in it. and i had been shipping against that
 
 here's the model i had, honestly:
 
-razorpay and my backend both hold the same secret key. after a payment, razorpay bundles up the order id, the payment id and the secret, hashes them together, and sends me the result. my backend has the secret too — so it must **open** that signature, pull the pieces back out, and check that the secret inside matches the secret it holds.
+razorpay and my backend both hold the same secret key. after a payment, razorpay bundles up the order id, the payment id and the secret, hashes them together, and sends me the result. my backend has the secret too - so it must **open** that signature, pull the pieces back out, and check that the secret inside matches the secret it holds.
 
 a locked box. verification meant unlocking it and looking inside.
 
-i can even point at the exact shape of the mistake, because i made it again a week later with JWTs. a token is `header.payload.signature`, three parts separated by dots. i had the payload, i had the header, i had the signature — so:
+i can even point at the exact shape of the mistake, because i made it again a week later with JWTs. a token is `header.payload.signature`, three parts separated by dots. i had the payload, i had the header, i had the signature - so:
 
 ```text
 1 + 2 + x = 10   →   solve for x
@@ -42,27 +42,27 @@ it just does the same arithmetic a second time:
 
 that's it. that's the whole verification.
 
-and once i saw it written out like that, the thing that had confused me stopped being confusing — it became obvious that there was never anything to extract. **both sides already have every ingredient.** the order id and the payment id came back from the browser. the secret was always sitting in my environment variables. nothing was ever hidden from me, so there was nothing to recover.
+and once i saw it written out like that, the thing that had confused me stopped being confusing - it became obvious that there was never anything to extract. **both sides already have every ingredient.** the order id and the payment id came back from the browser. the secret was always sitting in my environment variables. nothing was ever hidden from me, so there was nothing to recover.
 
 <Pull>the signature isn't a container holding the secret. it's a receipt for a computation only two parties in the world can perform.</Pull>
 
-which reframes what's being proved. i had assumed the signature was protecting the *data*. it isn't — the order id and payment id are sitting right there in the browser, anyone can read them. the signature proves **authorship**. it answers one question: did whoever produced this know the secret?
+which reframes what's being proved. i had assumed the signature was protecting the *data*. it isn't - the order id and payment id are sitting right there in the browser, anyone can read them. the signature proves **authorship**. it answers one question: did whoever produced this know the secret?
 
 an attacker can forge the order id. they can forge the payment id. they can post whatever json they like at my endpoint. what they cannot do is produce the matching hash, because that requires a key they don't have. so my backend recomputes, compares two strings, and a forgery falls out on the comparison.
 
-my equation was wrong because a hash doesn't run backwards. `1 + 2 + x = 10` is solvable. HMAC isn't an equation, it's a one-way street — you can walk it in the forward direction as many times as you like and never once walk back up it.
+my equation was wrong because a hash doesn't run backwards. `1 + 2 + x = 10` is solvable. HMAC isn't an equation, it's a one-way street - you can walk it in the forward direction as many times as you like and never once walk back up it.
 
 ## the part i actually want to write down
 
 the code was correct the whole time.
 
-that's the uncomfortable bit. verifying a signature is a library call and a comparison — a handful of lines. it worked on the first try, it worked in test mode, it worked in production, and it kept working the entire time i held a completely wrong picture of what it did.
+that's the uncomfortable bit. verifying a signature is a library call and a comparison - a handful of lines. it worked on the first try, it worked in test mode, it worked in production, and it kept working the entire time i held a completely wrong picture of what it did.
 
 nothing ever forced me to be right. the flow succeeding was not evidence that i understood it. it was evidence that someone had designed an API well enough that i didn't need to.
 
-<Ex>Ex: "it works" and "i know why it works" are two separate facts, and shipping only ever checks the first one. i found the gap because a person asked me a question — not because anything broke.</Ex>
+<Ex>Ex: "it works" and "i know why it works" are two separate facts, and shipping only ever checks the first one. i found the gap because a person asked me a question - not because anything broke.</Ex>
 
-and the failure mode isn't academic. if you believe verification means decryption, you believe the secret travels somewhere. you get slightly relaxed about where it's allowed to go. that's how a secret key ends up in a frontend bundle — not through carelessness, but through a wrong mental model that made it seem harmless.
+and the failure mode isn't academic. if you believe verification means decryption, you believe the secret travels somewhere. you get slightly relaxed about where it's allowed to go. that's how a secret key ends up in a frontend bundle - not through carelessness, but through a wrong mental model that made it seem harmless.
 
 so now i ask a boring question about anything cryptographic i touch: **which direction does this function run?** one-way or two-way. hash or cipher. that single distinction was the whole thing i was missing, and it takes four words to check.
 

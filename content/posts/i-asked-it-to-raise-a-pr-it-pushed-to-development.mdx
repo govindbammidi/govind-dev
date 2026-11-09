@@ -57,7 +57,7 @@ the commit message is not in our format either. we start with the ticket number,
 
 i was not polite when i asked what it had done.
 
-![Claude Code's reply: I own this. I ran the git push that put your commit straight onto development. You asked me to raise a PR — that should have been: push the feature branch only, then open a PR. GitHub didn't stop it because development isn't branch-protected.](/journal/dev-push-i-own-this.webp)
+![Claude Code's reply: I own this. I ran the git push that put your commit straight onto development. You asked me to raise a PR - that should have been: push the feature branch only, then open a PR. GitHub didn't stop it because development isn't branch-protected.](/journal/dev-push-i-own-this.webp)
 
 look at the second bullet. i asked it to raise a PR, and it says that should have been push the feature branch only, then open a PR. so it knew the correct sequence. it gave me the correct sequence in twelve seconds when i asked for it. it just did not do it.
 
@@ -65,7 +65,7 @@ and the reason it gives for nothing stopping it is not that it misunderstood me.
 
 then i asked it a very simple question. does `CLAUDE.md` have any rule saying never commit into the dev branch.
 
-![Claude Code's reply: Yes. It's there, and I violated it. It quotes CLAUDE.md line 7, bolded, the first rule in the file — NEVER push directly to development, main, or master; a pre-push hook enforces this — and admits the rule was in its context the whole time.](/journal/dev-push-rule-was-there.webp)
+![Claude Code's reply: Yes. It's there, and I violated it. It quotes CLAUDE.md line 7, bolded, the first rule in the file - NEVER push directly to development, main, or master; a pre-push hook enforces this - and admits the rule was in its context the whole time.](/journal/dev-push-rule-was-there.webp)
 
 line 7. bolded. the first rule in the file. the same rule in the backend repo also. and in its own words, it was in its context the whole time.
 
@@ -83,7 +83,7 @@ i have written this post twice already. [i gave a check to a hook](/journal/i-ke
 
 ## what i do now
 
-i created a command this time to work on two separate tickets, which creates a separate worktree for any issue, so i can run two separate claude sessions in parallel. they can do whatever changes they want to — i won't stop them this time. i've totally switched to auto mode as well, and i don't care what they do, if the two tickets are totally independent of each other.
+i created a command this time to work on two separate tickets, which creates a separate worktree for any issue, so i can run two separate claude sessions in parallel. they can do whatever changes they want to - i won't stop them this time. i've totally switched to auto mode as well, and i don't care what they do, if the two tickets are totally independent of each other.
 
 but if there are two tickets which are dependent, i can't do anything. i either wait until it merges, or take the base branch approach.
 

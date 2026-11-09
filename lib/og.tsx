@@ -4,13 +4,13 @@ import { site } from "@/lib/site";
 export const OG_SIZE = { width: 1200, height: 630 };
 
 /**
- * Try to load Fraunces for the OG card; fall back to the default font
- * if Google Fonts is unreachable at build time.
+ * Try to load Inter (the site's one typeface) for the OG card; fall back to
+ * the default font if Google Fonts is unreachable at build time.
  */
-async function loadFraunces(): Promise<ArrayBuffer | null> {
+async function loadInter(): Promise<ArrayBuffer | null> {
   try {
     const css = await fetch(
-      "https://fonts.googleapis.com/css2?family=Fraunces:wght@500",
+      "https://fonts.googleapis.com/css2?family=Inter:wght@600",
     ).then((res) => res.text());
     const url = css.match(/src: url\((.+?)\) format/)?.[1];
     if (!url) return null;
@@ -32,7 +32,7 @@ export async function ogCard({
   /** the line after the author's name, bottom right */
   foot?: string;
 }) {
-  const fraunces = await loadFraunces();
+  const inter = await loadInter();
 
   return new ImageResponse(
     (
@@ -48,7 +48,7 @@ export async function ogCard({
           backgroundImage: "radial-gradient(#d8d2c0 1px, transparent 1px)",
           backgroundSize: "26px 26px",
           color: "#1a1813",
-          fontFamily: fraunces ? "Fraunces" : "serif",
+          fontFamily: inter ? "Inter" : "sans-serif",
         }}
       >
         <div
@@ -98,8 +98,8 @@ export async function ogCard({
     ),
     {
       ...OG_SIZE,
-      fonts: fraunces
-        ? [{ name: "Fraunces", data: fraunces, style: "normal" as const, weight: 500 as const }]
+      fonts: inter
+        ? [{ name: "Inter", data: inter, style: "normal" as const, weight: 600 as const }]
         : undefined,
     },
   );

@@ -6,7 +6,7 @@ import { getAllPosts, toMeta } from "@/lib/posts";
 export const metadata: Metadata = {
   title: "Journal",
   description:
-    "Everything I'm learning, written down as it happens. Honest notes from shipping a real product — and, sometimes, from where my head actually is.",
+    "Everything I'm learning, written down as it happens. Honest notes from shipping a real product - and, sometimes, from where my head actually is.",
 };
 
 export default function JournalPage() {
@@ -23,7 +23,7 @@ export default function JournalPage() {
           <p className="rise rise-2 max-w-[580px] text-[20px] text-lede">
             Honest notes from shipping a real product. The practices I fought,
             the incidents I survived, the lessons that only made sense months
-            later — and, sometimes, where my head actually is.
+            later - and, sometimes, where my head actually is.
           </p>
         </div>
       </header>

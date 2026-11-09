@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { formatDate, formatDayMonth, type PostMeta } from "@/lib/post-meta";
 
-/** Marks the searched run inside a title — a rust underline, never a highlighter. */
+/** Marks the searched run inside a title - a rust underline, never a highlighter. */
 function Marked({ text, query }: { text: string; query: string }) {
   if (!query) return <>{text}</>;
   const at = text.toLowerCase().indexOf(query);

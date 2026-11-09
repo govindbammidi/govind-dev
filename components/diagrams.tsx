@@ -1,7 +1,7 @@
 import * as React from "react";
 
 /**
- * Post diagrams — hand-authored inline SVG, no runtime, no images.
+ * Post diagrams - hand-authored inline SVG, no runtime, no images.
  *
  * House rules, so a later one matches these two:
  *  - box strokes and arrows in var(--color-muted); label text inherits
@@ -140,7 +140,7 @@ function LBox({
 }
 
 /**
- * Figure 1 — the browser moves off the path.
+ * Figure 1 - the browser moves off the path.
  * Same three objects in both panels; the only difference is whether the
  * browser is a link in the chain or a bystander beside it.
  */
@@ -239,7 +239,7 @@ export function WebhookPathDiagram() {
         </div>
       </div>
       <figcaption>
-        the webhook never touches the browser — which is the entire reason it
+        the webhook never touches the browser - which is the entire reason it
         survives the tab closing.
       </figcaption>
     </figure>
@@ -247,7 +247,7 @@ export function WebhookPathDiagram() {
 }
 
 /**
- * Figure 2 — two independent arrivals, one idempotent door.
+ * Figure 2 - two independent arrivals, one idempotent door.
  * Dashed marks the leg that may never arrive; rust marks the join, which is
  * what the section is actually about.
  */
@@ -383,7 +383,7 @@ export function TwoPathsDiagram() {
             textAnchor="middle"
             fill={MUTED}
           >
-            idempotent — whichever lands first
+            idempotent - whichever lands first
           </text>
           <text
             x="160"
@@ -405,7 +405,7 @@ export function TwoPathsDiagram() {
 }
 
 /**
- * Figure 3 — the receipt is frozen at payment time, not rebuilt on download.
+ * Figure 3 - the receipt is frozen at payment time, not rebuilt on download.
  * Accent follows the stored bytes, because those are what comes back.
  */
 export function ReceiptFreezeDiagram() {
@@ -501,7 +501,7 @@ export function ReceiptFreezeDiagram() {
         </svg>
       </div>
       <figcaption>
-        the download path never reaches the live tables — so a fee structure
+        the download path never reaches the live tables - so a fee structure
         that changes next term cannot reach back into last term&rsquo;s receipt.
       </figcaption>
     </figure>
@@ -509,7 +509,7 @@ export function ReceiptFreezeDiagram() {
 }
 
 /**
- * Figure 4 — the layer chain, and the one import that jumped over a link.
+ * Figure 4 - the layer chain, and the one import that jumped over a link.
  * Accent is spent on the illegal edge; everything else is the house rule.
  */
 export function LayerChainDiagram() {
@@ -587,7 +587,7 @@ export function LayerChainDiagram() {
         </svg>
       </div>
       <figcaption>
-        the repository is the only thing that is supposed to hold queries — so
+        the repository is the only thing that is supposed to hold queries - so
         an import that reaches past it puts queries where nobody looks for them.
       </figcaption>
     </figure>
@@ -595,7 +595,7 @@ export function LayerChainDiagram() {
 }
 
 /**
- * Figure 5 — verifying a signature is recomputing it, not undoing it.
+ * Figure 5 - verifying a signature is recomputing it, not undoing it.
  * Both sides are deliberately identical; that symmetry is the whole point.
  */
 export function SignatureCompareDiagram() {
@@ -714,7 +714,7 @@ export function SignatureCompareDiagram() {
 }
 
 /**
- * Figure 6 — one price, three homes, and only one of them talks to razorpay.
+ * Figure 6 - one price, three homes, and only one of them talks to razorpay.
  */
 export function PriceInThreePlacesDiagram() {
   return (
@@ -812,7 +812,7 @@ export function PriceInThreePlacesDiagram() {
         </svg>
       </div>
       <figcaption>
-        three definitions, one of them wired to the payment gateway — the ticket
+        three definitions, one of them wired to the payment gateway - the ticket
         changed the number the customer reads, not the one they pay.
       </figcaption>
     </figure>
@@ -820,7 +820,7 @@ export function PriceInThreePlacesDiagram() {
 }
 
 /**
- * Figure 7 — the adapter is the seam. Everything above it is indifferent to
+ * Figure 7 - the adapter is the seam. Everything above it is indifferent to
  * what sits below.
  */
 export function AdapterSeamDiagram() {
@@ -908,7 +908,7 @@ export function AdapterSeamDiagram() {
         </svg>
       </div>
       <figcaption>
-        swap what sits under the adapter and nothing above it changes — the
+        swap what sits under the adapter and nothing above it changes - the
         service never learns which database answered.
       </figcaption>
     </figure>
@@ -916,7 +916,7 @@ export function AdapterSeamDiagram() {
 }
 
 /**
- * Figure 8 — a schema per school, and the crossing that does not exist.
+ * Figure 8 - a schema per school, and the crossing that does not exist.
  */
 export function TenantIsolationDiagram() {
   return (
@@ -1029,7 +1029,7 @@ export function TenantIsolationDiagram() {
 }
 
 /**
- * Figure 9 — two kinds of migration, two different destinations.
+ * Figure 9 - two kinds of migration, two different destinations.
  */
 export function MigrationSplitDiagram() {
   return (
@@ -1122,7 +1122,7 @@ export function MigrationSplitDiagram() {
 }
 
 /**
- * Figure 10 — the same two boxes, before and after; what moves is where the
+ * Figure 10 - the same two boxes, before and after; what moves is where the
  * filtering happens.
  */
 export function SearchMovedDiagram() {
@@ -1136,7 +1136,7 @@ export function SearchMovedDiagram() {
             aria-label="Before: the server returns all one thousand faculty rows and the browser filters them in the tab."
           >
             <Arrowhead id="dgm-search-a" />
-            <PanelHead title="before — the frontend fix" />
+            <PanelHead title="before - the frontend fix" />
 
             <LBox
               x={10}
@@ -1180,7 +1180,7 @@ export function SearchMovedDiagram() {
             aria-label="After: the server searches and paginates, and returns only the ten rows that were asked for; the browser just renders them."
           >
             <Arrowhead id="dgm-search-b" />
-            <PanelHead title="after — the real fix" />
+            <PanelHead title="after - the real fix" />
 
             <LBox
               x={10}
@@ -1218,7 +1218,7 @@ export function SearchMovedDiagram() {
         </div>
       </div>
       <figcaption>
-        the two boxes never change — only which one does the filtering, and
+        the two boxes never change - only which one does the filtering, and
         therefore how much has to cross the wire to get there.
       </figcaption>
     </figure>
@@ -1226,7 +1226,7 @@ export function SearchMovedDiagram() {
 }
 
 /**
- * Figure 11 — one instant, two clock readings, and the gap between them.
+ * Figure 11 - one instant, two clock readings, and the gap between them.
  * Accent is the gap, because the gap is the bug.
  */
 export function ClockSkewDiagram() {
@@ -1289,7 +1289,7 @@ export function ClockSkewDiagram() {
 }
 
 /**
- * Figure 12 — the shape of the returns. Accent is the tail, because the tail
+ * Figure 12 - the shape of the returns. Accent is the tail, because the tail
  * is what the post is about.
  */
 export function PromptCurveDiagram() {
@@ -1388,7 +1388,7 @@ export function PromptCurveDiagram() {
 }
 
 /**
- * Figure 13 — why one push moved the shared branch.
+ * Figure 13 - why one push moved the shared branch.
  * Same push, two topologies; the only difference is whether anything sits
  * between the branch and development. Accent is the fast-forward, because
  * the fast-forward is the whole incident.
@@ -1430,7 +1430,7 @@ export function BranchFastForwardDiagram() {
               textAnchor="middle"
               fill={MUTED}
             >
-              diverged — a push moves only it
+              diverged - a push moves only it
             </text>
           </svg>
         </div>
@@ -1486,7 +1486,7 @@ export function BranchFastForwardDiagram() {
               textAnchor="middle"
               fill={ACCENT}
             >
-              no divergence — dev comes too
+              no divergence - dev comes too
             </text>
           </svg>
         </div>
@@ -1494,7 +1494,7 @@ export function BranchFastForwardDiagram() {
       <figcaption>
         one push, two topologies. the branch i was on had commits of its own
         between it and development, so a push could only ever move the branch.
-        the branch it cut had none — so development came along with it.
+        the branch it cut had none - so development came along with it.
       </figcaption>
     </figure>
   );

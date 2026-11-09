@@ -13,7 +13,7 @@ export default function Footer({ who }: { who?: string }) {
             {who}
           </p>
         )}
-        <div className="flex justify-center gap-[22px] font-mono text-[13px]">
+        <div className="flex flex-wrap justify-center gap-x-[22px] gap-y-2 font-mono text-[13px]">
           <a
             href={site.linkedin}
             className="border-b border-transparent text-accent no-underline transition-colors hover:border-accent"
@@ -31,6 +31,12 @@ export default function Footer({ who }: { who?: string }) {
             className="border-b border-transparent text-accent no-underline transition-colors hover:border-accent"
           >
             GitHub · Maahita
+          </a>
+          <a
+            href={site.medium}
+            className="border-b border-transparent text-accent no-underline transition-colors hover:border-accent"
+          >
+            Medium
           </a>
           <a
             href={`mailto:${site.email}`}

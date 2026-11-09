@@ -54,7 +54,7 @@ export default function AboutPage() {
           <p className="mb-5 text-body">
             The product wasn&apos;t mature. The company wasn&apos;t mature.
             The processes weren&apos;t mature. We were figuring things out
-            while building — no perfect roadmap, no certainty about where the
+            while building - no perfect roadmap, no certainty about where the
             product would end up. We learned from users and evolved.
           </p>
 
@@ -73,7 +73,7 @@ export default function AboutPage() {
           </p>
           <p className="pull text-[26px]">
             Many of my most valuable lessons came from things I first
-            disagreed with — until months later a real need proved they
+            disagreed with - until months later a real need proved they
             mattered.
           </p>
           <p className="mb-5 text-body">

@@ -1,4 +1,4 @@
-/** Pure post metadata types & helpers — safe to import from client components. */
+/** Pure post metadata types & helpers - safe to import from client components. */
 
 export const TAGS = ["Engineering", "Interviews", "Product", "Production", "Startup", "Personal"] as const;
 export type Tag = (typeof TAGS)[number];
@@ -27,12 +27,12 @@ export function formatDate(iso: string): string {
   });
 }
 
-/** yyyy-mm — the grouping key for a post's month. */
+/** yyyy-mm - the grouping key for a post's month. */
 export function monthKey(iso: string): string {
   return iso.slice(0, 7);
 }
 
-/** "August 2026" — the heading for a month of entries. */
+/** "August 2026" - the heading for a month of entries. */
 export function formatMonth(iso: string): string {
   return new Date(`${monthKey(iso)}-01T00:00:00Z`).toLocaleDateString("en-US", {
     month: "long",
@@ -41,7 +41,7 @@ export function formatMonth(iso: string): string {
   });
 }
 
-/** "Aug" — the month as it appears in the jump index. */
+/** "Aug" - the month as it appears in the jump index. */
 export function formatMonthShort(iso: string): string {
   return new Date(`${monthKey(iso)}-01T00:00:00Z`).toLocaleDateString("en-US", {
     month: "short",
@@ -49,7 +49,7 @@ export function formatMonthShort(iso: string): string {
   });
 }
 
-/** "Aug 22" — the year is redundant under a month heading, so it's dropped. */
+/** "Aug 22" - the year is redundant under a month heading, so it's dropped. */
 export function formatDayMonth(iso: string): string {
   return new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-US", {
     month: "short",

@@ -3,7 +3,7 @@ import { site } from "@/lib/site";
 
 export const size = OG_SIZE;
 export const contentType = "image/png";
-export const alt = `${site.title} — ${site.role}`;
+export const alt = `${site.title} - ${site.role}`;
 
 export default function Image() {
   return ogCard({

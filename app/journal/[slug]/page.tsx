@@ -104,7 +104,7 @@ export default async function PostPage({ params }: Props) {
               <>
                 <span aria-hidden="true">·</span>
                 <span className="text-accent-soft">
-                  part {post.part} of {post.seriesTotal} — {post.series}
+                  part {post.part} of {post.seriesTotal} - {post.series}
                 </span>
               </>
             )}

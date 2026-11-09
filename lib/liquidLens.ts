@@ -10,12 +10,12 @@ import { useEffect, type RefObject } from "react";
  * An SVG displacement map, drawn at the element's own size and corner
  * radius (so a wide capsule's ends stay round, not stretched), used as a
  * backdrop-filter. Only Chromium applies SVG filters to the backdrop, so
- * everywhere else — and for anyone who has asked for less transparency or
- * more contrast — the element keeps the plain frost from globals.css.
+ * everywhere else - and for anyone who has asked for less transparency or
+ * more contrast - the element keeps the plain frost from globals.css.
  *
  * Note: a backdrop-filter only sees up to the nearest "backdrop root"
  * ancestor. An ancestor with a view-transition-name, filter, opacity < 1 or
- * mask is one, and cuts the page off from the blur entirely — keep those off
+ * mask is one, and cuts the page off from the blur entirely - keep those off
  * the element's ancestors.
  */
 
@@ -46,7 +46,7 @@ function defsEl() {
 /**
  * Displacement map for a w×h rounded rectangle with corner radius r. Within
  * `bezel` px of the edge each pixel samples from further in, along the edge
- * normal, most strongly at the rim — a convex lens. The middle is left
+ * normal, most strongly at the rim - a convex lens. The middle is left
  * alone (128 = no shift), so the links stay sharp.
  */
 function lensField(w: number, h: number, r: number, bezel: number) {
@@ -110,12 +110,12 @@ function attrs<T extends Element>(el: T, values: Record<string, string | number>
 
 /**
  * Give the element behind `ref` a refracting rim.
- *   bezel — how far in from the edge the bending reaches, px
- *   shift — the most a pixel at the rim is pulled, px
- *   frost — the blur (and tint) applied before the bend
+ *   bezel - how far in from the edge the bending reaches, px
+ *   shift - the most a pixel at the rim is pulled, px
+ *   frost - the blur (and tint) applied before the bend
  *
  * The frost goes FIRST in the chain: in Chrome, a blur placed after the
- * url() lens is dropped, and the page shows through bent but sharp — the
+ * url() lens is dropped, and the page shows through bent but sharp - the
  * "I can read the text behind it" bug. Blurred first, then bent, it reads as
  * frosted glass with a curved rim.
  */

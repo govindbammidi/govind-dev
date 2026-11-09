@@ -1,6 +1,6 @@
 ---
 title: "Nobody is going to remember to pay us every month"
-summary: "I finished the subscription flow and I was proud of it. Checkout worked, signatures verified, the webhook activated the school. Then my lead asked where the auto-renewal option was, and I realised I'd built a payment — not a subscription. The gap wasn't in the code. It was in what nobody had written down."
+summary: "I finished the subscription flow and I was proud of it. Checkout worked, signatures verified, the webhook activated the school. Then my lead asked where the auto-renewal option was, and I realised I'd built a payment - not a subscription. The gap wasn't in the code. It was in what nobody had written down."
 date: "2026-06-10"
 tag: "Product"
 arc: "shipped the subscription flow → 'where's auto-renewal?' → we never captured it → razorpay already did it, we just weren't listening → correct for month one, incomplete for month two"
@@ -12,7 +12,7 @@ i had just finished the subscription module and i was pleased with it. a school 
 
 then in a review my lead asked where the auto-renewal option was.
 
-we didn't have one. and the honest answer to "why not" wasn't that it was hard or that we'd cut it — it was that nobody had ever asked the question.
+we didn't have one. and the honest answer to "why not" wasn't that it was hard or that we'd cut it - it was that nobody had ever asked the question.
 
 ## the shape of what was missing
 
@@ -24,7 +24,7 @@ put that way it's obviously not a product. we'd have a banner reminding them, an
 
 <Pull>i had built the payment. i hadn't built the paying.</Pull>
 
-the part that stung is that this isn't a technical oversight i could have caught by testing harder. i tested the flow exhaustively — and the flow *worked*. it was correct for month one. nothing i could click would ever have told me it was incomplete for month two, because month two isn't a state you can reach by using the app carefully for an afternoon.
+the part that stung is that this isn't a technical oversight i could have caught by testing harder. i tested the flow exhaustively - and the flow *worked*. it was correct for month one. nothing i could click would ever have told me it was incomplete for month two, because month two isn't a state you can reach by using the app carefully for an afternoon.
 
 ## razorpay had already built it
 
@@ -32,11 +32,11 @@ the twist is how small the actual work was.
 
 razorpay supports recurring subscriptions natively. you don't trigger the monthly charge from your own system, you don't schedule anything, you don't hold card details. you enable it, razorpay debits the school on its own schedule, and it fires an event at you when the money lands.
 
-which means we already had most of it. we had an endpoint that receives payment events and activates subscriptions — [that's the webhook](/journal/they-paid-then-they-closed-the-tab). the missing feature was mostly a toggle and an event type we weren't listening for.
+which means we already had most of it. we had an endpoint that receives payment events and activates subscriptions - [that's the webhook](/journal/they-paid-then-they-closed-the-tab). the missing feature was mostly a toggle and an event type we weren't listening for.
 
 so this wasn't months of work sitting undone. it was a small amount of work that nobody had scoped, which is a different and worse problem, because effort estimates aren't what protects you from it.
 
-<Ex>Ex: the cheapest features to build are the easiest ones to never notice. nothing about the size of the gap makes it more visible — if anything, less.</Ex>
+<Ex>Ex: the cheapest features to build are the easiest ones to never notice. nothing about the size of the gap makes it more visible - if anything, less.</Ex>
 
 ## the cluster
 
@@ -45,17 +45,17 @@ once that question got asked, the same conversation surfaced a handful of siblin
 - no scheduler at all, so nothing was sweeping for pending or overdue state
 - the starter plan's feature limits existed on paper but weren't actually enforced in the app
 - cancel-plan was throwing errors, and nobody could say what a cancelled school should still be able to see
-- enterprise customers were being handled entirely by hand — a payment link over email from whoever in sales was talking to them
+- enterprise customers were being handled entirely by hand - a payment link over email from whoever in sales was talking to them
 
-none of those are bugs in the sense of something breaking. they're all the same absence: we'd built the moment of purchase in detail and left the *lifecycle* around it mostly unspecified. sign-up was designed. renewal, lapse, cancellation, downgrade, enforcement — those were going to get discovered one at a time by customers.
+none of those are bugs in the sense of something breaking. they're all the same absence: we'd built the moment of purchase in detail and left the *lifecycle* around it mostly unspecified. sign-up was designed. renewal, lapse, cancellation, downgrade, enforcement - those were going to get discovered one at a time by customers.
 
 ## the thing i actually learned
 
-my lead's framing was that this is where an AI-assisted workflow quietly fails you. it's genuinely good at building what you describe. it has no opinion whatsoever about what you didn't describe. i can hand it a well-written ticket and get back clean, tested, working code for exactly the scope in the ticket — and the scope in the ticket was the whole problem.
+my lead's framing was that this is where an AI-assisted workflow quietly fails you. it's genuinely good at building what you describe. it has no opinion whatsoever about what you didn't describe. i can hand it a well-written ticket and get back clean, tested, working code for exactly the scope in the ticket - and the scope in the ticket was the whole problem.
 
 writing the code stopped being the slow part a while ago. deciding what the code should be is now the slow part, and it's the part i'd been treating as already finished by the time a ticket reached me.
 
-so the question i try to ask before calling a feature done isn't "does this work?" any more. it's **"and then what happens next month?"** — which would have caught this one in about four seconds.
+so the question i try to ask before calling a feature done isn't "does this work?" any more. it's **"and then what happens next month?"** - which would have caught this one in about four seconds.
 
 it's the same lesson our [first pilot school taught me](/journal/the-principal-gets-a-salary-too) from the other direction. there i was wrong about the world i was building for. here i was wrong about time. both times the code was fine and the model behind it was too small.
 

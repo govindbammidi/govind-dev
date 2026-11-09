@@ -4,9 +4,9 @@ import { diagrams } from "@/components/diagrams";
 
 /**
  * Components available inside every post without imports.
- * <Pull> — Fraunces italic pull quote (same as blockquote).
- * <Ex>   — the mono "Ex:" callout block.
- * <...Diagram>  — the inline-SVG figures in diagrams.tsx, one per post.
+ * <Pull> - Fraunces italic pull quote (same as blockquote).
+ * <Ex> - the mono "Ex:" callout block.
+ * <...Diagram> - the inline-SVG figures in diagrams.tsx, one per post.
  */
 export const mdxComponents: MDXRemoteProps["components"] = {
   Pull: ({ children }: { children?: React.ReactNode }) => (
