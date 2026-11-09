@@ -113,6 +113,9 @@ function attrs<T extends Element>(el: T, values: Record<string, string | number>
  *   bezel - how far in from the edge the bending reaches, px
  *   shift - the most a pixel at the rim is pulled, px
  *   frost - the blur (and tint) applied before the bend
+ *   cssVar - instead of applying the lens, publish it as this custom
+ *            property (`url(#…)`), so CSS can switch it on only in some
+ *            state - the sliding pill bends what's under it only in motion
  *
  * The frost goes FIRST in the chain: in Chrome, a blur placed after the
  * url() lens is dropped, and the page shows through bent but sharp - the
@@ -121,7 +124,12 @@ function attrs<T extends Element>(el: T, values: Record<string, string | number>
  */
 export function useLiquidLens(
   ref: RefObject<HTMLElement | null>,
-  { bezel = 14, shift = 12, frost = "blur(10px) saturate(185%) brightness(1.05)" } = {},
+  {
+    bezel = 14,
+    shift = 12,
+    frost = "blur(10px) saturate(185%) brightness(1.05)",
+    cssVar,
+  }: { bezel?: number; shift?: number; frost?: string; cssVar?: string } = {},
 ) {
   useEffect(() => {
     const el = ref.current;
@@ -163,7 +171,8 @@ export function useLiquidLens(
       if (!url) return;
       attrs(filter, { width: w, height: h });
       attrs(image, { width: w, height: h, href: url });
-      el.style.backdropFilter = `${frost} url(#${id})`;
+      if (cssVar) el.style.setProperty(cssVar, `url(#${id})`);
+      else el.style.backdropFilter = `${frost} url(#${id})`;
     };
     build();
     const ro = new ResizeObserver(build);
@@ -172,7 +181,20 @@ export function useLiquidLens(
     return () => {
       ro.disconnect();
       filter.remove();
-      el.style.backdropFilter = "";
+      if (cssVar) el.style.removeProperty(cssVar);
+      else el.style.backdropFilter = "";
     };
-  }, [ref, bezel, shift, frost]);
+  }, [ref, bezel, shift, frost, cssVar]);
+}
+
+/**
+ * Mark a sliding pill as in motion for the length of its slide, so CSS can
+ * turn it into a clear, swollen glass bead while it travels (the iOS 26
+ * segmented control) and let it settle back into the frosted pill.
+ */
+export function markMoving(thumb: HTMLElement, ms = 520) {
+  const t = thumb as HTMLElement & { _settle?: number };
+  thumb.setAttribute("data-moving", "");
+  window.clearTimeout(t._settle);
+  t._settle = window.setTimeout(() => thumb.removeAttribute("data-moving"), ms);
 }

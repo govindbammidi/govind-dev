@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
-import { useLiquidLens } from "@/lib/liquidLens";
+import { markMoving, useLiquidLens } from "@/lib/liquidLens";
 
 // about, the project archive, the journal and contact. Experience lives on the
 // home page itself, so it needs no link of its own; the PDF is the hero's
@@ -93,6 +93,8 @@ export default function Nav() {
 
   const rowRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLSpanElement>(null);
+  // while it slides the thumb is a clear lens over the links (see GlassTabs)
+  useLiquidLens(thumbRef, { bezel: 12, shift: 9, cssVar: "--thumb-lens" });
   useEffect(() => {
     const row = rowRef.current;
     const thumb = thumbRef.current;
@@ -105,7 +107,9 @@ export default function Nav() {
         thumb.removeAttribute("data-on");
         return;
       }
-      thumb.style.left = `${el.offsetLeft}px`;
+      const left = `${el.offsetLeft}px`;
+      if (thumb.hasAttribute("data-on") && thumb.style.left !== left) markMoving(thumb);
+      thumb.style.left = left;
       thumb.style.width = `${el.offsetWidth}px`;
       thumb.setAttribute("data-on", "");
     };

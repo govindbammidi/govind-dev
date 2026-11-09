@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useLiquidLens } from "@/lib/liquidLens";
+import { markMoving, useLiquidLens } from "@/lib/liquidLens";
 
 /*
  * A filter row in the nav's material: one capsule of liquid glass, the
@@ -33,6 +33,9 @@ export default function GlassTabs<T extends string>({
   const rowRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLSpanElement>(null);
   const placed = useRef(false);
+  // while it slides the pill is a clear lens that bends the labels it
+  // passes over (Chromium; elsewhere it is just clear glass)
+  useLiquidLens(thumbRef, { bezel: 12, shift: 9, cssVar: "--thumb-lens" });
   useEffect(() => {
     const row = rowRef.current;
     const thumb = thumbRef.current;
@@ -44,7 +47,9 @@ export default function GlassTabs<T extends string>({
       row.toggleAttribute("data-scroll", row.scrollWidth > row.clientWidth + 1);
       const el = chosen();
       if (!el) return;
-      thumb.style.left = `${el.offsetLeft}px`;
+      const left = `${el.offsetLeft}px`;
+      if (thumb.hasAttribute("data-on") && thumb.style.left !== left) markMoving(thumb);
+      thumb.style.left = left;
       thumb.style.width = `${el.offsetWidth}px`;
       thumb.setAttribute("data-on", "");
     };
