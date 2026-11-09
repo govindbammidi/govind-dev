@@ -170,7 +170,8 @@ export default function Nav() {
 
           <div
             ref={rowRef}
-            className="relative hidden items-center gap-[2px] font-mono text-[13px] sm:flex"
+            // the gap leaves room for the pill, which rests larger than its link
+            className="relative hidden items-center gap-[8px] font-mono text-[13px] sm:flex"
           >
             <span ref={thumbRef} aria-hidden="true" className="nav-thumb" />
             {LINKS.map((l) => (

@@ -76,9 +76,11 @@ export default function GlassTabs<T extends string>({
         aria-label={label}
         // the padding lives on the row, not the capsule, so when it scrolls
         // the pill keeps room for its shadow inside the clipped edge
-        className="lg-scroll relative flex items-center gap-[2px] rounded-full p-[5px]"
+        // the gaps and padding leave room for the pill, which rests larger
+        // than its button
+        className="lg-scroll relative flex items-center gap-[8px] rounded-full px-[8px] py-[6px]"
       >
-        <span ref={thumbRef} aria-hidden="true" className="nav-thumb top-[5px] bottom-[5px]" />
+        <span ref={thumbRef} aria-hidden="true" className="nav-thumb top-[6px] bottom-[6px]" />
         {options.map((o) => {
           const on = o.value === value;
           return (

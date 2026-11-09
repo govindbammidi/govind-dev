@@ -822,7 +822,7 @@ body::before {
     display: none;
   }
   /* a scroller clips at its edge, so there the pill's shadow is drawn
-     tight enough to fit inside the row's 5px of padding */
+     tight enough to fit inside the row's 6px of padding */
   .lg-scroll[data-scroll] .nav-thumb {
     box-shadow:
       inset 0 1px 1px rgb(255 255 255 / 0.9),
@@ -856,8 +856,21 @@ body::before {
       background-color 0.4s var(--ease-settle),
       box-shadow 0.4s var(--ease-settle);
   }
+  /* the pill rests a little larger than its link, in both themes: it sits
+     raised over the row (the rows' gaps leave it room) */
   .nav-thumb[data-on] {
     opacity: 1;
+    /* the same size it travels at, so it doesn't shrink when it lands */
+    scale: 1.12 1.2;
+    /* a scaled pill without its own stacking context was painted adrift
+       (a blob over the wrong link) inside the island's lens. z-index 1
+       fixes that and still leaves it under the labels, which are z-index
+       1 too and come later */
+    z-index: 1;
+  }
+  /* a scrolling row clips its edge, so there it rests flat */
+  .lg-scroll[data-scroll] .nav-thumb[data-on] {
+    scale: none;
   }
   /* in motion the pill turns liquid (the iOS 26 segmented control): it
      swells, goes clear, lifts above the labels and bends them as it
@@ -875,6 +888,80 @@ body::before {
     /* a scrolling row clips, so there it barely swells */
     .lg-scroll[data-scroll] .nav-thumb[data-moving] {
       scale: 1.04 1.08;
+    }
+    /* the dark rest rule below outranks the plain moving rule, so give a
+       moving dark pill its colour-fringed lens back: the red/blue split
+       reads as light in glass while it travels, but parked on the rim it
+       just looks like a red smudge */
+    html[data-theme="dark"] .nav-thumb[data-on][data-moving] {
+      -webkit-backdrop-filter: saturate(160%) brightness(1.06) var(--thumb-lens,);
+      backdrop-filter: saturate(160%) brightness(1.06) var(--thumb-lens,);
+    }
+  }
+  /* dark mode: the pill never settles back into frost. at rest it is what
+     it is in motion: same size, over the label, same glass and lit rim.
+     only the bending lens is left off: parked on the word, it warped the
+     letters and left a red fringe on the rim */
+  html[data-theme="dark"] .nav-thumb[data-on] {
+    z-index: 2;
+    background: var(--thumb-glass);
+    box-shadow: var(--thumb-glass-shine);
+    -webkit-backdrop-filter: saturate(160%) brightness(1.06);
+    backdrop-filter: saturate(160%) brightness(1.06);
+  }
+  /* light mode: at rest the pill is the same glass lens as the "← home"
+     chip (:is(a, button).glass-chip): half-clear fill, thin edge, the two
+     corner highlights, a blurred shade low inside and a glare at the ends.
+     z-index 1 (above) already makes it a stacking context, so the -1
+     pseudo-elements stay inside it, under the label */
+  html:not([data-theme="dark"]) .nav-thumb[data-on] {
+    background: var(--lens-fill);
+    -webkit-backdrop-filter: blur(6px) saturate(160%);
+    backdrop-filter: blur(6px) saturate(160%);
+    border: 1px solid var(--lens-edge);
+    box-shadow: var(--lens-shine), var(--lens-shadow);
+  }
+  html:not([data-theme="dark"]) .nav-thumb::before,
+  html:not([data-theme="dark"]) .nav-thumb::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    border-radius: inherit;
+    filter: blur(3px);
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease-settle);
+  }
+  html:not([data-theme="dark"]) .nav-thumb::before {
+    left: 4px;
+    right: 4px;
+    top: 35%;
+    height: calc(100% - 8px);
+    border: 1px solid var(--lens-shade);
+  }
+  html:not([data-theme="dark"]) .nav-thumb::after {
+    inset: 0;
+    background: linear-gradient(
+      45deg,
+      var(--lens-glare) 0%,
+      transparent 22%,
+      transparent 78%,
+      var(--lens-glare) 100%
+    );
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    /* the lens rule above outranks the plain moving rule, so while it
+       slides, put the clear travelling glass back and fade the shade and
+       glare out */
+    html:not([data-theme="dark"]) .nav-thumb[data-on][data-moving] {
+      background: var(--thumb-glass);
+      border-color: transparent;
+      box-shadow: var(--thumb-glass-shine);
+      -webkit-backdrop-filter: saturate(160%) brightness(1.06) var(--thumb-lens,);
+      backdrop-filter: saturate(160%) brightness(1.06) var(--thumb-lens,);
+    }
+    html:not([data-theme="dark"]) .nav-thumb[data-moving]::before,
+    html:not([data-theme="dark"]) .nav-thumb[data-moving]::after {
+      opacity: 0;
     }
   }
   /* open: the capsule grows a little into a card to hold the menu - only as
