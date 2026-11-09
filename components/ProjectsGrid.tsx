@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import GlassTabs from "@/components/GlassTabs";
 import type { ArchiveItem, Category } from "@/lib/archive";
 
 const TONE = {
@@ -11,7 +12,7 @@ const TONE = {
 } as const;
 
 /**
- * The project archive: filter chips over a two-column grid of cards. Each
+ * The project archive: a glass filter row over a two-column grid of cards. Each
  * card is a cover (a screenshot when there is one, otherwise the name set
  * large on glass), then name, status, a two-line blurb and the stack. The
  * whole card opens the project's page; the globe opens the live app.
@@ -32,25 +33,13 @@ export default function ProjectsGrid({
   return (
     <>
       {filters && (
-      <div className="mb-7 flex flex-wrap gap-2" role="tablist" aria-label="Filter projects">
-        {(["All", ...categories] as const).map((c) => {
-          const on = c === filter;
-          return (
-            <button
-              key={c}
-              type="button"
-              role="tab"
-              aria-selected={on}
-              onClick={() => setFilter(c)}
-              className={`rounded-full px-[14px] py-[6px] text-[13.5px] transition-colors ${
-                on ? "bg-accent font-semibold text-paper" : "glass-chip text-muted hover:text-ink"
-              }`}
-            >
-              {c}
-            </button>
-          );
-        })}
-      </div>
+        <GlassTabs
+          className="mb-7"
+          label="Filter projects"
+          value={filter}
+          onChange={setFilter}
+          options={(["All", ...categories] as const).map((c) => ({ value: c, label: c }))}
+        />
       )}
 
       <ul className="grid gap-5 sm:grid-cols-2">
