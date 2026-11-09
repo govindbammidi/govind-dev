@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLiquidLens } from "@/lib/liquidLens";
 import { TAGS, formatDate, type PostMeta, type Tag } from "@/lib/post-meta";
 
 /**
@@ -49,26 +50,74 @@ export default function JournalCards({
   const used = TAGS.filter((t) => posts.some((p) => p.tag === t));
   const shown = tag === "All" ? posts : posts.filter((p) => p.tag === tag);
 
+  // the same bending rim as the nav island (Chromium; elsewhere the CSS frost)
+  const barRef = useRef<HTMLDivElement>(null);
+  useLiquidLens(barRef, { bezel: 14, shift: 12 });
+
+  // the thumb is placed by measuring the chosen button, as in the nav, so a
+  // font swap or a resize just re-measures. when the row is scrolling, the
+  // chosen one is also brought into view
+  const rowRef = useRef<HTMLDivElement>(null);
+  const thumbRef = useRef<HTMLSpanElement>(null);
+  const placed = useRef(false);
+  useEffect(() => {
+    const row = rowRef.current;
+    const thumb = thumbRef.current;
+    if (!row || !thumb) return;
+    const place = () => {
+      const el = row.querySelector<HTMLElement>(`[data-tag="${tag}"]`);
+      if (!el) return;
+      thumb.style.left = `${el.offsetLeft}px`;
+      thumb.style.width = `${el.offsetWidth}px`;
+      thumb.setAttribute("data-on", "");
+    };
+    place();
+    const el = row.querySelector<HTMLElement>(`[data-tag="${tag}"]`);
+    if (el && row.scrollWidth > row.clientWidth) {
+      const still = !placed.current || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      row.scrollTo({
+        left: el.offsetLeft - (row.clientWidth - el.offsetWidth) / 2,
+        behavior: still ? "auto" : "smooth",
+      });
+    }
+    placed.current = true;
+    const ro = new ResizeObserver(place);
+    ro.observe(row);
+    return () => ro.disconnect();
+  }, [tag]);
+
   return (
     <>
-      <div className="mb-7 flex flex-wrap gap-2" role="tablist" aria-label="Filter entries">
-        {(["All", ...used] as const).map((t) => {
-          const on = t === tag;
-          return (
-            <button
-              key={t}
-              type="button"
-              role="tab"
-              aria-selected={on}
-              onClick={() => setTag(t)}
-              className={`rounded-full px-[14px] py-[6px] text-[13.5px] transition-colors ${
-                on ? "bg-accent font-semibold text-paper" : "glass-chip text-muted hover:text-ink"
-              }`}
-            >
-              {t === "All" ? "All entries" : t}
-            </button>
-          );
-        })}
+      {/* the filter in the nav's material: one capsule of liquid glass, the
+          chosen kind in a pill that slides between them. on a phone the row
+          scrolls sideways inside the capsule rather than wrapping */}
+      <div ref={barRef} className="lg-bar mb-7 p-[5px]">
+        <div
+          ref={rowRef}
+          role="tablist"
+          aria-label="Filter entries"
+          className="lg-scroll relative flex items-center gap-[2px] rounded-full"
+        >
+          <span ref={thumbRef} aria-hidden="true" className="nav-thumb" />
+          {(["All", ...used] as const).map((t) => {
+            const on = t === tag;
+            return (
+              <button
+                key={t}
+                type="button"
+                role="tab"
+                aria-selected={on}
+                data-tag={t}
+                onClick={() => setTag(t)}
+                className={`nav-link shrink-0 whitespace-nowrap rounded-full px-[13px] py-[6px] text-[13.5px] transition-colors hover:text-accent ${
+                  on ? "font-medium text-accent" : "text-muted"
+                }`}
+              >
+                {t === "All" ? "All entries" : t}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <ul className="space-y-4">

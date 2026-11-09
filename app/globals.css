@@ -84,10 +84,23 @@ html {
   --lg-sheen: radial-gradient(120% 70% at 28% -8%, rgb(255 255 255 / 0.4), rgb(255 255 255 / 0) 60%);
   --lg-shadow: 0 12px 36px -12px rgb(44 44 60 / 0.24), 0 2px 8px -2px rgb(44 44 60 / 0.1);
   --lg-shadow-deep: 0 18px 44px -14px rgb(44 44 60 / 0.34), 0 3px 10px -2px rgb(44 44 60 / 0.14);
-  --lg-pill: rgb(255 255 255 / 0.72);
+  --lg-pill: linear-gradient(180deg, rgb(255 255 255 / 0.88), rgb(255 255 255 / 0.56));
   --lg-pill-shine:
-    inset 0 1px 1px rgb(255 255 255 / 1), inset 0 -1px 1px rgb(255 255 255 / 0.6),
-    0 3px 10px -3px rgb(44 44 60 / 0.22), 0 1px 2px rgb(44 44 60 / 0.08);
+    inset 0 1px 1px rgb(255 255 255 / 1), inset 1px 2px 3px rgb(255 255 255 / 0.8),
+    inset -1px -2px 4px rgb(30 30 45 / 0.1), 0 4px 12px -4px rgb(30 30 45 / 0.26),
+    0 1px 2px rgb(30 30 45 / 0.1);
+  /* a pressable pill as a thick bead of frosted glass: light pours in at the
+     top-left rim, the lower edge falls into a soft inner shade, and a wide,
+     faint shadow sets it on the page. monochrome, so the words stay crisp */
+  --lg-btn: linear-gradient(180deg, rgb(255 255 255 / 0.62), rgb(255 255 255 / 0.24));
+  --lg-btn-solid: linear-gradient(180deg, #ffffff, #efeff2);
+  --lg-btn-edge: rgb(255 255 255 / 0.75);
+  --lg-btn-shine:
+    inset 0 1px 0.5px rgb(255 255 255 / 1), inset 1.5px 2px 3px rgb(255 255 255 / 0.7),
+    inset -1px -2px 4px rgb(30 30 45 / 0.08);
+  --lg-btn-shadow: 0 6px 18px -7px rgb(30 30 45 / 0.24), 0 1px 3px rgb(30 30 45 / 0.08);
+  --lg-btn-shadow-lift: 0 10px 26px -8px rgb(30 30 45 / 0.3), 0 2px 5px rgb(30 30 45 / 0.1);
+  --lg-btn-text: 0 1px 0 rgb(255 255 255 / 0.7);
 }
 
 /* dark theme: a true neutral black, no warm tint - near-black ground,
@@ -135,10 +148,20 @@ html[data-theme="dark"] {
   --lg-sheen: radial-gradient(120% 70% at 28% -8%, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0) 62%);
   --lg-shadow: 0 14px 38px -12px rgb(0 0 0 / 0.7), 0 2px 8px -2px rgb(0 0 0 / 0.4);
   --lg-shadow-deep: 0 20px 48px -14px rgb(0 0 0 / 0.8), 0 3px 10px -2px rgb(0 0 0 / 0.5);
-  --lg-pill: rgb(255 255 255 / 0.14);
+  --lg-pill: linear-gradient(180deg, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0.08));
   --lg-pill-shine:
-    inset 0 1px 1px rgb(255 255 255 / 0.22), inset 0 -1px 1px rgb(255 255 255 / 0.06),
-    0 3px 10px -3px rgb(0 0 0 / 0.5), 0 1px 2px rgb(0 0 0 / 0.3);
+    inset 0 1px 1px rgb(255 255 255 / 0.32), inset 1px 2px 3px rgb(255 255 255 / 0.08),
+    inset -1px -2px 4px rgb(0 0 0 / 0.35), 0 4px 12px -4px rgb(0 0 0 / 0.6),
+    0 1px 2px rgb(0 0 0 / 0.35);
+  --lg-btn: linear-gradient(180deg, rgb(255 255 255 / 0.13), rgb(255 255 255 / 0.04));
+  --lg-btn-solid: linear-gradient(180deg, #2a2a2a, #1a1a1a);
+  --lg-btn-edge: rgb(255 255 255 / 0.13);
+  --lg-btn-shine:
+    inset 0 1px 0.5px rgb(255 255 255 / 0.34), inset 1.5px 2px 3px rgb(255 255 255 / 0.08),
+    inset -1px -2px 4px rgb(0 0 0 / 0.4);
+  --lg-btn-shadow: 0 8px 20px -8px rgb(0 0 0 / 0.75), 0 1px 3px rgb(0 0 0 / 0.4);
+  --lg-btn-shadow-lift: 0 12px 28px -8px rgb(0 0 0 / 0.85), 0 2px 5px rgb(0 0 0 / 0.45);
+  --lg-btn-text: 0 1px 1px rgb(0 0 0 / 0.45);
 }
 
 body {
@@ -609,13 +632,19 @@ body::before {
   }
   /* a chip you can press answers on pointer-down, not on release */
   :is(a, button).glass-chip {
+    background: var(--lg-btn);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    backdrop-filter: blur(14px) saturate(180%);
+    border-color: var(--lg-btn-edge);
+    box-shadow: var(--lg-btn-shine), var(--lg-btn-shadow);
+    text-shadow: var(--lg-btn-text);
     transition:
       transform 0.1s ease-out,
-      border-color 0.3s var(--ease-settle),
+      box-shadow 0.3s var(--ease-settle),
       color 0.3s var(--ease-settle);
   }
   :is(a, button).glass-chip:hover {
-    border-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+    box-shadow: var(--lg-btn-shine), var(--lg-btn-shadow-lift);
   }
   :is(a, button).glass-chip:active {
     transform: scale(0.97);
@@ -673,7 +702,8 @@ body::before {
   }
   /* the rim: a 1px gradient border, drawn by masking everything but the
      padding ring, so light catches two opposite corners */
-  .island::before {
+  .island::before,
+  .lg-bar::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -690,7 +720,8 @@ body::before {
     pointer-events: none;
   }
   /* the sheen pools at the top-left, under the content */
-  .island::after {
+  .island::after,
+  .lg-bar::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -698,6 +729,28 @@ body::before {
     border-radius: inherit;
     background: var(--lg-sheen);
     pointer-events: none;
+  }
+  /* the island's material on a bar that stays put in the page (the journal
+     filter): same fill, frost, rim and sheen, none of the island's motion */
+  .lg-bar {
+    position: relative;
+    isolation: isolate;
+    width: fit-content;
+    max-width: 100%;
+    background-color: var(--lg-fill);
+    -webkit-backdrop-filter: blur(10px) saturate(185%) brightness(1.04);
+    backdrop-filter: blur(10px) saturate(185%) brightness(1.04);
+    border-radius: 23px;
+    box-shadow: var(--lg-shine), var(--lg-shadow);
+  }
+  /* a row that scrolls sideways when it can't fit, with no scrollbar drawn */
+  .lg-scroll {
+    overflow-x: auto;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .lg-scroll::-webkit-scrollbar {
+    display: none;
   }
   /* the current link sits in a white pill that slides between links, like a
      tab bar's thumb. Nav positions it; this is only the material */
@@ -860,6 +913,7 @@ html[data-theme="dark"] .glass-btn {
   .glass,
   .glass-chip,
   .island,
+  .lg-bar,
   .glass-btn {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
@@ -875,7 +929,11 @@ html[data-theme="dark"] .glass-btn {
   .glass-chip {
     background: var(--color-paper-2);
   }
-  .island {
+  :is(a, button).glass-chip {
+    background: var(--lg-btn-solid);
+  }
+  .island,
+  .lg-bar {
     background-color: var(--color-paper-2);
   }
   .island-scrim {
@@ -895,12 +953,15 @@ html[data-theme="dark"] .glass-btn {
     background: var(--color-paper-2);
     border-color: var(--color-muted);
   }
-  .island {
+  .island,
+  .lg-bar {
     background-color: var(--color-paper);
     outline: 1px solid var(--color-muted);
   }
   .island::before,
-  .island::after {
+  .island::after,
+  .lg-bar::before,
+  .lg-bar::after {
     display: none;
   }
 }
