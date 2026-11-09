@@ -846,12 +846,15 @@ body::before {
     box-shadow: var(--lg-pill-shine);
     opacity: 0;
     pointer-events: none;
+    /* the pill swells into glass first, then glides after a short beat,
+       with a softer overshoot so the landing reads smooth, not springy */
     transition:
-      left 0.5s cubic-bezier(0.34, 1.25, 0.4, 1),
-      width 0.5s cubic-bezier(0.34, 1.25, 0.4, 1),
-      opacity 0.3s var(--ease-settle),
-      scale 0.4s cubic-bezier(0.34, 1.5, 0.5, 1),
-      box-shadow 0.3s var(--ease-settle);
+      left 0.72s cubic-bezier(0.3, 1.12, 0.4, 1) 0.07s,
+      width 0.72s cubic-bezier(0.3, 1.12, 0.4, 1) 0.07s,
+      opacity 0.35s var(--ease-settle),
+      scale 0.5s cubic-bezier(0.34, 1.3, 0.5, 1),
+      background-color 0.4s var(--ease-settle),
+      box-shadow 0.4s var(--ease-settle);
   }
   .nav-thumb[data-on] {
     opacity: 1;

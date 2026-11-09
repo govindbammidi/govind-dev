@@ -249,7 +249,9 @@ export function useLiquidLens(
  * turn it into a clear, swollen glass bead while it travels (the iOS 26
  * segmented control) and let it settle back into the frosted pill.
  */
-export function markMoving(thumb: HTMLElement, ms = 520) {
+// covers the 70ms start beat + 720ms glide in .nav-thumb, so the pill stays
+// liquid until it has landed and only then frosts back over
+export function markMoving(thumb: HTMLElement, ms = 820) {
   const t = thumb as HTMLElement & { _settle?: number };
   thumb.setAttribute("data-moving", "");
   window.clearTimeout(t._settle);

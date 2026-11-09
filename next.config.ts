@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
+  // a stray package-lock.json in the user folder made Turbopack pick that as
+  // the workspace root, and then modules like @vercel/analytics didn't resolve
+  turbopack: { root: __dirname },
   // React <ViewTransition> on route changes (globals.css: .page-swap)
   experimental: { viewTransition: true },
   async redirects() {
