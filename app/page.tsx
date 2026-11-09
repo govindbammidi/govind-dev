@@ -4,7 +4,7 @@ import Link from "next/link";
 import Footer from "@/components/Footer";
 import GitHubActivity from "@/components/GitHubActivity";
 import SkillVenn from "@/components/SkillVenn";
-import Me from "@/components/Me";
+import HeroPortrait from "@/components/HeroPortrait";
 import Typewriter from "@/components/Typewriter";
 import HeroLinks from "@/components/HeroLinks";
 import SkillChips from "@/components/SkillChips";
@@ -109,10 +109,7 @@ export default function HomePage() {
       <header className="border-b border-line pb-10 pt-[56px]">
         <div className="mx-auto max-w-[760px] px-7">
           <div className="rise flex items-center gap-5">
-            <Me
-              size={88}
-              className="h-[76px] w-[76px] shrink-0 rounded-[20px] border border-line sm:h-[88px] sm:w-[88px]"
-            />
+            <HeroPortrait />
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                 <h1 className="font-display text-[clamp(1.5rem,1.2rem+1.2vw,1.95rem)] leading-[1.15]">
