@@ -16,10 +16,11 @@ const OFF = 145; // how far each circle's centre sits from the middle
 const LABEL = 100; // how far a label sits out from its circle's centre
 
 const AREAS = [
-  { label: ["Backend & Databases"], dx: 0, dy: -1 },
+  // two short lines each, so a label still fits when the orbit carries it to the side
+  { label: ["Backend &", "Databases"], dx: 0, dy: -1 },
   { label: ["Frontend", "Engineering"], dx: -1, dy: 0 },
   { label: ["Product", "Thinking"], dx: 1, dy: 0 },
-  { label: ["Shipping & DevOps"], dx: 0, dy: 1 },
+  { label: ["Shipping &", "DevOps"], dx: 0, dy: 1 },
 ];
 
 export default function SkillVenn() {
@@ -35,7 +36,9 @@ export default function SkillVenn() {
           {/* a soft light where the four meet, behind me */}
           <circle cx={CX} cy={CY} r={120} className="venn-glow" />
           {/* each area is its ring and its label, so hovering one lights both;
-              --i staggers the drawing-in (see .venn-* in globals.css) */}
+              --i staggers the drawing-in (see .venn-* in globals.css).
+              The four slowly orbit me; the labels turn back so they stay upright. */}
+          <g className="venn-orbit">
           {AREAS.map((a, i) => {
             const x = CX + a.dx * (OFF + LABEL);
             const y = CY + a.dy * (OFF + LABEL);
@@ -52,6 +55,7 @@ export default function SkillVenn() {
               </g>
             );
           })}
+          </g>
         </svg>
 
         {/* me, where the four meet */}

@@ -1164,7 +1164,22 @@ html[data-theme="dark"] {
       venn-breathe 7s ease-in-out calc(1.6s + var(--i) * 0.9s) infinite alternate;
   }
   .is-visible .venn-label {
-    animation: venn-label 0.7s var(--ease-settle) calc(0.55s + var(--i) * 0.16s) both;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation:
+      venn-label 0.7s var(--ease-settle) calc(0.55s + var(--i) * 0.16s) both,
+      venn-unspin 60s linear 1.6s infinite;
+  }
+  /* the four areas orbit the middle, once a minute; each label turns back
+     at the same rate so it stays upright. Pointing at it holds it still. */
+  .is-visible .venn-orbit {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    animation: venn-spin 60s linear 1.6s infinite;
+  }
+  .venn-orbit:hover,
+  .venn-orbit:hover .venn-label {
+    animation-play-state: paused;
   }
   .is-visible .venn-glow {
     animation: venn-glow 4.5s ease-in-out 1.2s infinite alternate both;
@@ -1181,6 +1196,12 @@ html[data-theme="dark"] {
 @keyframes venn-draw {
   from { stroke-dashoffset: 1; }
   to { stroke-dashoffset: 0; }
+}
+@keyframes venn-spin {
+  to { rotate: 360deg; }
+}
+@keyframes venn-unspin {
+  to { rotate: -360deg; }
 }
 @keyframes venn-breathe {
   from { scale: 1; }
