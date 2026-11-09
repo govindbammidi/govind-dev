@@ -1,0 +1,90 @@
+---
+title: "The job description was in my browser history"
+summary: "HR gave me a few hours to prepare and i didn't have the job description. claude found it inside a sqlite file on my own laptop, which sent me off learning how sqlite actually works. then i lost the interview on one DSA question."
+date: "2026-10-21"
+tag: "Interviews"
+arc: "an interview in a few hours and no JD → claude finds it in my browser history → what that history file actually is → prepared fully, rejected on one DSA question"
+draft: false
+featured: false
+---
+
+i got a call for a job opportunity. HR said the interview was in a few hours and asked me to prepare.
+
+prepare for what, though. i didn't have the job description 😬
+
+i'd been applying for jobs with AI. claude runs my applications across naukri and a few other sites, and this one i'd applied to quite a while back. so the JD wasn't saved anywhere i could just open. i asked claude to find it.
+
+## where it looked
+
+first it searched its own memory. nothing. i'd applied long enough ago that it just wasn't there anymore.
+
+then it searched my gmail with the company name and found the confirmation mail. "thank you for applying to ... for the role of software engineer."
+
+so now we knew the company and the role. still no JD.
+
+i told it, do whatever, just bring me the JD.
+
+a few minutes later it came back with the exact naukri page i had applied from, with the full job description still on it.
+
+i was surprised, so i asked it how it found that page. it said it read my browser history.
+
+## my browser history is a database
+
+i didn't know this. i thought history was just something the browser remembered somewhere inside itself.
+
+it's actually a file on disk, named `History`, and that file is a sqlite database.
+
+claude didn't even open the browser to look. it used python's `sqlite3` module, opened that file, and queried it. it was close to this:
+
+```sql
+SELECT url, title, last_visit_time
+FROM urls
+WHERE title LIKE '%company name%'
+ORDER BY last_visit_time;
+```
+
+`urls` is a table. every page you've ever opened is a row in it, with the address, the page title and when you last visited. naukri puts the company name in the page title, so the `LIKE` matched that row, and the url in it was the job page.
+
+one small detail: claude copied the file first and ran the query on the copy. while the browser is running it keeps the original file busy, so reading it directly can fail with "database is locked".
+
+<Ex>Ex: last_visit_time isn't stored as a date. it's one big number, microseconds counted from 1 january 1601, which is where windows starts its clock. you have to convert it before it means anything.</Ex>
+
+<Pull>the JD was never lost. it was a row in a table on my own laptop.</Pull>
+
+## so what is sqlite
+
+i didn't really know sqlite before this. i knew the name and that's it.
+
+claude found the JD, but i didn't want to just take the answer and move on. i wanted to know how it worked. so i went to youtube, watched a short video on how sqlite works, and started writing in my notebook.
+
+this is what i wrote down, and what each point actually means.
+
+**it's small, and it's written in C.** the whole library is under 1 MB.
+
+**it's embedded.** apps like whatsapp, chrome and spotify carry it inside themselves. there's no database server running anywhere.
+
+**queries work like function calls.** this is the one that clicked for me, because of postgres. in our ERP, my node code sends a query over a connection to the postgres server, a separate process, which runs it and sends the rows back. sqlite has no server. the database code lives inside the app, so running a query is the app calling a function in a library it already has. that's why python could just open the file and read it.
+
+**it's one file, cut into pages.** the whole database is a single file, split into fixed-size pages, 4 KB each by default.
+
+**page 1 is the map.** the first page holds the schema: which tables and indexes exist, and which page each one starts on.
+
+<SqlitePagesDiagram />
+
+so reading the `urls` table doesn't mean going through the whole file. sqlite reads page 1, finds where `urls` starts, and goes there.
+
+**many reads, one write.** lots of reads can happen at the same time, but only one write at a time. if two writes come in, they go one by one.
+
+## the interview
+
+the interview came a few days later. the whole thing is in [i prepared for the job description, he interviewed my resume](/journal/i-prepared-for-the-job-description-he-interviewed-my-resume). the waiting room, the reschedule, every question.
+
+the short version. the JD mainly covered web fundamentals, so i prepared those fully. it also expected workato automation experience. i'd never used workato, so i learned that too. the interviewer was very impressed with my development knowledge.
+
+then came one DSA question, two sum. i explained the brute-force approach and wrote the pseudocode. i couldn't optimize it to a better time complexity.
+
+in the end, i got rejected because of that one question 🙂
+
+still, i learned something that day that i never planned to learn. i went looking for a job description and came back knowing how the database inside my own browser is laid out.
+
+#sqlite #python #interviews #dsa #learninginpublic

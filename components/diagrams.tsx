@@ -1615,6 +1615,98 @@ export function MembershipCheckDiagram() {
   );
 }
 
+/** a sqlite file as a row of fixed-size pages. page 1 holds the schema,
+ *  which says which page each table or index starts on, so a read goes
+ *  to page 1 first and then straight to the page it names. the page
+ *  numbers are illustrative, not chrome's real layout. */
+export function SqlitePagesDiagram() {
+  const pages = [0, 1, 2, 3, 4, 5].map((i) => ({ n: i + 1, x: 16 + i * 60 }));
+  const cx = (n: number) => 16 + (n - 1) * 60 + 26; // centre of page n
+  const rows = [
+    { y: 142, label: "table urls", to: 4 },
+    { y: 160, label: "index on urls", to: 5 },
+    { y: 178, label: "table visits", to: 6 },
+  ];
+
+  return (
+    <figure className="diagram">
+      <div className="diagram-solo diagram-wide">
+        <svg
+          viewBox="0 0 380 220"
+          role="img"
+          aria-label="The History file is one SQLite file split into 4 KB pages. Page 1 holds the schema: it lists each table and index and the page it starts on. The urls table starts on page 4, its index on page 5, the visits table on page 6, so a read starts at page 1 and goes straight to the page it names."
+        >
+          <Arrowhead id="dgm-sqlite" />
+
+          <text x="16" y="14" fontSize="11" letterSpacing="0.3">
+            History · one file on disk
+          </text>
+
+          {/* the file: fixed-size pages, page 1 first */}
+          {pages.map((p) => (
+            <g key={p.n}>
+              <rect
+                x={p.x}
+                y="30"
+                width="52"
+                height="40"
+                fill={PAPER}
+                stroke={p.n === 1 ? ACCENT : MUTED}
+              />
+              <text
+                x={p.x + 26}
+                y="47"
+                fontSize="10.5"
+                textAnchor="middle"
+                fill={p.n === 1 ? ACCENT : "currentColor"}
+              >
+                page {p.n}
+              </text>
+              <text x={p.x + 26} y="61" fontSize="9" textAnchor="middle" fill={MUTED}>
+                4 KB
+              </text>
+            </g>
+          ))}
+
+          {/* page 1, opened up: the schema */}
+          <line x1={cx(1)} y1="70" x2={cx(1)} y2="104" stroke={MUTED} />
+          <rect x="16" y="104" width="196" height="88" fill={PAPER} stroke={MUTED} />
+          <text x="26" y="122" fontSize="10.5">
+            inside page 1: the schema
+          </text>
+          {rows.map((r) => (
+            <g key={r.label}>
+              <text x="26" y={r.y} fontSize="9.5" fill={MUTED}>
+                {r.label}
+              </text>
+              <text x="202" y={r.y} fontSize="9.5" textAnchor="end">
+                → page {r.to}
+              </text>
+              <line
+                x1="216"
+                y1={r.y - 4}
+                x2={cx(r.to)}
+                y2="74"
+                stroke={MUTED}
+                markerEnd="url(#dgm-sqlite)"
+              />
+            </g>
+          ))}
+
+          <text x="190" y="212" fontSize="9.5" textAnchor="middle" fill={MUTED}>
+            every read starts at page 1, then jumps to the page it names
+          </text>
+        </svg>
+      </div>
+      <figcaption>
+        the whole database is one file cut into 4 KB pages. page 1 is the map:
+        it lists every table and index and the page each one starts on. the
+        page numbers here are made up for the picture.
+      </figcaption>
+    </figure>
+  );
+}
+
 export const diagrams = {
   WebhookPathDiagram,
   TwoPathsDiagram,
@@ -1630,4 +1722,5 @@ export const diagrams = {
   PromptCurveDiagram,
   BranchFastForwardDiagram,
   MembershipCheckDiagram,
+  SqlitePagesDiagram,
 };
