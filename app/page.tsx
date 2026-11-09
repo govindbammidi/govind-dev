@@ -279,21 +279,9 @@ export default function HomePage() {
       </section>
 
       {/* the four kinds of work I do, with me where they meet */}
-      <section className="border-b border-line py-[56px]" id="hi">
+      <section className="py-[56px]" id="hi">
         <Reveal className="mx-auto max-w-[760px] px-7">
           <SkillVenn />
-        </Reveal>
-      </section>
-
-      <section className="py-[40px]">
-        <Reveal className="mx-auto max-w-[760px] px-7 text-center">
-          <a
-            href={RESUME_PDF}
-            download={RESUME_FILENAME}
-            className="inline-flex items-center gap-2 glass-btn rounded-full px-[22px] py-[11px] font-mono text-[13px] no-underline"
-          >
-            ↓ Download resume
-          </a>
         </Reveal>
       </section>
 

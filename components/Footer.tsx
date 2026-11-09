@@ -1,10 +1,12 @@
 import Link from "next/link";
+import FooterQuote from "@/components/FooterQuote";
 import { site } from "@/lib/site";
 
 export default function Footer({ who }: { who?: string }) {
   return (
     <footer className="border-t border-line py-[50px] pb-[70px] text-center">
       <div className="mx-auto max-w-[760px] px-7">
+        <FooterQuote />
         {who && (
           <p
             id="contact"
