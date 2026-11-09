@@ -61,14 +61,16 @@ export default function GlassTabs<T extends string>({
   }, [value]);
 
   return (
-    <div ref={barRef} className={`lg-bar p-[5px] ${className}`}>
+    <div ref={barRef} className={`lg-bar ${className}`}>
       <div
         ref={rowRef}
         role="tablist"
         aria-label={label}
-        className="lg-scroll relative flex items-center gap-[2px] rounded-full"
+        // the padding lives on the scrolling row, not the capsule: a scroller
+        // clips at its edges, and the pill's shadow needs room inside them
+        className="lg-scroll relative flex items-center gap-[2px] rounded-full p-[5px]"
       >
-        <span ref={thumbRef} aria-hidden="true" className="nav-thumb" />
+        <span ref={thumbRef} aria-hidden="true" className="nav-thumb top-[5px] bottom-[5px]" />
         {options.map((o) => {
           const on = o.value === value;
           return (
