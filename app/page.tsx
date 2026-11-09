@@ -6,7 +6,7 @@ import GitHubActivity from "@/components/GitHubActivity";
 import SkillVenn from "@/components/SkillVenn";
 import HeroPortrait from "@/components/HeroPortrait";
 import Typewriter from "@/components/Typewriter";
-import HeroLinks from "@/components/HeroLinks";
+import HeroLinks, { HeroAsks } from "@/components/HeroLinks";
 import SkillChips from "@/components/SkillChips";
 import ProjectsGrid from "@/components/ProjectsGrid";
 import { getArchive } from "@/lib/archive";
@@ -123,8 +123,11 @@ export default function HomePage() {
               <p className="mt-1 min-h-[1.6em] text-[16px] text-muted sm:text-[17px]">
                 <Typewriter lines={ROLE_LINES} />
               </p>
+              {/* beside the name on wider screens; on a phone its own row below */}
+              <HeroAsks className="mt-3 hidden sm:flex" />
             </div>
           </div>
+          <HeroAsks className="rise mt-5 flex sm:hidden" />
 
           <p className="rise rise-1 mt-7 max-w-[640px] text-[17px] leading-[1.7] text-lede">
             At Maahita Technologies, I built core parts of a multi-tenant school

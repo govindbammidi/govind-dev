@@ -19,5 +19,8 @@ export const site = {
   github: "https://github.com/govindbammidi",
   githubWork: "https://github.com/govindaraob-maahita",
   medium: "https://medium.com/@bammidigovindarao1729",
+  /** "Book a call" in the masthead. The contact page until there's a
+   *  Cal.com / Calendly link - paste that here and the button opens it in a new tab */
+  booking: "/contact",
   fine: "Govind - building the Maahita school ERP, and writing down what it teaches me.",
 } as const;
