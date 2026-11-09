@@ -44,9 +44,13 @@ html {
   --glass-highlight: rgb(255 255 255 / 0.85);
   --glass-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 10px 30px -14px rgb(0 0 0 / 0.18);
   --glass-shadow-lift: 0 2px 4px rgb(0 0 0 / 0.05), 0 18px 40px -16px rgb(0 0 0 / 0.26);
-  --glow-1: rgb(255 255 255 / 0.75);
-  --glow-2: rgb(17 17 17 / 0.06);
-  --glow-3: rgb(255 255 255 / 0.55);
+  /* ambient light behind the panes: three muted pastels, faint enough that
+     the paper stays paper — the glass picks them up, the text doesn't */
+  --glow-1: rgb(205 218 255 / 0.55);
+  --glow-2: rgb(255 222 205 / 0.45);
+  --glow-3: rgb(205 238 224 / 0.5);
+  /* the gloss: a soft sheen across the top-left of a pane */
+  --glass-gloss: rgb(255 255 255 / 0.4);
 }
 
 /* dark theme: same warm paper-and-ink character on Claude's near-black ground */
@@ -71,9 +75,10 @@ html[data-theme="dark"] {
   --glass-highlight: rgb(255 255 255 / 0.1);
   --glass-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -14px rgb(0 0 0 / 0.6);
   --glass-shadow-lift: 0 2px 4px rgb(0 0 0 / 0.35), 0 20px 44px -16px rgb(0 0 0 / 0.75);
-  --glow-1: rgb(255 255 255 / 0.07);
-  --glow-2: rgb(255 255 255 / 0.05);
-  --glow-3: rgb(255 255 255 / 0.04);
+  --glow-1: rgb(150 170 230 / 0.1);
+  --glow-2: rgb(230 170 150 / 0.07);
+  --glow-3: rgb(150 210 190 / 0.07);
+  --glass-gloss: rgb(255 255 255 / 0.07);
 }
 
 body {
@@ -466,7 +471,10 @@ body::before {
 @layer components {
   /* cards: the bigger surface reads thicker — more blur, deeper shadow */
   .glass {
-    background: var(--glass-bg);
+    /* frosted body, glossy top-left: the sheen fades out before mid-pane */
+    background:
+      linear-gradient(135deg, var(--glass-gloss), transparent 48%),
+      var(--glass-bg);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
     backdrop-filter: blur(24px) saturate(180%);
     border: 1px solid var(--glass-edge);
@@ -500,6 +508,14 @@ body::before {
     box-shadow:
       inset 0 1px 0 var(--glass-highlight),
       0 1px 2px rgb(0 0 0 / 0.04);
+  }
+  /* no glass on glass (HIG): a chip sitting on a pane goes flat, so the
+     pane stays one clear layer instead of a stack of frosted edges */
+  .glass .glass-chip {
+    background: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
   }
   /* a chip you can press answers on pointer-down, not on release */
   :is(a, button).glass-chip {
@@ -555,15 +571,20 @@ body::before {
     color: var(--color-ink);
     width: fit-content;
     max-width: 100%;
-    background: rgb(17 17 17 / 0.8);
+    background:
+      linear-gradient(135deg, rgb(255 255 255 / 0.07), transparent 50%),
+      rgb(17 17 17 / 0.8);
     -webkit-backdrop-filter: blur(22px) saturate(180%);
     backdrop-filter: blur(22px) saturate(180%);
     border: 1px solid rgb(255 255 255 / 0.1);
     border-radius: 23px;
+    /* lensing, cheaply: a bright top edge and a faint ring all the way round,
+       the way light catches the rim of thick glass */
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.12),
+      inset 0 0 0 1px rgb(255 255 255 / 0.03),
       0 1px 2px rgb(0 0 0 / 0.25),
-      0 14px 34px -14px rgb(0 0 0 / 0.5);
+      0 14px 34px -14px rgb(0 0 0 / 0.45);
     /* lets width animate from fit-content to a length where supported */
     interpolate-size: allow-keywords;
     transition:
@@ -571,12 +592,13 @@ body::before {
       border-radius 0.45s var(--ease-settle);
     animation: island-in 0.7s var(--ease-settle) both;
   }
-  /* open: the capsule grows into a card to hold the menu. phone widths only,
-     so a menu left open while the window widens can't squeeze the desktop
-     island (the panel itself is already sm:hidden) */
+  /* open: the capsule grows a little into a card to hold the menu — only as
+     wide as the rows need, so the page stays visible around it. phone widths
+     only, so a menu left open while the window widens can't squeeze the
+     desktop island (the panel itself is already sm:hidden) */
   @media (max-width: 639px) {
     .island[data-open] {
-      width: min(100%, 420px);
+      width: min(100%, 272px);
       border-radius: 24px;
     }
   }
@@ -611,7 +633,7 @@ body::before {
 
 /* dark ground: lift the capsule a shade so it reads against near-black */
 html[data-theme="dark"] .island {
-  background: rgb(30 30 32 / 0.76);
+  background-color: rgb(30 30 32 / 0.76);
   border-color: rgb(255 255 255 / 0.14);
 }
 
@@ -693,18 +715,26 @@ html[data-theme="dark"] .glass-btn {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
-  .glass,
+  /* solid panes, but still frosted-looking: the sheen and the ambient light
+     behind the page are plain paint, not see-through, so they stay. (Chrome
+     on Windows reports this whenever "Transparency effects" is off.) */
+  .glass {
+    background:
+      linear-gradient(135deg, var(--glass-gloss), transparent 48%),
+      var(--color-paper-2);
+  }
   .glass-chip {
     background: var(--color-paper-2);
   }
   .island {
     background: #111111;
   }
+  /* outranks the dark-ground tint below, which is translucent */
+  html[data-theme="dark"] .island {
+    background-color: #1e1e20;
+  }
   .glass-btn {
     background: var(--color-accent);
-  }
-  body::before {
-    display: none;
   }
 }
 
@@ -718,6 +748,9 @@ html[data-theme="dark"] .glass-btn {
   .island {
     background: #000000;
     border-color: rgb(255 255 255 / 0.5);
+  }
+  html[data-theme="dark"] .island {
+    background-color: #000000;
   }
 }
 

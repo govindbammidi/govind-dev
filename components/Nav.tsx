@@ -16,6 +16,8 @@ const LINKS = [
 
 const RESUME = { href: "/Govind_Resume.pdf", file: "Bammidi_Govinda_Rao_Resume.pdf" };
 
+const sectionOf = (href: string) => (href.startsWith("/#") ? href.slice(2) : null);
+
 /**
  * The nav as a floating island: a black capsule over the page, after the
  * Dynamic Island. On a phone it grows into a card to hold the menu and
@@ -25,9 +27,39 @@ const RESUME = { href: "/Govind_Resume.pdf", file: "Bammidi_Govinda_Rao_Resume.p
 export default function Nav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  // the home section under the reading line, so /#experience and /#projects
+  // light up as you scroll past them (a pathname never matches a hash)
+  const [section, setSection] = useState<string | null>(null);
+  // off the home page the observer is gone, so whatever it last saw is stale
+  const here = pathname === "/" ? section : null;
 
-  const isActive = (href: string) =>
-    pathname === href || pathname.startsWith(`${href}/`);
+  const isActive = (href: string) => {
+    const id = sectionOf(href);
+    if (id) return here === id;
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+
+  useEffect(() => {
+    if (pathname !== "/") return;
+    const sections = Array.from(document.querySelectorAll<HTMLElement>("section[id]"));
+    if (sections.length === 0) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const entering = entries.find((e) => e.isIntersecting);
+        if (entering) {
+          setSection(entering.target.id);
+          return;
+        }
+        // left a section without entering another: back up in the hero
+        setSection((cur) => (entries.some((e) => e.target.id === cur) ? null : cur));
+      },
+      // a thin band a third of the way down the viewport: whichever section
+      // crosses it is where the reader is
+      { rootMargin: "-30% 0px -65% 0px" },
+    );
+    sections.forEach((s) => io.observe(s));
+    return () => io.disconnect();
+  }, [pathname]);
 
   // Escape closes the island, the way a sheet dismisses
   useEffect(() => {
@@ -75,7 +107,7 @@ export default function Nav() {
               <Link
                 key={l.href}
                 href={l.href}
-                aria-current={isActive(l.href) ? "page" : undefined}
+                aria-current={isActive(l.href) ? (sectionOf(l.href) ? "location" : "page") : undefined}
                 className={`nav-link no-underline transition-colors hover:text-accent ${
                   isActive(l.href) ? "text-accent" : "text-muted"
                 }`}
@@ -92,7 +124,9 @@ export default function Nav() {
             </a>
           </div>
 
-          <span aria-hidden="true" className="h-[14px] w-px bg-line" />
+          {/* ml-auto: when the island widens for the menu, the controls stay
+              in the right corner, under the thumb */}
+          <span aria-hidden="true" className="ml-auto h-[14px] w-px bg-line" />
 
           <ThemeToggle />
 
@@ -107,10 +141,11 @@ export default function Nav() {
           </button>
         </div>
 
-        {/* phone menu: the island makes room first, then the rows settle in */}
+        {/* phone menu: the island makes room first, then the rows settle in.
+            the dot marks where you are; the chevron just says "goes somewhere" */}
         <div className="island-panel sm:hidden" aria-hidden={!open}>
           <div>
-            <div className="island-rows border-t border-line px-[18px] pb-2 pt-1">
+            <div className="island-rows border-t border-line px-[18px] pb-[5px] pt-[3px]">
               {LINKS.map((l) => {
                 const active = isActive(l.href);
                 return (
@@ -119,23 +154,16 @@ export default function Nav() {
                     href={l.href}
                     onClick={() => setOpen(false)}
                     tabIndex={open ? undefined : -1}
-                    aria-current={active ? "page" : undefined}
-                    className={`flex items-center justify-between border-b border-line/60 py-[13px] font-mono text-[14px] no-underline last:border-0 ${
+                    aria-current={active ? (sectionOf(l.href) ? "location" : "page") : undefined}
+                    className={`flex items-center justify-between border-b border-line/60 py-[10px] font-mono text-[13px] no-underline last:border-0 ${
                       active ? "text-accent" : "text-tag"
                     }`}
                   >
-                    <span className="flex items-center gap-[11px]">
-                      <span
-                        aria-hidden="true"
-                        className={`h-[5px] w-[5px] rounded-full ${
-                          active ? "bg-accent" : "bg-line"
-                        }`}
-                      />
+                    <span className="flex items-center gap-[10px]">
+                      <Dot lit={active} />
                       {l.label}
                     </span>
-                    <span aria-hidden="true" className="text-muted">
-                      →
-                    </span>
+                    <Chevron />
                   </Link>
                 );
               })}
@@ -144,18 +172,57 @@ export default function Nav() {
                 download={RESUME.file}
                 onClick={() => setOpen(false)}
                 tabIndex={open ? undefined : -1}
-                className="flex items-center justify-between py-[13px] font-mono text-[14px] text-accent no-underline"
+                className="flex items-center justify-between py-[10px] font-mono text-[13px] text-accent no-underline"
               >
-                <span className="flex items-center gap-[11px]">
-                  <span aria-hidden="true" className="h-[5px] w-[5px] rounded-full bg-accent" />
+                <span className="flex items-center gap-[10px]">
+                  <Dot lit={false} />
                   resume
                 </span>
-                <span aria-hidden="true">↓</span>
+                <ArrowDown />
               </a>
             </div>
           </div>
         </div>
       </div>
     </nav>
+  );
+}
+
+function Dot({ lit }: { lit: boolean }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`h-[5px] w-[5px] rounded-full transition-colors duration-300 ${
+        lit ? "bg-accent" : "bg-line"
+      }`}
+    />
+  );
+}
+
+function Chevron() {
+  return (
+    <svg aria-hidden="true" width="6" height="10" viewBox="0 0 6 10" fill="none" className="text-muted">
+      <path
+        d="M1 1l4 4-4 4"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ArrowDown() {
+  return (
+    <svg aria-hidden="true" width="10" height="10" viewBox="0 0 10 10" fill="none">
+      <path
+        d="M5 1v8M1.5 5.5L5 9l3.5-3.5"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
