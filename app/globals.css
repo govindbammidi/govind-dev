@@ -943,6 +943,10 @@ html[data-theme-switch]::view-transition-new(root) {
      the pill on every page change and theme switch */
   border-radius: 23px;
   overflow: clip;
+  /* the clip also cuts away the island's drop shadow, which would vanish
+     for the length of the transition; a box-shadow on the group itself
+     sits outside its own clip, so it is drawn here instead */
+  box-shadow: var(--lg-shadow);
 }
 ::view-transition-old(site-nav) {
   display: none;
