@@ -156,17 +156,16 @@ html[data-theme="dark"] {
     inset 0 1px 1px rgb(255 255 255 / 0.32), inset 1px 2px 3px rgb(255 255 255 / 0.08),
     inset -1px -2px 4px rgb(0 0 0 / 0.35), 0 4px 12px -4px rgb(0 0 0 / 0.6),
     0 1px 2px rgb(0 0 0 / 0.35);
-  --lens-fill: rgb(255 255 255 / 0.05);
-  --lens-solid: #1c1c1c;
-  --lens-edge: rgb(255 255 255 / 0.1);
-  --lens-shine:
-    inset 2px -2px 1px -1px rgb(255 255 255 / 0.4), inset -2px 2px 1px -1px rgb(255 255 255 / 0.4),
-    inset 6px -6px 1px -6px rgb(255 255 255 / 0.2), inset -6px 6px 1px -6px rgb(255 255 255 / 0.2),
-    inset 0 0 2px rgb(0 0 0 / 0.9);
-  --lens-shadow: 0 4px 10px rgb(0 0 0 / 0.5);
-  --lens-shadow-lift: 0 8px 16px rgb(0 0 0 / 0.6);
-  --lens-shade: rgb(0 0 0 / 0.85);
-  --lens-glare: rgb(255 255 255 / 0.2);
+  /* dark keeps the plain smoked-glass chip: the lens's inner shade and dark
+     rim read as a hole on a black page, so only the lift and press remain */
+  --lens-fill: var(--glass-bg);
+  --lens-solid: var(--color-paper-2);
+  --lens-edge: var(--glass-edge);
+  --lens-shine: inset 0 1px 0 var(--glass-highlight);
+  --lens-shadow: 0 1px 2px rgb(0 0 0 / 0.3);
+  --lens-shadow-lift: 0 6px 16px -6px rgb(0 0 0 / 0.6);
+  --lens-shade: transparent;
+  --lens-glare: transparent;
 }
 
 body {
