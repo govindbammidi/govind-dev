@@ -1,35 +1,16 @@
+import { getContributions } from "@/lib/github";
 import { site } from "@/lib/site";
 
 /*
  * The last year of GitHub contributions, drawn as the familiar green grid.
- *
- * Rendered on the server from the public contributions API (the same source
- * react-github-calendar reads), cached with the page and refreshed daily -
- * no token, no client JavaScript. If the feed is unreachable the section
- * simply doesn't render: a visitor can't act on an error.
+ * Rendered on the server and refreshed daily, no client JavaScript. Where the
+ * numbers come from, and the fallbacks, are in lib/github.ts.
  */
 
-type Day = { date: string; count: number; level: 0 | 1 | 2 | 3 | 4 };
-type Feed = { total: { lastYear: number }; contributions: Day[] };
-
-const USER = new URL(site.github).pathname.replace(/\//g, "");
 const CELL = 10; // 53 weeks of 10px + 3px gaps fit the 704px column without scrolling
 const GAP = 3;
 const STEP = CELL + GAP;
 const TOP = 18; // room for the month labels
-
-async function loadFeed(): Promise<Feed | null> {
-  try {
-    const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${USER}?y=last`, {
-      next: { revalidate: 86400 },
-    });
-    if (!res.ok) return null;
-    const data = (await res.json()) as Feed;
-    return data.contributions?.length ? data : null;
-  } catch {
-    return null;
-  }
-}
 
 const dayLabel = (iso: string) =>
   new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", {
@@ -39,12 +20,12 @@ const dayLabel = (iso: string) =>
   });
 
 export default async function GitHubActivity() {
-  const feed = await loadFeed();
-  if (!feed) return null;
+  // never empty: falls back to the saved snapshot if GitHub can't be reached
+  const feed = await getContributions();
 
   // Columns are weeks starting on Sunday, as on github.com: pad the first
   // week so each day lands on its weekday row
-  const days = feed.contributions;
+  const days = feed.days;
   const lead = new Date(`${days[0].date}T00:00:00`).getDay();
   const weeks = Math.ceil((lead + days.length) / 7);
   const width = weeks * STEP - GAP;
@@ -84,7 +65,7 @@ export default async function GitHubActivity() {
           height={height}
           viewBox={`0 0 ${width} ${height}`}
           role="img"
-          aria-label={`${feed.total.lastYear} GitHub contributions in the last year`}
+          aria-label={`${feed.total} GitHub contributions in the last year`}
         >
           {months.map((m) => (
             <text key={m.x} x={m.x} y={10} className="gh-month">
@@ -114,7 +95,7 @@ export default async function GitHubActivity() {
       </div>
       <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-[12.5px] text-muted">
         <a href={site.github} className="no-underline hover:text-accent">
-          {feed.total.lastYear.toLocaleString("en-US")} contributions in {range}
+          {feed.total.toLocaleString("en-US")} contributions in {range}
         </a>
         <span className="flex items-center gap-[5px]" aria-hidden="true">
           Less
