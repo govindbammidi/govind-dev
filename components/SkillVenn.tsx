@@ -60,7 +60,7 @@ export default function SkillVenn() {
 
         {/* me, where the four meet */}
         <div className="venn-me absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <Me size={112} className="h-[clamp(72px,16vw,112px)] w-[clamp(72px,16vw,112px)] rounded-full ring-1 ring-line" />
+          <Me size={112} alive className="h-[clamp(72px,16vw,112px)] w-[clamp(72px,16vw,112px)] rounded-full ring-1 ring-line" />
           <span className="venn-hi absolute -bottom-2 -right-6 rounded-full bg-accent px-[11px] py-[3px] text-[14px] font-semibold text-paper shadow-md">
             hi
           </span>
