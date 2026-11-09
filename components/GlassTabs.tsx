@@ -39,6 +39,9 @@ export default function GlassTabs<T extends string>({
     if (!row || !thumb) return;
     const chosen = () => row.querySelector<HTMLElement>(`[data-value="${CSS.escape(value)}"]`);
     const place = () => {
+      // scroll (and so clip) only when the options don't fit: a scroller
+      // cuts off the pill's shadow, so where they fit nothing is clipped
+      row.toggleAttribute("data-scroll", row.scrollWidth > row.clientWidth + 1);
       const el = chosen();
       if (!el) return;
       thumb.style.left = `${el.offsetLeft}px`;
@@ -66,8 +69,8 @@ export default function GlassTabs<T extends string>({
         ref={rowRef}
         role="tablist"
         aria-label={label}
-        // the padding lives on the scrolling row, not the capsule: a scroller
-        // clips at its edges, and the pill's shadow needs room inside them
+        // the padding lives on the row, not the capsule, so when it scrolls
+        // the pill keeps room for its shadow inside the clipped edge
         className="lg-scroll relative flex items-center gap-[2px] rounded-full p-[5px]"
       >
         <span ref={thumbRef} aria-hidden="true" className="nav-thumb top-[5px] bottom-[5px]" />
