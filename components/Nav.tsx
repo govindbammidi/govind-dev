@@ -144,6 +144,17 @@ export default function Nav() {
         <div className="flex h-[44px] items-center gap-[14px] pl-[18px] pr-[14px]">
           <Link
             href="/"
+            // already home: a link to the same page would only run the page
+            // transition (and flash the island see-through) without moving,
+            // so go back up to the top instead
+            onClick={(e) => {
+              setOpen(false);
+              if (pathname !== "/") return;
+              e.preventDefault();
+              const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+              window.scrollTo({ top: 0, behavior: still ? "auto" : "smooth" });
+              if (window.location.hash) history.replaceState(null, "", "/");
+            }}
             className="group font-mono text-[13.5px] font-medium tracking-[-0.3px] text-ink no-underline"
           >
             govind
