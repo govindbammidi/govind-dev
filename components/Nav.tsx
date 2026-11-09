@@ -61,14 +61,24 @@ export default function Nav() {
     return () => io.disconnect();
   }, [pathname]);
 
-  // Escape closes the island, the way a sheet dismisses
+  // the island dismisses the way a sheet does: Escape, or scrolling away.
+  // the menu is for choosing, not for reading past, so once the page moves
+  // more than a nudge it folds back into the pill
   useEffect(() => {
     if (!open) return;
+    const startY = window.scrollY;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
+    const onScroll = () => {
+      if (Math.abs(window.scrollY - startY) > 24) setOpen(false);
+    };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, [open]);
 
   return (
