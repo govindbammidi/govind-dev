@@ -102,13 +102,13 @@ export default async function ProjectPage({ params }: Props) {
             {project.tagline}
           </p>
           <div className="rise rise-4 flex flex-wrap gap-[10px] font-mono text-[12.5px]">
-            <span className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[6px] text-tag">
+            <span className="glass-chip rounded-full px-[13px] py-[6px] text-tag">
               <i className="not-italic text-accent" aria-hidden="true">
                 ◆{" "}
               </i>
               {project.status}
             </span>
-            <span className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[6px] text-tag">
+            <span className="glass-chip rounded-full px-[13px] py-[6px] text-tag">
               <i className="not-italic text-accent" aria-hidden="true">
                 ◆{" "}
               </i>
@@ -209,7 +209,7 @@ export default async function ProjectPage({ params }: Props) {
               {project.challenges.map((item) => (
                 <div
                   key={item.challenge.slice(0, 40)}
-                  className="rounded-[3px] border border-line bg-paper-2 px-[26px] py-6"
+                  className="glass rounded-[18px] px-[26px] py-6"
                 >
                   <p className="mb-2 font-mono text-[11.5px] uppercase tracking-[1px] text-muted">
                     Challenge
@@ -289,7 +289,7 @@ export default async function ProjectPage({ params }: Props) {
                 {project.stack.map((s) => (
                   <span
                     key={s}
-                    className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[7px] font-mono text-[13px] text-tag"
+                    className="glass-chip rounded-full px-[13px] py-[7px] font-mono text-[13px] text-tag"
                   >
                     {s}
                   </span>
@@ -304,7 +304,7 @@ export default async function ProjectPage({ params }: Props) {
                 {project.role.map((r) => (
                   <span
                     key={r}
-                    className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[7px] font-mono text-[13px] text-tag"
+                    className="glass-chip rounded-full px-[13px] py-[7px] font-mono text-[13px] text-tag"
                   >
                     {r}
                   </span>

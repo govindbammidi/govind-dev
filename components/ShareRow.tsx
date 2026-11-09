@@ -25,7 +25,7 @@ export default function ShareRow({ url }: { url: string }) {
       <button
         type="button"
         onClick={copy}
-        className="rounded-[2px] border border-line bg-paper-2 px-[15px] py-2 font-mono text-[12.5px] text-tag transition-colors hover:border-accent hover:text-accent"
+        className="glass-chip rounded-full px-[15px] py-2 font-mono text-[12.5px] text-tag transition-colors hover:border-accent hover:text-accent"
       >
         {copied ? "Copied!" : "Copy link"}
       </button>
@@ -33,7 +33,7 @@ export default function ShareRow({ url }: { url: string }) {
         href={linkedinShare}
         target="_blank"
         rel="noopener noreferrer"
-        className="rounded-[2px] border border-line bg-paper-2 px-[15px] py-2 font-mono text-[12.5px] text-tag no-underline transition-colors hover:border-accent hover:text-accent"
+        className="glass-chip rounded-full px-[15px] py-2 font-mono text-[12.5px] text-tag no-underline transition-colors hover:border-accent hover:text-accent"
       >
         Share on LinkedIn
       </a>

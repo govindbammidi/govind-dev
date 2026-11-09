@@ -29,7 +29,7 @@ export default function ContactPage() {
             to reach.
           </p>
 
-          <div className="rise rise-3 grid max-w-[520px] gap-px border border-line bg-line">
+          <div className="glass rise rise-3 grid max-w-[520px] overflow-hidden rounded-[18px]">
             {CHANNELS.map((ch) => {
               // mailto opens the mail client, not a page — a new tab would be blank
               const external = !ch.href.startsWith("mailto:");
@@ -39,7 +39,7 @@ export default function ContactPage() {
                 href={ch.href}
                 target={external ? "_blank" : undefined}
                 rel={external ? "noopener noreferrer" : undefined}
-                className="group flex items-center justify-between bg-paper px-6 py-5 no-underline transition-colors hover:bg-paper-2"
+                className="group flex items-center justify-between border-b border-[var(--glass-edge)] px-6 py-5 no-underline transition-colors last:border-0 hover:bg-[var(--glass-bg)] active:bg-[var(--glass-bg-strong)]"
               >
                 <span>
                   <span className="block font-mono text-[12px] uppercase tracking-[1px] text-accent">

@@ -59,10 +59,10 @@ export async function ogCard({
             textTransform: "uppercase",
             letterSpacing: 2,
             fontSize: 24,
-            color: "#9a3412",
+            color: "#111111",
           }}
         >
-          <div style={{ width: 44, height: 2, background: "#9a3412" }} />
+          <div style={{ width: 44, height: 2, background: "#111111" }} />
           {kicker}
         </div>
 
@@ -88,7 +88,7 @@ export async function ogCard({
           }}
         >
           <span>
-            govind<span style={{ color: "#9a3412" }}>.</span>dev
+            govind<span style={{ color: "#111111" }}>.</span>dev
           </span>
           <span>
             {site.author} · {foot}

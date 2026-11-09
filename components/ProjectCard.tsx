@@ -8,7 +8,7 @@ export default function ProjectCard({ project }: { project: Project }) {
   return (
     <Link
       href={`/work/${project.slug}`}
-      className="group block rounded-[3px] border border-line bg-paper-2 px-[30px] py-7 no-underline transition-colors hover:border-accent"
+      className="group block glass glass-hover rounded-[18px] px-[30px] py-7 no-underline"
     >
       <div className="mb-[14px] flex flex-wrap items-center gap-x-[14px] gap-y-1 font-mono text-[12px] uppercase tracking-[1px]">
         <span className="text-accent">{project.kicker}</span>
@@ -25,7 +25,7 @@ export default function ProjectCard({ project }: { project: Project }) {
         {project.stack.map((s) => (
           <span
             key={s}
-            className="rounded-[2px] border border-line bg-paper px-[10px] py-[5px] text-tag"
+            className="glass-chip rounded-full px-[11px] py-[5px] text-tag"
           >
             {s}
           </span>

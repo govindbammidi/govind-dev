@@ -1,13 +1,13 @@
 /* schema hall figure: the anatomy kit rules, with tokens drawn from the
- * site palette (warm paper, ink, one rust accent) instead of the kit greys.
+ * site palette (warm paper, ink, one ink accent) instead of the kit greys.
  * Generated from scripts/figures/iso/iso.css by hand; light is the default,
  * dark follows the site toggle on <html data-theme>. */
 .hall{
   --anatomy-page:var(--color-paper);--anatomy-card:#efebe0;--anatomy-text:#5b5446;--anatomy-strong:#1a1813;--anatomy-muted:#8a8273;
   --anatomy-paper:#efebe0;--anatomy-face:#f8f5ec;--anatomy-top:#faf8f2;
   --anatomy-shade-0:#d9d2c0;--anatomy-shade-1:#e1dbcb;--anatomy-shade-2:#e8e3d5;--anatomy-shade-3:#f0ece1;
-  --anatomy-lit-top:#fbefe6;--anatomy-lit-shade:#f1dccd;
-  --anatomy-hi:#2b2722;--anatomy-mid:#857d6c;--anatomy-lo:#b3ab98;--anatomy-faint:#d3ccba;--anatomy-lit:#9a3412;
+  --anatomy-lit-top:#f2f2f2;--anatomy-lit-shade:#e2e2e2;
+  --anatomy-hi:#2b2722;--anatomy-mid:#857d6c;--anatomy-lo:#b3ab98;--anatomy-faint:#d3ccba;--anatomy-lit:#111111;
   --anatomy-halo:#7d7258;--anatomy-halo-opacity:.3;--anatomy-dot:#3a352c;
   --anatomy-red:#e5484d;--anatomy-green:#30a46c;--anatomy-blue:#3e63dd;
   --anatomy-weight:.6px;--anatomy-ease:cubic-bezier(.32,.72,0,1);
@@ -18,8 +18,8 @@ html[data-theme="dark"] .hall{
   --anatomy-card:#252524;--anatomy-text:#b5ad99;--anatomy-strong:#ece7da;--anatomy-muted:#8a8270;
   --anatomy-paper:#252524;--anatomy-face:#2d2d2b;--anatomy-top:#30302e;
   --anatomy-shade-0:#1f1f1e;--anatomy-shade-1:#232322;--anatomy-shade-2:#272726;--anatomy-shade-3:#2b2b29;
-  --anatomy-lit-top:#3a2e27;--anatomy-lit-shade:#312722;
-  --anatomy-hi:#d9d3c2;--anatomy-mid:#7d7666;--anatomy-lo:#4d4940;--anatomy-faint:#3a3935;--anatomy-lit:#e58a5b;
+  --anatomy-lit-top:#3a3a39;--anatomy-lit-shade:#313130;
+  --anatomy-hi:#d9d3c2;--anatomy-mid:#7d7666;--anatomy-lo:#4d4940;--anatomy-faint:#3a3935;--anatomy-lit:#f5f5f7;
   --anatomy-halo:#000;--anatomy-halo-opacity:.75;--anatomy-dot:#ece7da;
   --hall-void:#161615;
 }

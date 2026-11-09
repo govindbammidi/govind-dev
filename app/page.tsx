@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import Reveal from "@/components/Reveal";
 import SectionLabel from "@/components/SectionLabel";
 import SchemaHall from "@/components/figures/schema-hall/SchemaHall";
 import { experienceShort } from "@/lib/experience";
@@ -182,7 +183,7 @@ export default function HomePage() {
             {facts.map((f) => (
               <span
                 key={f}
-                className="rounded-[2px] border border-line bg-paper-2 px-[13px] py-[6px] text-tag"
+                className="glass-chip rounded-full px-[13px] py-[6px] text-tag"
               >
                 <i className="not-italic text-accent" aria-hidden="true">
                   ◆{" "}
@@ -195,7 +196,7 @@ export default function HomePage() {
             <a
               href={RESUME_PDF}
               download={RESUME_FILENAME}
-              className="inline-flex items-center gap-2 rounded-[2px] bg-accent px-5 py-[11px] text-paper no-underline transition-opacity hover:opacity-[0.88]"
+              className="inline-flex items-center gap-2 glass-btn rounded-full px-[22px] py-[11px] no-underline"
             >
               ↓ Download resume
             </a>
@@ -224,7 +225,7 @@ export default function HomePage() {
       </header>
 
       <section className="border-b border-line py-[34px]" aria-label="Key numbers">
-        <div className="mx-auto grid max-w-[760px] grid-cols-2 gap-x-6 gap-y-6 px-7 sm:grid-cols-4">
+        <Reveal className="mx-auto grid max-w-[760px] grid-cols-2 gap-x-6 gap-y-6 px-7 sm:grid-cols-4">
           {NUMBERS.map((n) => (
             <div key={n.label}>
               <div className="tnum font-display text-[34px] font-medium leading-none tracking-[-0.8px] text-accent">
@@ -235,11 +236,11 @@ export default function HomePage() {
               </div>
             </div>
           ))}
-        </div>
+        </Reveal>
       </section>
 
       <section className="border-b border-line py-[46px]" id="experience">
-        <div className="mx-auto max-w-[760px] px-7">
+        <Reveal className="mx-auto max-w-[760px] px-7">
           <SectionLabel number="01" className="mb-[22px]">
             Experience
           </SectionLabel>
@@ -261,11 +262,11 @@ export default function HomePage() {
               </Bullet>
             ))}
           </ul>
-        </div>
+        </Reveal>
       </section>
 
       <section className="border-b border-line py-[46px]" id="architect">
-        <div className="mx-auto max-w-[760px] px-7">
+        <Reveal className="mx-auto max-w-[760px] px-7">
           <SectionLabel number="02" className="mb-[22px]">
             How I build
           </SectionLabel>
@@ -281,11 +282,11 @@ export default function HomePage() {
             </p>
           </div>
           <SchemaHall />
-        </div>
+        </Reveal>
       </section>
 
       <section className="border-b border-line py-[46px]" id="projects">
-        <div className="mx-auto max-w-[760px] px-7">
+        <Reveal className="mx-auto max-w-[760px] px-7">
           <SectionLabel number="03" className="mb-[8px]">
             Projects
           </SectionLabel>
@@ -331,11 +332,11 @@ export default function HomePage() {
               client and side projects →
             </Link>
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <section className="border-b border-line py-[46px]" id="skills">
-        <div className="mx-auto max-w-[760px] px-7">
+        <Reveal className="mx-auto max-w-[760px] px-7">
           <SectionLabel number="04" className="mb-[22px]">
             Skills
           </SectionLabel>
@@ -351,11 +352,11 @@ export default function HomePage() {
               </div>
             ))}
           </dl>
-        </div>
+        </Reveal>
       </section>
 
       <section className="border-b border-line py-[46px]" id="education">
-        <div className="mx-auto max-w-[760px] px-7">
+        <Reveal className="mx-auto max-w-[760px] px-7">
           <SectionLabel number="05" className="mb-[22px]">
             Education
           </SectionLabel>
@@ -377,11 +378,11 @@ export default function HomePage() {
               university&apos;s first convocation, July 2026.
             </Bullet>
           </ul>
-        </div>
+        </Reveal>
       </section>
 
       <section className="border-b border-line py-[46px]" id="writing">
-        <div className="mx-auto max-w-[760px] px-7">
+        <Reveal className="mx-auto max-w-[760px] px-7">
           <SectionLabel number="06" className="mb-[14px]">
             Selected writing
           </SectionLabel>
@@ -406,19 +407,19 @@ export default function HomePage() {
               the whole journal →
             </Link>
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <section className="py-[40px]">
-        <div className="mx-auto max-w-[760px] px-7 text-center">
+        <Reveal className="mx-auto max-w-[760px] px-7 text-center">
           <a
             href={RESUME_PDF}
             download={RESUME_FILENAME}
-            className="inline-flex items-center gap-2 rounded-[2px] bg-accent px-5 py-[11px] font-mono text-[13px] text-paper no-underline transition-opacity hover:opacity-[0.88]"
+            className="inline-flex items-center gap-2 glass-btn rounded-full px-[22px] py-[11px] font-mono text-[13px] no-underline"
           >
             ↓ Download resume
           </a>
-        </div>
+        </Reveal>
       </section>
 
       <Footer />

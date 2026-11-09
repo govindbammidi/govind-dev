@@ -139,7 +139,7 @@ export default function WorkPage() {
             {PRODUCTS.map((product) => (
               <div
                 key={product.name}
-                className="rounded-[3px] border border-line bg-paper-2 px-[30px] py-7"
+                className="glass rounded-[18px] px-[30px] py-7"
               >
                 <p className="mb-[14px] font-mono text-[12px] uppercase tracking-[1px] text-accent">
                   {product.kicker}
@@ -152,7 +152,7 @@ export default function WorkPage() {
                   {product.stack.map((s) => (
                     <span
                       key={s}
-                      className="rounded-[2px] border border-line bg-paper px-[10px] py-[5px] text-tag"
+                      className="glass-chip rounded-full px-[11px] py-[5px] text-tag"
                     >
                       {s}
                     </span>
@@ -236,7 +236,7 @@ export default function WorkPage() {
             {SIDE_PROJECTS.map((project) => (
               <div
                 key={project.title}
-                className="rounded-[3px] border border-line bg-paper-2 px-[30px] py-7"
+                className="glass rounded-[18px] px-[30px] py-7"
               >
                 <p className="mb-[14px] font-mono text-[12px] uppercase tracking-[1px] text-accent">
                   {project.kicker}
@@ -253,7 +253,7 @@ export default function WorkPage() {
                   {project.stack.map((s) => (
                     <span
                       key={s}
-                      className="rounded-[2px] border border-line bg-paper px-[10px] py-[5px] text-tag"
+                      className="glass-chip rounded-full px-[11px] py-[5px] text-tag"
                     >
                       {s}
                     </span>

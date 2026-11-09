@@ -162,7 +162,7 @@ export default function JournalList({ posts }: { posts: PostMeta[] }) {
             ) : (
               <kbd
                 aria-hidden="true"
-                className="shrink-0 rounded-[2px] border border-line bg-paper-2 px-[6px] py-[2px] font-mono text-[10.5px] text-muted/80"
+                className="glass-chip shrink-0 rounded-[6px] px-[6px] py-[2px] font-mono text-[10.5px] text-muted/80"
               >
                 /
               </kbd>
@@ -190,12 +190,12 @@ export default function JournalList({ posts }: { posts: PostMeta[] }) {
                 aria-pressed={active}
                 disabled={empty && !active}
                 onClick={() => setFilter(f)}
-                className={`inline-flex items-center gap-[9px] rounded-[2px] border px-[14px] py-[7px] transition-colors active:translate-y-[1px] ${
+                className={`inline-flex items-center gap-[9px] rounded-full border px-[14px] py-[7px] transition-colors active:translate-y-[1px] ${
                   active
-                    ? "border-accent bg-accent text-paper"
+                    ? "glass-btn border-transparent"
                     : empty
                       ? "cursor-not-allowed border-line/60 bg-transparent text-muted/40"
-                      : "border-line bg-paper-2 text-tag hover:border-accent hover:text-accent"
+                      : "glass-chip text-tag hover:text-accent"
                 }`}
               >
                 <span>{f === "all" ? "All" : f}</span>

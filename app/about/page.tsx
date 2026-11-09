@@ -106,7 +106,7 @@ export default function AboutPage() {
             {VALUES.map((v) => (
               <span
                 key={v}
-                className="rounded-[2px] border border-line bg-paper-2 px-[15px] py-2 font-mono text-[13px] text-tag"
+                className="glass-chip rounded-full px-[15px] py-2 font-mono text-[13px] text-tag"
               >
                 {v}
               </span>

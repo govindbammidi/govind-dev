@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { ViewTransition } from "react";
 import { Fraunces, JetBrains_Mono, Newsreader } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Nav from "@/components/Nav";
@@ -89,7 +90,11 @@ export default function RootLayout({
       </head>
       <body className="flex min-h-full flex-col">
         <Nav />
-        <div className="flex-1">{children}</div>
+        {/* the island floats, so the page starts below it; route changes
+            crossfade through the .page-swap rules in globals.css */}
+        <ViewTransition default="page-swap">
+          <div className="flex-1 pt-[64px]">{children}</div>
+        </ViewTransition>
         <Analytics />
       </body>
     </html>
