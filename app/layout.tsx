@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { ViewTransition } from "react";
 import { Fraunces, JetBrains_Mono, Newsreader } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import LiquidLens from "@/components/LiquidLens";
 import Nav from "@/components/Nav";
 import { site } from "@/lib/site";
 import "./globals.css";
@@ -89,6 +90,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
       </head>
       <body className="flex min-h-full flex-col">
+        <LiquidLens />
         <Nav />
         {/* the island floats, so the page starts below it; route changes
             crossfade through the .page-swap rules in globals.css */}

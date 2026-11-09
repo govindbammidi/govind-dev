@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
 
 // recruiter-first: the resume sections, the journal for anyone who wants the
@@ -19,10 +19,11 @@ const RESUME = { href: "/Govind_Resume.pdf", file: "Bammidi_Govinda_Rao_Resume.p
 const sectionOf = (href: string) => (href.startsWith("/#") ? href.slice(2) : null);
 
 /**
- * The nav as a floating island: a black capsule over the page, after the
- * Dynamic Island. On a phone it grows into a card to hold the menu and
- * shrinks back when a row is tapped. The material lives in globals.css
- * (`.island`), which also gives it its own light-on-black palette.
+ * The nav as a floating island of liquid glass: a capsule over the page, after
+ * the Dynamic Island. On a phone it grows into a card to hold the menu and
+ * folds back when a row is tapped, the page is tapped, or the page scrolls.
+ * The material lives in globals.css (`.island`, `.nav-thumb`); the lens behind
+ * it is drawn by LiquidLens.
  */
 export default function Nav() {
   const pathname = usePathname();
@@ -38,6 +39,7 @@ export default function Nav() {
     if (id) return here === id;
     return pathname === href || pathname.startsWith(`${href}/`);
   };
+  const activeHref = LINKS.find((l) => isActive(l.href))?.href ?? null;
 
   useEffect(() => {
     if (pathname !== "/") return;
@@ -81,6 +83,33 @@ export default function Nav() {
     };
   }, [open]);
 
+  // the thumb: a white pill that slides under the current desktop link. it is
+  // placed by measuring the link, not by state, so a font swap or a resize
+  // just re-measures without a render
+  const rowRef = useRef<HTMLDivElement>(null);
+  const thumbRef = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const row = rowRef.current;
+    const thumb = thumbRef.current;
+    if (!row || !thumb) return;
+    const place = () => {
+      const el = activeHref
+        ? row.querySelector<HTMLElement>(`a[href="${activeHref}"]`)
+        : null;
+      if (!el) {
+        thumb.removeAttribute("data-on");
+        return;
+      }
+      thumb.style.left = `${el.offsetLeft}px`;
+      thumb.style.width = `${el.offsetWidth}px`;
+      thumb.setAttribute("data-on", "");
+    };
+    place();
+    const ro = new ResizeObserver(place);
+    ro.observe(row);
+    return () => ro.disconnect();
+  }, [activeHref]);
+
   return (
     <nav
       aria-label="Site"
@@ -100,7 +129,7 @@ export default function Nav() {
         className="island-scrim fixed inset-0 -z-10 cursor-default sm:hidden"
       />
       <div className="island pointer-events-auto" data-open={open || undefined}>
-        <div className="flex h-[44px] items-center gap-[18px] pl-[18px] pr-[14px]">
+        <div className="flex h-[44px] items-center gap-[14px] pl-[18px] pr-[14px]">
           <Link
             href="/"
             className="group font-mono text-[13.5px] font-medium tracking-[-0.3px] text-ink no-underline"
@@ -112,13 +141,17 @@ export default function Nav() {
             dev
           </Link>
 
-          <div className="hidden items-center gap-[20px] font-mono text-[13px] sm:flex">
+          <div
+            ref={rowRef}
+            className="relative hidden items-center gap-[2px] font-mono text-[13px] sm:flex"
+          >
+            <span ref={thumbRef} aria-hidden="true" className="nav-thumb" />
             {LINKS.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
                 aria-current={isActive(l.href) ? (sectionOf(l.href) ? "location" : "page") : undefined}
-                className={`nav-link no-underline transition-colors hover:text-accent ${
+                className={`nav-link rounded-full px-[10px] py-[5px] no-underline transition-colors hover:text-accent ${
                   isActive(l.href) ? "text-accent" : "text-muted"
                 }`}
               >
@@ -128,7 +161,7 @@ export default function Nav() {
             <a
               href={RESUME.href}
               download={RESUME.file}
-              className="nav-link text-accent no-underline transition-opacity hover:opacity-80"
+              className="nav-link rounded-full px-[10px] py-[5px] text-accent no-underline transition-opacity hover:opacity-80"
             >
               resume ↓
             </a>

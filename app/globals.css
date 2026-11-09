@@ -51,6 +51,29 @@ html {
   --glow-3: rgb(205 238 224 / 0.5);
   /* the gloss: a soft sheen across the top-left of a pane */
   --glass-gloss: rgb(255 255 255 / 0.4);
+  /* liquid glass, the island's material (after the Roots bottom bar): a thin
+     fill the page shows through, a 1px rim that catches light at opposite
+     corners, a sheen pooling at the top-left, "shine" on the inset edges, a
+     soft drop shadow, and the white pill that marks the current link */
+  --lg-fill: rgb(255 255 255 / 0.34);
+  --lg-rim: linear-gradient(
+    135deg,
+    rgb(255 255 255 / 1),
+    rgb(255 255 255 / 0.4) 28%,
+    rgb(255 255 255 / 0.06) 52%,
+    rgb(255 255 255 / 0.5) 82%,
+    rgb(255 255 255 / 0.95)
+  );
+  --lg-shine:
+    inset 0 1px 1px rgb(255 255 255 / 0.95), inset 0 -1px 1px rgb(255 255 255 / 0.5),
+    inset 0 0 16px rgb(255 255 255 / 0.35);
+  --lg-sheen: radial-gradient(120% 70% at 28% -8%, rgb(255 255 255 / 0.4), rgb(255 255 255 / 0) 60%);
+  --lg-shadow: 0 12px 36px -12px rgb(44 44 60 / 0.24), 0 2px 8px -2px rgb(44 44 60 / 0.1);
+  --lg-shadow-deep: 0 18px 44px -14px rgb(44 44 60 / 0.34), 0 3px 10px -2px rgb(44 44 60 / 0.14);
+  --lg-pill: rgb(255 255 255 / 0.72);
+  --lg-pill-shine:
+    inset 0 1px 1px rgb(255 255 255 / 1), inset 0 -1px 1px rgb(255 255 255 / 0.6),
+    0 3px 10px -3px rgb(44 44 60 / 0.22), 0 1px 2px rgb(44 44 60 / 0.08);
 }
 
 /* dark theme: same warm paper-and-ink character on Claude's near-black ground */
@@ -79,6 +102,25 @@ html[data-theme="dark"] {
   --glow-2: rgb(230 170 150 / 0.07);
   --glow-3: rgb(150 210 190 / 0.07);
   --glass-gloss: rgb(255 255 255 / 0.07);
+  --lg-fill: rgb(40 40 44 / 0.42);
+  --lg-rim: linear-gradient(
+    135deg,
+    rgb(255 255 255 / 0.42),
+    rgb(255 255 255 / 0.1) 28%,
+    rgb(255 255 255 / 0) 52%,
+    rgb(255 255 255 / 0.12) 82%,
+    rgb(255 255 255 / 0.3)
+  );
+  --lg-shine:
+    inset 0 1px 1px rgb(255 255 255 / 0.22), inset 0 -1px 1px rgb(255 255 255 / 0.07),
+    inset 0 0 16px rgb(255 255 255 / 0.05);
+  --lg-sheen: radial-gradient(120% 70% at 28% -8%, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0) 62%);
+  --lg-shadow: 0 14px 38px -12px rgb(0 0 0 / 0.7), 0 2px 8px -2px rgb(0 0 0 / 0.4);
+  --lg-shadow-deep: 0 20px 48px -14px rgb(0 0 0 / 0.8), 0 3px 10px -2px rgb(0 0 0 / 0.5);
+  --lg-pill: rgb(255 255 255 / 0.14);
+  --lg-pill-shine:
+    inset 0 1px 1px rgb(255 255 255 / 0.22), inset 0 -1px 1px rgb(255 255 255 / 0.06),
+    0 3px 10px -3px rgb(0 0 0 / 0.5), 0 1px 2px rgb(0 0 0 / 0.3);
 }
 
 body {
@@ -557,42 +599,84 @@ body::before {
     transform: scale(0.97);
   }
 
-  /* the island: the nav as a floating black capsule, after the Dynamic
-     Island. it carries its own palette, so every child's text-muted /
-     text-accent utility reads light-on-black in either theme. */
+  /* the island: the nav as a floating capsule of liquid glass, after the
+     Dynamic Island in shape and the Roots bottom bar in material. it takes
+     the page's own palette, so it reads ink-on-clear in light and
+     light-on-smoke in dark. */
   .island {
-    --color-ink: #f5f5f7;
-    --color-tag: #e8e8ed;
-    --color-muted: #b9b9be;
-    --color-accent: #ffffff;
-    --color-accent-soft: #d2d2d7;
-    --color-line: rgb(255 255 255 / 0.14);
-    --color-paper: #111111;
+    position: relative;
+    isolation: isolate;
     color: var(--color-ink);
     width: fit-content;
     max-width: 100%;
-    /* smoked glass, not paint: the page shows through as a dim blurred wash,
-       and the rim catches the light — a bright top edge, a faint ring all the
-       way round, and a sheen that fades before the middle */
-    background:
-      linear-gradient(135deg, rgb(255 255 255 / 0.12), transparent 45%),
-      rgb(17 17 17 / 0.72);
-    -webkit-backdrop-filter: blur(28px) saturate(170%);
-    backdrop-filter: blur(28px) saturate(170%);
-    border: 1px solid rgb(255 255 255 / 0.16);
+    background-color: var(--lg-fill);
+    -webkit-backdrop-filter: blur(10px) saturate(185%) brightness(1.04);
+    backdrop-filter: blur(10px) saturate(185%) brightness(1.04);
     border-radius: 23px;
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.24),
-      inset 0 -1px 0 rgb(255 255 255 / 0.05),
-      inset 0 0 0 1px rgb(255 255 255 / 0.04),
-      0 1px 2px rgb(0 0 0 / 0.2),
-      0 16px 40px -16px rgb(0 0 0 / 0.4);
+    box-shadow: var(--lg-shine), var(--lg-shadow);
     /* lets width animate from fit-content to a length where supported */
     interpolate-size: allow-keywords;
     transition:
       width 0.45s var(--ease-settle),
       border-radius 0.45s var(--ease-settle);
     animation: island-in 0.7s var(--ease-settle) both;
+  }
+  /* the rim: a 1px gradient border, drawn by masking everything but the
+     padding ring, so light catches two opposite corners */
+  .island::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: var(--lg-rim);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+    pointer-events: none;
+  }
+  /* the sheen pools at the top-left, under the content */
+  .island::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--lg-sheen);
+    pointer-events: none;
+  }
+  /* the lens: once LiquidLens has drawn its displacement map, the backdrop
+     bends inward at the rim as well as blurring. Chromium reads url()
+     filters in backdrop-filter; other engines keep the plain blur above */
+  @media (prefers-reduced-transparency: no-preference) {
+    html[data-lens] .island {
+      backdrop-filter: url("#liquid-lens") blur(10px) saturate(185%) brightness(1.04);
+    }
+  }
+  /* the current link sits in a white pill that slides between links, like a
+     tab bar's thumb. Nav positions it; this is only the material */
+  .nav-thumb {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    border-radius: 9999px;
+    background: var(--lg-pill);
+    box-shadow: var(--lg-pill-shine);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      left 0.5s cubic-bezier(0.34, 1.25, 0.4, 1),
+      width 0.5s cubic-bezier(0.34, 1.25, 0.4, 1),
+      opacity 0.3s var(--ease-settle);
+  }
+  .nav-thumb[data-on] {
+    opacity: 1;
   }
   /* open: the capsule grows a little into a card to hold the menu — only as
      wide as the rows need, so the page stays visible around it. phone widths
@@ -648,11 +732,6 @@ body::before {
   }
 }
 
-/* dark ground: lift the capsule a shade so it reads against near-black */
-html[data-theme="dark"] .island {
-  background-color: rgb(44 44 48 / 0.6);
-  border-color: rgb(255 255 255 / 0.2);
-}
 
 /* the island arrives: drops in and un-blurs, once, on first load */
 @keyframes island-in {
@@ -668,12 +747,7 @@ html[data-theme="dark"] .island {
 @keyframes island-compact {
   to {
     scale: 0.96;
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.24),
-      inset 0 -1px 0 rgb(255 255 255 / 0.05),
-      inset 0 0 0 1px rgb(255 255 255 / 0.04),
-      0 2px 4px rgb(0 0 0 / 0.28),
-      0 22px 48px -16px rgb(0 0 0 / 0.6);
+    box-shadow: var(--lg-shine), var(--lg-shadow-deep);
   }
 }
 @supports (animation-timeline: scroll()) {
@@ -746,16 +820,12 @@ html[data-theme="dark"] .glass-btn {
     background: var(--color-paper-2);
   }
   .island {
-    background: #111111;
+    background-color: var(--color-paper-2);
   }
   .island-scrim {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     background: color-mix(in srgb, var(--color-paper) 70%, transparent);
-  }
-  /* outranks the dark-ground tint below, which is translucent */
-  html[data-theme="dark"] .island {
-    background-color: #1e1e20;
   }
   .glass-btn {
     background: var(--color-accent);
@@ -770,11 +840,12 @@ html[data-theme="dark"] .glass-btn {
     border-color: var(--color-muted);
   }
   .island {
-    background: #000000;
-    border-color: rgb(255 255 255 / 0.5);
+    background-color: var(--color-paper);
+    outline: 1px solid var(--color-muted);
   }
-  html[data-theme="dark"] .island {
-    background-color: #000000;
+  .island::before,
+  .island::after {
+    display: none;
   }
 }
 
@@ -846,23 +917,11 @@ html[data-theme="dark"] .glass-btn {
     animation: caret-blink 1.2s linear infinite;
   }
 
-  /* nav links: hairline rule grows in from the left; stays on the current page */
+  /* nav links: the current one is marked by the sliding .nav-thumb pill
+     behind it, so the links themselves only need to sit above it */
   .nav-link {
     position: relative;
-  }
-  .nav-link::after {
-    content: "";
-    position: absolute;
-    inset: auto 0 -4px 0;
-    height: 1px;
-    background: var(--color-accent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s var(--ease-settle);
-  }
-  .nav-link:hover::after,
-  .nav-link[aria-current="page"]::after {
-    transform: scaleX(1);
+    z-index: 1;
   }
 }
 
