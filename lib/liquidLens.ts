@@ -113,6 +113,9 @@ function attrs<T extends Element>(el: T, values: Record<string, string | number>
  *   bezel - how far in from the edge the bending reaches, px
  *   shift - the most a pixel at the rim is pulled, px
  *   frost - the blur (and tint) applied before the bend
+ *   aberration - colour fringing at the rim, px: red is bent this much
+ *            further than green and blue this much less, the way real
+ *            glass splits light (after Aceternity's Liquid Glass). 0 = none
  *   cssVar - instead of applying the lens, publish it as this custom
  *            property (`url(#…)`), so CSS can switch it on only in some
  *            state - the sliding pill bends what's under it only in motion
@@ -128,8 +131,9 @@ export function useLiquidLens(
     bezel = 14,
     shift = 12,
     frost = "blur(10px) saturate(185%) brightness(1.05)",
+    aberration = 0,
     cssVar,
-  }: { bezel?: number; shift?: number; frost?: string; cssVar?: string } = {},
+  }: { bezel?: number; shift?: number; frost?: string; aberration?: number; cssVar?: string } = {},
 ) {
   useEffect(() => {
     const el = ref.current;
@@ -150,14 +154,49 @@ export function useLiquidLens(
       preserveAspectRatio: "none",
       result: "map",
     });
-    const displace = attrs(document.createElementNS(NS, "feDisplacementMap"), {
-      in: "SourceGraphic",
-      in2: "map",
-      scale: shift * 2,
-      xChannelSelector: "R",
-      yChannelSelector: "G",
-    });
-    filter.append(image, displace);
+    const bend = (scale: number, result?: string) =>
+      attrs(document.createElementNS(NS, "feDisplacementMap"), {
+        in: "SourceGraphic",
+        in2: "map",
+        scale,
+        xChannelSelector: "R",
+        yChannelSelector: "G",
+        ...(result ? { result } : {}),
+      });
+    if (aberration > 0) {
+      // three bends, one per colour, each pushed a little differently, then
+      // each keeps only its own channel and the three are added back up
+      const only = (from: string, row: number, result: string) => {
+        const m = ["0 0 0 0 0", "0 0 0 0 0", "0 0 0 0 0", "0 0 0 1 0"];
+        m[row] = ["1 0 0 0 0", "0 1 0 0 0", "0 0 1 0 0"][row];
+        return attrs(document.createElementNS(NS, "feColorMatrix"), {
+          in: from,
+          type: "matrix",
+          values: m.join(" "),
+          result,
+        });
+      };
+      const blend = (a: string, b: string, result?: string) =>
+        attrs(document.createElementNS(NS, "feBlend"), {
+          in: a,
+          in2: b,
+          mode: "screen",
+          ...(result ? { result } : {}),
+        });
+      filter.append(
+        image,
+        bend((shift + aberration) * 2, "bent-r"),
+        only("bent-r", 0, "r"),
+        bend(shift * 2, "bent-g"),
+        only("bent-g", 1, "g"),
+        bend(Math.max(shift - aberration, 0) * 2, "bent-b"),
+        only("bent-b", 2, "b"),
+        blend("r", "g", "rg"),
+        blend("rg", "b"),
+      );
+    } else {
+      filter.append(image, bend(shift * 2));
+    }
     defsEl().appendChild(filter);
 
     let size = "";
@@ -184,7 +223,7 @@ export function useLiquidLens(
       if (cssVar) el.style.removeProperty(cssVar);
       else el.style.backdropFilter = "";
     };
-  }, [ref, bezel, shift, frost, cssVar]);
+  }, [ref, bezel, shift, frost, aberration, cssVar]);
 }
 
 /**

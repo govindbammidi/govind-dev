@@ -89,6 +89,10 @@ html {
     inset 0 1px 1px rgb(255 255 255 / 1), inset 1px 2px 3px rgb(255 255 255 / 0.8),
     inset -1px -2px 4px rgb(30 30 45 / 0.1), 0 4px 12px -4px rgb(30 30 45 / 0.26),
     0 1px 2px rgb(30 30 45 / 0.1);
+  /* the portrait switch (glass toggle): a tinted capsule, a white bead */
+  --toggle-fill: rgb(30 30 45 / 0.1);
+  --toggle-orb: radial-gradient(circle at 35% 30%, #ffffff, #efeff2 70%);
+  --toggle-orb-shine: 0 1px 3px rgb(0 0 0 / 0.25), inset 0 -1px 1px rgb(0 0 0 / 0.06);
   /* the sliding pill in motion: clear glass with a lit rim, a faint
      outline (white on a white bar would vanish) and a cool caustic along
      its lower edge */
@@ -166,6 +170,9 @@ html[data-theme="dark"] {
     inset 0 1px 1px rgb(255 255 255 / 0.32), inset 1px 2px 3px rgb(255 255 255 / 0.08),
     inset -1px -2px 4px rgb(0 0 0 / 0.35), 0 4px 12px -4px rgb(0 0 0 / 0.6),
     0 1px 2px rgb(0 0 0 / 0.35);
+  --toggle-fill: rgb(255 255 255 / 0.08);
+  --toggle-orb: radial-gradient(circle at 35% 30%, rgb(255 255 255 / 0.62), rgb(255 255 255 / 0.2) 70%);
+  --toggle-orb-shine: inset 0 1px 1px rgb(255 255 255 / 0.45), 0 1px 3px rgb(0 0 0 / 0.5);
   --thumb-glass: rgb(255 255 255 / 0.06);
   --thumb-glass-shine:
     inset 0 0 0 1px rgb(255 255 255 / 0.45), inset 0 1px 2px rgb(255 255 255 / 0.35),
@@ -1470,3 +1477,89 @@ html.cursor-down .cursor-arrow svg {
 @keyframes quote-in {
   from { opacity: 0; translate: 0 4px; }
 }
+
+/* ------------------------------------------------------------------ */
+/* the portrait switch as a glass toggle (after Krystian Bieda's       */
+/* "Creativity meets Liquid Glass"): a clear capsule with a bead in    */
+/* it. Off it's a plain glass bead; on, it slides across and lights    */
+/* up, and the glow fills the glass under its rim                      */
+/* ------------------------------------------------------------------ */
+.glass-toggle {
+  position: relative;
+  isolation: isolate;
+  display: block;
+  width: 44px;
+  height: 24px;
+  border-radius: 9999px;
+  overflow: hidden;
+  background-color: var(--toggle-fill);
+  -webkit-backdrop-filter: blur(8px) saturate(180%);
+  backdrop-filter: blur(8px) saturate(180%);
+  box-shadow: var(--lg-shine), 0 2px 8px -3px rgb(0 0 0 / 0.3);
+  transition: background-color 0.3s var(--ease-settle);
+}
+/* the rim sits above the glow, so the light stays inside the glass */
+.glass-toggle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--lg-rim);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+.glass-toggle-orb {
+  position: absolute;
+  z-index: 1;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--toggle-orb);
+  box-shadow: var(--toggle-orb-shine);
+  transition:
+    left 0.5s cubic-bezier(0.34, 1.3, 0.4, 1),
+    scale 0.2s var(--ease-settle),
+    box-shadow 0.4s var(--ease-settle);
+}
+/* the lit bead: a warm core whose glow spills through the capsule */
+.glass-toggle-orb::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 40% 38%, #fffbe6 0%, #ffe066 35%, #ffc21a 70%, #f0a500 100%);
+  box-shadow:
+    0 0 8px 3px rgb(255 205 50 / 0.85),
+    0 0 20px 9px rgb(255 190 30 / 0.45);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-settle);
+}
+.glass-toggle[aria-checked="true"] .glass-toggle-orb {
+  left: 23px;
+}
+.glass-toggle[aria-checked="true"] .glass-toggle-orb::before {
+  opacity: 1;
+}
+.glass-toggle:hover .glass-toggle-orb {
+  scale: 1.06;
+}
+@media (prefers-reduced-motion: reduce) {
+  .glass-toggle-orb,
+  .glass-toggle-orb::before {
+    transition: none;
+  }
+  .glass-toggle:hover .glass-toggle-orb {
+    scale: none;
+  }
+}
+

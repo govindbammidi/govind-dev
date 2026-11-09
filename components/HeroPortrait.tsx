@@ -42,18 +42,11 @@ export default function HeroPortrait() {
         aria-label="Show realistic portrait"
         title={real ? "Back to the cartoon" : "See what I actually look like"}
         onClick={() => setReal((r) => !r)}
-        // off: a filled grey track with a white knob, readable on either theme;
-        // on: the accent track with a knob in the page colour
-        className={`relative h-[18px] w-8 rounded-full transition-colors duration-200 ${
-          real ? "bg-accent" : "bg-[color-mix(in_srgb,var(--color-ink)_30%,transparent)] hover:bg-[color-mix(in_srgb,var(--color-ink)_40%,transparent)]"
-        }`}
+        // a clear glass capsule with a bead inside; on, the bead slides
+        // across and lights up, its glow filling the glass (globals.css)
+        className="glass-toggle"
       >
-        <span
-          aria-hidden="true"
-          className={`absolute top-1/2 size-[14px] -translate-y-1/2 rounded-full shadow-sm transition-[left,background-color] duration-200 ${
-            real ? "left-[16px] bg-paper" : "left-[2px] bg-white"
-          }`}
-        />
+        <span aria-hidden="true" className="glass-toggle-orb" />
       </button>
     </div>
   );

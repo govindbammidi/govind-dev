@@ -89,12 +89,12 @@ export default function Nav() {
   const islandRef = useRef<HTMLDivElement>(null);
   // a full 10px frost under the bend: the island holds words, and words
   // behind it must never compete with the links
-  useLiquidLens(islandRef, { bezel: 14, shift: 12 });
+  useLiquidLens(islandRef, { bezel: 14, shift: 12, aberration: 3 });
 
   const rowRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLSpanElement>(null);
   // while it slides the thumb is a clear lens over the links (see GlassTabs)
-  useLiquidLens(thumbRef, { bezel: 12, shift: 9, cssVar: "--thumb-lens" });
+  useLiquidLens(thumbRef, { bezel: 12, shift: 9, aberration: 4, cssVar: "--thumb-lens" });
   useEffect(() => {
     const row = rowRef.current;
     const thumb = thumbRef.current;

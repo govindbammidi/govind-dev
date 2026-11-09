@@ -26,7 +26,7 @@ export default function GlassTabs<T extends string>({
 }) {
   // the same bending rim as the nav island (Chromium; elsewhere the CSS frost)
   const barRef = useRef<HTMLDivElement>(null);
-  useLiquidLens(barRef, { bezel: 14, shift: 12 });
+  useLiquidLens(barRef, { bezel: 14, shift: 12, aberration: 3 });
 
   // the thumb is placed by measuring the chosen button, as in the nav, so a
   // font swap or a resize just re-measures
@@ -35,7 +35,7 @@ export default function GlassTabs<T extends string>({
   const placed = useRef(false);
   // while it slides the pill is a clear lens that bends the labels it
   // passes over (Chromium; elsewhere it is just clear glass)
-  useLiquidLens(thumbRef, { bezel: 12, shift: 9, cssVar: "--thumb-lens" });
+  useLiquidLens(thumbRef, { bezel: 12, shift: 9, aberration: 4, cssVar: "--thumb-lens" });
   useEffect(() => {
     const row = rowRef.current;
     const thumb = thumbRef.current;
