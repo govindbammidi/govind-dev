@@ -115,7 +115,8 @@ function attrs<T extends Element>(el: T, values: Record<string, string | number>
  *   frost - the blur (and tint) applied before the bend
  *   aberration - colour fringing at the rim, px: red is bent this much
  *            further than green and blue this much less, the way real
- *            glass splits light (after Aceternity's Liquid Glass). 0 = none
+ *            glass splits light (after Aceternity's Liquid Glass). 0 = none.
+ *            Dark theme only - globals.css picks the plain lens in light
  *   cssVar - instead of applying the lens, publish it as this custom
  *            property (`url(#…)`), so CSS can switch it on only in some
  *            state - the sliding pill bends what's under it only in motion
@@ -140,20 +141,6 @@ export function useLiquidLens(
     if (!el || !lensSupported()) return;
 
     const id = `liquid-lens-${++seq}`;
-    const filter = attrs(document.createElementNS(NS, "filter"), {
-      id,
-      x: 0,
-      y: 0,
-      filterUnits: "userSpaceOnUse",
-      primitiveUnits: "userSpaceOnUse",
-      "color-interpolation-filters": "sRGB",
-    });
-    const image = attrs(document.createElementNS(NS, "feImage"), {
-      x: 0,
-      y: 0,
-      preserveAspectRatio: "none",
-      result: "map",
-    });
     const bend = (scale: number, result?: string) =>
       attrs(document.createElementNS(NS, "feDisplacementMap"), {
         in: "SourceGraphic",
@@ -163,41 +150,69 @@ export function useLiquidLens(
         yChannelSelector: "G",
         ...(result ? { result } : {}),
       });
-    if (aberration > 0) {
-      // three bends, one per colour, each pushed a little differently, then
-      // each keeps only its own channel and the three are added back up
-      const only = (from: string, row: number, result: string) => {
-        const m = ["0 0 0 0 0", "0 0 0 0 0", "0 0 0 0 0", "0 0 0 1 0"];
-        m[row] = ["1 0 0 0 0", "0 1 0 0 0", "0 0 1 0 0"][row];
-        return attrs(document.createElementNS(NS, "feColorMatrix"), {
-          in: from,
-          type: "matrix",
-          values: m.join(" "),
-          result,
-        });
-      };
-      const blend = (a: string, b: string, result?: string) =>
-        attrs(document.createElementNS(NS, "feBlend"), {
-          in: a,
-          in2: b,
-          mode: "screen",
-          ...(result ? { result } : {}),
-        });
-      filter.append(
-        image,
-        bend((shift + aberration) * 2, "bent-r"),
-        only("bent-r", 0, "r"),
-        bend(shift * 2, "bent-g"),
-        only("bent-g", 1, "g"),
-        bend(Math.max(shift - aberration, 0) * 2, "bent-b"),
-        only("bent-b", 2, "b"),
-        blend("r", "g", "rg"),
-        blend("rg", "b"),
-      );
-    } else {
-      filter.append(image, bend(shift * 2));
-    }
-    defsEl().appendChild(filter);
+    const images: SVGFEImageElement[] = [];
+    const makeFilter = (fid: string, fringe: number) => {
+      const filter = attrs(document.createElementNS(NS, "filter"), {
+        id: fid,
+        x: 0,
+        y: 0,
+        filterUnits: "userSpaceOnUse",
+        primitiveUnits: "userSpaceOnUse",
+        "color-interpolation-filters": "sRGB",
+      });
+      const image = attrs(document.createElementNS(NS, "feImage"), {
+        x: 0,
+        y: 0,
+        preserveAspectRatio: "none",
+        result: "map",
+      });
+      images.push(image);
+      if (fringe > 0) {
+        // three bends, one per colour, each pushed a little differently,
+        // then each keeps only its own channel and the three are added up
+        const only = (from: string, row: number, result: string) => {
+          const m = ["0 0 0 0 0", "0 0 0 0 0", "0 0 0 0 0", "0 0 0 1 0"];
+          m[row] = ["1 0 0 0 0", "0 1 0 0 0", "0 0 1 0 0"][row];
+          return attrs(document.createElementNS(NS, "feColorMatrix"), {
+            in: from,
+            type: "matrix",
+            values: m.join(" "),
+            result,
+          });
+        };
+        const blend = (a: string, b: string, result?: string) =>
+          attrs(document.createElementNS(NS, "feBlend"), {
+            in: a,
+            in2: b,
+            mode: "screen",
+            ...(result ? { result } : {}),
+          });
+        filter.append(
+          image,
+          bend((shift + fringe) * 2, "bent-r"),
+          only("bent-r", 0, "r"),
+          bend(shift * 2, "bent-g"),
+          only("bent-g", 1, "g"),
+          bend(Math.max(shift - fringe, 0) * 2, "bent-b"),
+          only("bent-b", 2, "b"),
+          blend("r", "g", "rg"),
+          blend("rg", "b"),
+        );
+      } else {
+        filter.append(image, bend(shift * 2));
+      }
+      defsEl().appendChild(filter);
+      return filter;
+    };
+    // a plain lens, and with colour fringing a fringed one beside it. CSS
+    // chooses between them by theme through --lens (globals.css,
+    // [data-lens]): the fringe reads as glass on the dark page but as
+    // smudged colour on the light one
+    const filters = [makeFilter(id, 0)];
+    if (aberration > 0) filters.push(makeFilter(`${id}-fringe`, aberration));
+    el.style.setProperty("--lens-plain", `url(#${id})`);
+    el.style.setProperty("--lens-fringe", `url(#${filters.length > 1 ? `${id}-fringe` : id})`);
+    el.setAttribute("data-lens", "");
 
     let size = "";
     const build = () => {
@@ -208,10 +223,10 @@ export function useLiquidLens(
       const radius = Math.min(parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0, w / 2, h / 2);
       const url = mapUrl(w, h, radius, Math.min(bezel, radius || bezel));
       if (!url) return;
-      attrs(filter, { width: w, height: h });
-      attrs(image, { width: w, height: h, href: url });
-      if (cssVar) el.style.setProperty(cssVar, `url(#${id})`);
-      else el.style.backdropFilter = `${frost} url(#${id})`;
+      for (const f of filters) attrs(f, { width: w, height: h });
+      for (const image of images) attrs(image, { width: w, height: h, href: url });
+      if (cssVar) el.style.setProperty(cssVar, "var(--lens)");
+      else el.style.backdropFilter = `${frost} var(--lens)`;
     };
     build();
     const ro = new ResizeObserver(build);
@@ -219,7 +234,10 @@ export function useLiquidLens(
 
     return () => {
       ro.disconnect();
-      filter.remove();
+      for (const f of filters) f.remove();
+      el.removeAttribute("data-lens");
+      el.style.removeProperty("--lens-plain");
+      el.style.removeProperty("--lens-fringe");
       if (cssVar) el.style.removeProperty(cssVar);
       else el.style.backdropFilter = "";
     };

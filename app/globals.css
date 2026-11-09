@@ -1478,6 +1478,16 @@ html.cursor-down .cursor-arrow svg {
   from { opacity: 0; translate: 0 4px; }
 }
 
+/* the liquid lens (useLiquidLens) publishes a plain and a colour-fringed
+   version of itself; the fringe is for the dark page only, where it reads
+   as light splitting in glass - on the light page it reads as smudged colour */
+[data-lens] {
+  --lens: var(--lens-plain);
+}
+html[data-theme="dark"] [data-lens] {
+  --lens: var(--lens-fringe);
+}
+
 /* ------------------------------------------------------------------ */
 /* the portrait switch as a glass toggle (after Krystian Bieda's       */
 /* "Creativity meets Liquid Glass"): a clear capsule with a bead in    */
