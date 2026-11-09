@@ -68,7 +68,10 @@ export default function CustomCursor() {
   }, []);
 
   return (
-    <div ref={arrowRef} className="cursor-arrow" aria-hidden="true">
+    // its own view-transition layer: a page change or theme switch otherwise
+    // freezes the arrow inside the page snapshot, and with the real cursor
+    // hidden there is no pointer at all until the transition ends
+    <div ref={arrowRef} className="cursor-arrow" aria-hidden="true" style={{ viewTransitionName: "cursor" }}>
       <svg width="22" height="22" viewBox="0 0 24 24">
         <path d="M3.5 2.5 L19.5 11.2 L12.3 13 L9 20.5 Z" strokeLinejoin="round" />
       </svg>

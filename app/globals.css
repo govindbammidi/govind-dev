@@ -934,6 +934,18 @@ html[data-theme-switch]::view-transition-new(root) {
 ::view-transition-old(site-nav) {
   display: none;
 }
+/* the custom cursor rides above every transition, live and unanimated, so
+   it keeps following the mouse through a page change (CustomCursor) */
+::view-transition-group(cursor) {
+  animation: none;
+  z-index: 200;
+}
+::view-transition-old(cursor) {
+  display: none;
+}
+::view-transition-new(cursor) {
+  animation: none;
+}
 ::view-transition-new(site-nav) {
   animation: none;
 }
