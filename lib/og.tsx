@@ -88,7 +88,7 @@ export async function ogCard({
           }}
         >
           <span>
-            govind<span style={{ color: "#111111" }}>.</span>dev
+            govind<span style={{ color: "#ef4444" }}>.</span>dev
           </span>
           <span>
             {site.author} · {foot}

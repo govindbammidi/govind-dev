@@ -1,36 +1,44 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Footer from "@/components/Footer";
-import JournalList from "@/components/JournalList";
+import JournalCards from "@/components/JournalCards";
+import { mediumUrlsBySlug } from "@/lib/medium";
 import { getAllPosts, toMeta } from "@/lib/posts";
 
 export const metadata: Metadata = {
   title: "Journal",
   description:
-    "Everything I'm learning, written down as it happens. Honest notes from shipping a real product - and, sometimes, from where my head actually is.",
+    "Notes from shipping a real product: the practices I fought, the incidents I survived, and the lessons that only made sense later.",
 };
 
-export default function JournalPage() {
+export default async function JournalPage() {
   const posts = getAllPosts().map(toMeta);
+  const medium = await mediumUrlsBySlug(posts);
 
   return (
     <>
-      <header className="border-b border-line pb-9 pt-[70px]">
+      <header className="pb-8 pt-[64px]">
         <div className="mx-auto max-w-[760px] px-7">
-          <p className="kicker rise mb-5">The journal</p>
-          <h1 className="rise rise-1 mb-[18px] font-display text-display font-medium leading-[1.03] tracking-[-1.2px]">
-            Everything I&apos;m learning, written down as it happens.
+          <Link
+            href="/"
+            className="rise glass-chip mb-6 inline-block rounded-full px-[14px] py-[6px] text-[13px] text-ink no-underline"
+          >
+            ← home
+          </Link>
+          <h1 className="rise rise-1 font-display text-[clamp(1.9rem,1.5rem+1.6vw,2.6rem)] leading-[1.1]">
+            Journal
           </h1>
-          <p className="rise rise-2 max-w-[580px] text-[20px] text-lede">
-            Honest notes from shipping a real product. The practices I fought,
-            the incidents I survived, the lessons that only made sense months
-            later - and, sometimes, where my head actually is.
+          <p className="rise rise-2 mt-3 text-[17px] text-muted">
+            Notes from shipping a real product, written down as I learn.
           </p>
         </div>
       </header>
 
-      <div className="mx-auto max-w-[760px] px-7">
-        <JournalList posts={posts} />
-      </div>
+      <section className="pb-16">
+        <div className="mx-auto max-w-[760px] px-7">
+          <JournalCards posts={posts} medium={medium} />
+        </div>
+      </section>
 
       <Footer />
     </>

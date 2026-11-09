@@ -6,12 +6,12 @@ import { useEffect, useRef, useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useLiquidLens } from "@/lib/liquidLens";
 
-// recruiter-first: the resume sections, the journal for anyone who wants the
-// longer read, and contact. The PDF is the hero's "Download resume" button;
-// /work is linked from Projects.
+// about, the project archive, the journal and contact. Experience lives on the
+// home page itself, so it needs no link of its own; the PDF is the hero's
+// "Download resume" button.
 const LINKS = [
-  { href: "/#experience", label: "experience" },
-  { href: "/#projects", label: "projects" },
+  { href: "/about", label: "about" },
+  { href: "/projects", label: "projects" },
   { href: "/journal", label: "journal" },
   { href: "/contact", label: "contact" },
 ];
@@ -147,7 +147,7 @@ export default function Nav() {
             className="group font-mono text-[13.5px] font-medium tracking-[-0.3px] text-ink no-underline"
           >
             govind
-            <b className="inline-block text-accent transition-transform duration-300 ease-settle group-hover:-translate-y-[3px]">
+            <b className="inline-block text-mark transition-transform duration-300 ease-settle group-hover:-translate-y-[3px]">
               .
             </b>
             dev

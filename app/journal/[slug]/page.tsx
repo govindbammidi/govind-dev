@@ -3,10 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Footer from "@/components/Footer";
+import Me from "@/components/Me";
 import ShareRow from "@/components/ShareRow";
 import { mdxComponents } from "@/components/mdx";
 import { formatDate, getAdjacentPosts, getAllPosts, getPost } from "@/lib/posts";
+import { mediumUrlFor } from "@/lib/medium";
 import { site } from "@/lib/site";
+
+const AUTHOR = "Bammidi Govinda Rao";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -55,6 +59,7 @@ export default async function PostPage({ params }: Props) {
 
   const { prev, next } = getAdjacentPosts(slug);
   const url = `${site.url}/journal/${post.slug}`;
+  const mediumUrl = await mediumUrlFor(post.title);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -84,38 +89,74 @@ export default async function PostPage({ params }: Props) {
       <div className="read-progress" aria-hidden="true" />
 
       <div className="mx-auto max-w-[680px] px-7">
-        <Link
-          href="/journal"
-          className="rise mt-[34px] inline-block font-mono text-[12.5px] text-muted no-underline hover:text-accent"
-        >
-          ← back to journal
-        </Link>
+        {/* back to the list, and the Medium copy when there is one */}
+        <div className="rise mt-[34px] flex items-center justify-between gap-3">
+          <Link
+            href="/journal"
+            className="glass-chip rounded-full px-[14px] py-[6px] text-[13px] text-ink no-underline"
+          >
+            ← all entries
+          </Link>
+          {mediumUrl && (
+            <a
+              href={mediumUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass-chip rounded-full px-[14px] py-[6px] text-[13px] text-muted no-underline hover:text-ink"
+            >
+              Original on Medium ↗
+            </a>
+          )}
+        </div>
 
         <article className="pb-[10px] pt-[30px]">
-          <div className="rise mb-5 flex items-center gap-[14px] font-mono text-[12.5px] text-muted">
-            <span className="uppercase tracking-[0.5px] text-accent">
-              {post.tag}
-            </span>
-            <span aria-hidden="true">·</span>
-            <span>{formatDate(post.date)}</span>
-            <span aria-hidden="true">·</span>
-            <span>{post.readTime} min</span>
+          <div className="rise mb-4 flex flex-wrap items-center gap-x-[12px] gap-y-1 text-[12.5px] uppercase tracking-[0.8px] text-muted">
+            <span className="text-accent">{post.tag}</span>
             {post.part != null && post.seriesTotal != null && (
               <>
                 <span aria-hidden="true">·</span>
-                <span className="text-accent-soft">
+                <span className="normal-case tracking-normal">
                   part {post.part} of {post.seriesTotal} - {post.series}
                 </span>
               </>
             )}
           </div>
 
-          <h1 className="rise rise-1 mb-[18px] font-display text-title font-medium leading-[1.08] tracking-[-1px]">
+          <h1 className="rise rise-1 mb-4 font-display text-title leading-[1.08]">
             {post.title}
           </h1>
+          <p className="rise rise-1 mb-7 text-[19px] italic leading-[1.55] text-muted">
+            {post.summary}
+          </p>
+
+          {/* who wrote it, when, and where to follow */}
+          <div className="rise rise-2 mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-line pb-7">
+            <div className="flex items-center gap-3">
+              <Me size={40} small alt="" className="h-10 w-10 rounded-full border border-line" />
+              <div className="leading-[1.35]">
+                <p className="flex items-center gap-2 text-[15px] font-semibold text-ink">
+                  {AUTHOR}
+                  <span className="rounded-md border border-line px-[6px] py-[1px] text-[11px] font-medium text-muted">
+                    Author
+                  </span>
+                </p>
+                <p className="text-[13px] text-muted">
+                  {formatDate(post.date)} · {post.readTime} min read
+                </p>
+              </div>
+            </div>
+            <a
+              href={site.medium}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full bg-accent px-[16px] py-[8px] text-[13.5px] font-semibold text-paper no-underline transition-opacity hover:opacity-85"
+            >
+              Follow on Medium
+            </a>
+          </div>
 
           {post.arc && (
-            <div className="rise rise-2 mb-[34px] border-b border-line pb-7 text-[15px] leading-relaxed text-accent-soft">
+            <div className="mb-[34px] text-[15px] leading-relaxed text-accent-soft">
               arc: {post.arc}
             </div>
           )}
@@ -124,6 +165,27 @@ export default async function PostPage({ params }: Props) {
             <MDXRemote source={post.content} components={mdxComponents} />
           </div>
         </article>
+
+        {/* written by: the same author, and the Medium copy to clap on */}
+        <aside className="glass my-10 flex flex-wrap items-center justify-between gap-5 rounded-[22px] p-5 sm:p-6">
+          <div className="flex min-w-0 items-center gap-4">
+            <Me size={48} small alt="" className="h-12 w-12 shrink-0 rounded-full border border-line" />
+            <div className="min-w-0">
+              <p className="text-[16px] font-semibold text-ink">Written by {AUTHOR}</p>
+              <p className="text-[14px] leading-[1.5] text-muted">
+                Full-stack developer building the Maahita school ERP, and writing down what it teaches me.
+              </p>
+            </div>
+          </div>
+          <a
+            href={mediumUrl ?? site.medium}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 rounded-full bg-accent px-[16px] py-[9px] text-[13.5px] font-semibold text-paper no-underline transition-opacity hover:opacity-85"
+          >
+            {mediumUrl ? "Read & clap on Medium" : "Follow on Medium"}
+          </a>
+        </aside>
 
         <ShareRow url={url} />
 
