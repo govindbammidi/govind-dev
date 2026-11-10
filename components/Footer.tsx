@@ -35,6 +35,12 @@ export default function Footer({ who }: { who?: string }) {
             GitHub · Maahita
           </a>
           <a
+            href={site.x}
+            className="border-b border-transparent text-accent no-underline transition-colors hover:border-accent"
+          >
+            X
+          </a>
+          <a
             href={site.medium}
             className="border-b border-transparent text-accent no-underline transition-colors hover:border-accent"
           >

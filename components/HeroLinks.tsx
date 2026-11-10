@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { siGithub } from "simple-icons";
+import { siGithub, siX } from "simple-icons";
 import { site } from "@/lib/site";
 
 /*
@@ -70,6 +70,9 @@ export default function HeroLinks() {
           <rect width="4" height="12" x="2" y="9" />
           <circle cx="4" cy="4" r="2" />
         </svg>
+      </a>
+      <a href={site.x} target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" title="X (Twitter)" className={ring}>
+        <Brand path={siX.path} />
       </a>
       <a href={site.medium} target="_blank" rel="noopener noreferrer" aria-label="Medium" title="Medium" className={ring}>
         {/* Medium's classic mark - three ellipses - stays legible at icon size,

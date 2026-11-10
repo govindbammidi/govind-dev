@@ -19,6 +19,9 @@ export const site = {
   github: "https://github.com/govindbammidi",
   githubWork: "https://github.com/govindaraob-maahita",
   medium: "https://medium.com/@bammidigovindarao1729",
+  x: "https://x.com/GovindaBammidi",
+  /** used as twitter:creator on share cards */
+  xHandle: "@GovindaBammidi",
   /** "Book a call" in the masthead: my Cal.com page, where visitors pick a
    *  15 or 30 minute call. An http link opens in a new tab; a path stays on site */
   booking: "https://cal.com/govindbammidi",

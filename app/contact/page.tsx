@@ -11,6 +11,7 @@ const CHANNELS = [
   { label: "LinkedIn", value: "/in/bammidi-govinda-rao", href: site.linkedin },
   { label: "GitHub", value: "@govindbammidi", href: site.github },
   { label: "GitHub · Maahita", value: "@govindaraob-maahita", href: site.githubWork },
+  { label: "X (Twitter)", value: site.xHandle, href: site.x },
   { label: "Medium", value: "@bammidigovindarao1729", href: site.medium },
   { label: "Email", value: site.email, href: `mailto:${site.email}` },
 ];

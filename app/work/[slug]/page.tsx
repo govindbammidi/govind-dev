@@ -38,6 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title: project.title,
       description: project.summary,
+      creator: site.xHandle,
     },
   };
 }

@@ -39,6 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: homeTitle,
     description: site.description,
+    creator: site.xHandle,
   },
   alternates: {
     types: { "application/rss+xml": `${site.url}/rss.xml` },
