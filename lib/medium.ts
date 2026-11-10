@@ -5,8 +5,9 @@ import { site } from "@/lib/site";
  * copy ("Original on Medium", "Read & clap on Medium") when one exists, found
  * by title in the public Medium feed. Fetched with the page and refreshed
  * daily, so a newly cross-posted entry picks up its link without a deploy.
- * The feed only carries recent stories; anything not in it just gets the
- * "Follow on Medium" link to the profile.
+ * The feed only carries recent stories, so a post can pin its copy with a
+ * `medium:` frontmatter URL, which wins over the feed. Anything with neither
+ * just gets the "Follow on Medium" link to the profile.
  */
 
 const FEED = `https://medium.com/feed/${new URL(site.medium).pathname.slice(1)}`;
@@ -34,17 +35,20 @@ export async function mediumStories(): Promise<Map<string, string>> {
 }
 
 /** For a list page: each post's Medium copy, keyed by slug, for those that have one. */
-export async function mediumUrlsBySlug(posts: { slug: string; title: string }[]): Promise<Record<string, string>> {
+export async function mediumUrlsBySlug(
+  posts: { slug: string; title: string; medium?: string }[],
+): Promise<Record<string, string>> {
   const stories = await mediumStories();
   const out: Record<string, string> = {};
   for (const p of posts) {
-    const url = stories.get(norm(p.title));
+    const url = p.medium ?? stories.get(norm(p.title));
     if (url) out[p.slug] = url;
   }
   return out;
 }
 
-export async function mediumUrlFor(title: string): Promise<string | null> {
+export async function mediumUrlFor({ title, medium }: { title: string; medium?: string }): Promise<string | null> {
+  if (medium) return medium;
   const key = norm(title);
   if (!key) return null;
   return (await mediumStories()).get(key) ?? null;

@@ -16,6 +16,7 @@ export interface PostMeta {
   series?: string;
   part?: number;
   seriesTotal?: number; // derived, not frontmatter
+  medium?: string; // the Medium copy, pinned so it outlives the feed
 }
 
 export function formatDate(iso: string): string {

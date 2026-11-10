@@ -45,6 +45,7 @@ function parsePost(filename: string): Post | null {
     featured: data.featured === true,
     series: typeof data.series === "string" ? data.series : undefined,
     part: typeof data.part === "number" ? data.part : undefined,
+    medium: typeof data.medium === "string" ? data.medium : undefined,
     content,
   };
 }
@@ -123,6 +124,6 @@ export function getAdjacentPosts(slug: string): {
 
 /** Strip content so lists can be passed to client components. */
 export function toMeta(post: Post): PostMeta {
-  const { slug, title, summary, date, tag, arc, readTime, featured, series, part, seriesTotal } = post;
-  return { slug, title, summary, date, tag, arc, readTime, featured, series, part, seriesTotal };
+  const { slug, title, summary, date, tag, arc, readTime, featured, series, part, seriesTotal, medium } = post;
+  return { slug, title, summary, date, tag, arc, readTime, featured, series, part, seriesTotal, medium };
 }

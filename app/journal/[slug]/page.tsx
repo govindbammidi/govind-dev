@@ -65,7 +65,7 @@ export default async function PostPage({ params }: Props) {
         .sort((a, b) => (a.part ?? 0) - (b.part ?? 0))
     : [];
   const url = `${site.url}/journal/${post.slug}`;
-  const mediumUrl = await mediumUrlFor(post.title);
+  const mediumUrl = await mediumUrlFor(post);
 
   const jsonLd = {
     "@context": "https://schema.org",
